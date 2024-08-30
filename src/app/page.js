@@ -13,7 +13,7 @@ export default function Home() {
   console.log({user})
  
   if (!user && !userSession){
-    router.push('/sign-up')
+    router.push('/signUp')
   }
   
 

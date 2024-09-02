@@ -24,7 +24,7 @@ const SignIn = () => {
         sessionStorage.setItem('user', true)
         setEmail('');
         setPassword('');
-        router.push('/')
+        router.push('/dashboard')
     }catch(e){
         console.error(e)
         setErrorMessage(e.message);
@@ -35,7 +35,6 @@ const SignIn = () => {
     <div className="min-h-screen flex flex-col items-center justify-center">
        <Image
     src="/nexusLogo.png"
-    className="dark:invert"
     width={400}
     height={24}
     priority
@@ -77,11 +76,11 @@ const SignIn = () => {
 <div className=" p-10 pt-5 pt-0 rounded-lg w-1/3 text-center">
 <button 
           onClick={() => signInWithRedirect(auth, googleProvider)}
-          className=" flex flex-row w-full p-3 mb-3 border-solid border border-[#c2c8d0] font-light rounded hover:bg-[#0000001a]"
+          className=" flex flex-row w-full p-3 mb-3 border-solid border border-[#c2c8d0] text-black font-light rounded hover:bg-[#0000001a]"
         >
           <Image
               src="/googleLogo.svg"
-              className="dark:invert mr-4"
+              className="mr-4"
               width={24}
               height={24}
               priority
@@ -90,11 +89,11 @@ const SignIn = () => {
 
         <button 
           onClick={() => signInWithRedirect(auth, microsoftProvider)}
-          className=" flex flex-row w-full p-3 mb-3 border-solid border border-[#c2c8d0] font-light rounded hover:bg-[#0000001a]"
+          className=" flex flex-row w-full p-3 mb-3 border-solid border border-[#c2c8d0] text-black font-light rounded hover:bg-[#0000001a]"
         >
           <Image
               src="/Microsoft_logo.svg"
-              className="dark:invert mr-4"
+              className="mr-4"
               width={24}
               height={24}
               priority

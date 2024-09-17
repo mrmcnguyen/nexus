@@ -1,9 +1,13 @@
 import MeetingTitle from "../meetingTitle";
 import Psection from "./Psection";
 import SpeakerNotes from "./speakerNotes";
+import { DM_Sans } from 'next/font/google';
+
+const dmSans = DM_Sans({ subsets: ["latin"] });
 
 export default function FivePs() {
     return (
+        <body className={dmSans.className}>
         <main className="flex flex-row min-h-screen items-stretch p-12">
             <div className="w-4/5 text-sm bg-white h-full m-2 border-b border-gray-300 rounded-3xl p-14 overflow-auto">
                 <MeetingTitle meetingName="Kevin's Meeting - MOCK PAGE" meetingType="The 5 P's Framework" meetingDate="9:00 AM 12th July 2024" />
@@ -17,5 +21,6 @@ export default function FivePs() {
                 <SpeakerNotes content="Enter your notes here" />
             </div>
         </main>
+        </body>
     );
 }

@@ -6,6 +6,9 @@ import { auth } from '../firebase/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { DM_Sans } from 'next/font/google';
+
+const dmSans = DM_Sans({ subsets: ["latin"] });
 
 const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -51,6 +54,7 @@ const SignUp = () => {
   }, [auth]);
 
   return (
+    <body className={dmSans.className}>
     <div className="min-h-screen flex flex-col items-center justify-center">
        <Image
         src="/nexusLogo.png"
@@ -122,6 +126,7 @@ const SignUp = () => {
       </div>
       <footer className='text-gray-500'>Nexus 2024 © </footer>
     </div>
+    </body>
   );
 };
 

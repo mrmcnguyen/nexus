@@ -6,6 +6,9 @@ import { OAuthProvider, GoogleAuthProvider, signInWithRedirect } from 'firebase/
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { DM_Sans } from 'next/font/google';
+
+const dmSans = DM_Sans({ subsets: ["latin"] });
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -32,6 +35,7 @@ const SignIn = () => {
   };
 
   return (
+    <body className={dmSans.className}>
     <div className="min-h-screen flex flex-col items-center justify-center">
        <Image
     src="/nexusLogo.png"
@@ -103,6 +107,7 @@ const SignIn = () => {
     </div>
     <footer className='text-gray-500'>Nexus 2024 © </footer>
 </div>
+</body>
   );
 };
 

@@ -28,7 +28,7 @@ const frameworks = [
     link: "/nexusME/kanban",
   },
   {
-    name: "Normal To-Do List",
+    name: "To-Do List",
     description: "Create a normal daily To-Do list to breeze through your tasks.",
     link: "/nexusME/to-do-list",
   },
@@ -41,7 +41,7 @@ const frameworks = [
 
 export default function Navbar({ page }) {
   return (
-    <nav className={`pt-1 pb-1 h-1/5 flex flex-row items-center border-b border-[#c2c8d0] ${dmSans.className}`}>
+    <nav className={`pt-1 pb-1 h-1/5 flex flex-row items-center border-b border-[#c2c8d0] ${dmSans.className} ${page === '/nexusME/pomodoro' ? 'bg-red-100' : ''}`}>
       {/* Logo */}
       <Link href="/dashboard">
         <Image
@@ -73,8 +73,14 @@ export default function Navbar({ page }) {
       <button className="px-4 py-2 mr-2 text-gray-600 transition duration-200 border border-[#c2c8d0] align-middle font-semibold rounded-lg hover:bg-gray-300">
 About 
         </button>
-        <button className="px-4 py-2 align-middle transition duration-200 bg-blue-400 text-white font-semibold rounded-lg hover:bg-blue-300">
-Nexus TEAMS
+        <button className="flex flex-row px-4 py-2 align-middle items-center transition duration-200 bg-blue-400 text-white font-semibold rounded-lg hover:bg-blue-300">
+Nexus TEAMS<Image
+    src="/newTab.svg"
+    className="ml-2 filter invert"  
+    width={14}
+    height={14}
+    priority
+  />
         </button>
       </div>
     </nav>

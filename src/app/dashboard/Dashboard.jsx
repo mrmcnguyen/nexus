@@ -80,7 +80,7 @@ export default function Dashboard() {
                         </Link>
                     </div>
                     <div className="flex flex-col">
-                        <h2 className="text-left text-4xl m-4 ml-0 mt-14">Quick Shortcuts</h2>
+                        <h2 className="text-left text-white text-4xl m-4 ml-0 mt-14">Quick Shortcuts</h2>
                         <div className="grid grid-cols-2 gap-4">
                     <Link href={'./nexusME/pomodoro'} className="p-8 text-white transition duration-200 bg-red-300 flex flex-row rounded-xl hover:shadow-lg hover:shadow-red-300">
                             <Image

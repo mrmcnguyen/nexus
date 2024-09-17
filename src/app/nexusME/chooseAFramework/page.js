@@ -18,27 +18,27 @@ export default function ChooseFramework() {
       {
         name: "The Pomodoro",
         description: "Work in short, focused intervals, followed by brief breaks to enhance focus and productivity.",
-        link: "/pomodoro",
+        link: "/nexusME/pomodoro",
       },
       {
         name: "1-3-5 Method",
         description: "Focus on 1 big task, 3 medium tasks, and 5 small tasks each day.",
-        link: "/1-3-5",
+        link: "/nexusME/1-3-5",
       },
       {
         name: "Kanban",
         description: "Visualize tasks using a board and limit work in progress.",
-        link: "/kanban",
+        link: "/nexusME/kanban",
       },
       {
-        name: "Normal To-Do List",
+        name: "To-Do List",
         description: "Create a normal daily To-Do list to breeze through your tasks.",
-        link: "/to-do-list",
+        link: "/nexusME/to-do-list",
       },
       {
         name: "Take notes",
         description: "Map out your thoughts and ideas.",
-        link: "/mindMap",
+        link: "/nexusME/mindMap",
       },
     ];
   

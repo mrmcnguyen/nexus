@@ -7,9 +7,9 @@ export default function SelectionPane({ frameworks }) {
   const [selectedFramework, setSelectedFramework] = useState(null);
 
   return (
-    <div className="p-12 flex flex-col justify-center items-center">
-      <h1 className="text-5xl font-bold text-center mb-4">Choose your framework for today</h1>
-      <p className="mt-4 mb-8 inline-flex items-center">
+    <div className="p-12 flex flex-col min-h-screen justify-center items-center">
+      <h1 className="text-5xl font-bold text-black text-center mb-4 lg:text-7xl">Choose your framework for today</h1>
+      <p className="mt-4 mb-8 inline-flex text-black items-center lg:text-xl">
   Unsure of what to pick?
   <Image
     src="/newTab.svg"
@@ -20,13 +20,13 @@ export default function SelectionPane({ frameworks }) {
   />
 </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto lg:max-w-6xl">
         {frameworks.map((framework) => (
           <div
             key={framework.name}
             onClick={() => setSelectedFramework(framework)} // Set selected framework when clicked
             className={`p-6 bg-white border-solid border border-[#c2c8d0] rounded-lg transition duration-300 ease-in-out cursor-pointer 
-            ${selectedFramework?.name === framework.name ? "scale-105 shadow-2xl border-2 border-blue-500 bg-[#3B82F6]/50" : "hover:shadow-2xl transform hover:scale-105"}`}
+            ${selectedFramework?.name === framework.name ? "scale-105 shadow-2xl border-solid border-blue-500 bg-[#3B82F6]/50" : "hover:shadow-2xl transform hover:scale-105"}`}
           >
             <h2 className="text-xl font-semibold text-gray-800 mb-2">{framework.name}</h2>
             <p className="text-gray-600">{framework.description}</p>

@@ -8,7 +8,7 @@ export default function SelectionPane({ frameworks }) {
 
   return (
     <div className="p-12 flex flex-col min-h-screen justify-center items-center">
-      <h1 className="text-5xl font-bold text-black text-center mb-4 lg:text-7xl">Choose your framework for today</h1>
+      <h1 className="text-5xl font-bold text-black text-center mb-4 lg:text-7xl">Choose a framework for today.</h1>
       <p className="mt-4 mb-8 inline-flex text-black items-center lg:text-xl">
   Unsure of what to pick?
   <Image

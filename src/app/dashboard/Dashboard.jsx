@@ -50,7 +50,7 @@ export default function Dashboard() {
                     <h2 className="text-4xl text-white">{formatDate()}</h2>
                 </div>
                 <div className="w-full p-10 text-center pt-0">
-                <h1 className="text-6xl text-white">Welcome, Kevin</h1><br />
+                {/* <h1 className="text-6xl text-white">Welcome, Kevin</h1><br /> */}
                     <div className="grid grid-cols-2 gap-4">
                         <Link className="p-6 bg-blue-500 rounded-lg transition duration-300 ease-in-out cursor-pointer hover:shadow-blue-200 transform hover:scale-105" href={'./nexusME/chooseAFramework/'}>
                             <div className="flex flex-row mb-6">
@@ -63,7 +63,7 @@ export default function Dashboard() {
                             />
                             <h2 className="text-2xl font-semibold text-gray-200">Nexus ME</h2>
                             </div>
-                            <p className="text-gray-200">Everything you need for your individual productivity.</p>
+                            <p className="text-gray-200">Everything you need for your individual productivity. </p>
                         </Link>
                         <Link className="p-6 bg-sky-500 rounded-lg transition duration-300 ease-in-out cursor-pointer hover:shadow-blue-200 transform hover:scale-105" href={'./nexusME/chooseAFramework/'}>
                         <div className="flex flex-row mb-6">

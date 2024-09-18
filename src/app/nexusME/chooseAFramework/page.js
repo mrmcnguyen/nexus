@@ -36,8 +36,8 @@ export default function ChooseFramework() {
         link: "/nexusME/to-do-list",
       },
       {
-        name: "Take notes",
-        description: "Map out your thoughts and ideas.",
+        name: "Mind Map",
+        description: "Take notes of your thoughts and ideas.",
         link: "/nexusME/mindMap",
       },
     ];

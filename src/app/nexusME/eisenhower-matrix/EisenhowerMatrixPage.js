@@ -3,8 +3,18 @@
 export default function EisenhowerMatrix() {
   return (
     <div className="min-h-screen h-4/5 flex flex-col items-center text-left p-8">
-      <h1 className="text-5xl text-black font-bold text-left mb-8 lg:text-7xl">Your Eisenhower Matrix</h1>
-      <div className="grid grid-cols-1 lg:grid-cols-2 max-w-6xl mx-auto">
+      <h1 className="text-5xl text-black font-bold text-left mb-8 lg:text-7xl md:text-3xl">The Eisenhower Matrix</h1>
+      <div className="flex flex-row">
+        <div className="flex flex-col justify-center items-center">
+          <div>Urgent</div>
+          <div>Not Urgent</div>
+        </div>
+        <div className="flex flex-col justify-center items-center">
+          <div>Important</div>
+          <div>Not Important</div>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 max-w-6xl mx-auto h-full">
         {/* Quadrant 1: Urgent and Important */}
         <div className="p-6 bg-blue-500 text-white rounded-tl-lg shadow-lg">
           <h2 className="text-2xl font-semibold mb-4">Urgent and Important</h2>
@@ -30,5 +40,6 @@ export default function EisenhowerMatrix() {
         </div>
       </div>
     </div>
+    
   );
 }

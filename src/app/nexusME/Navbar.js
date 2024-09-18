@@ -33,7 +33,7 @@ const frameworks = [
     link: "/nexusME/to-do-list",
   },
   {
-    name: "Take notes",
+    name: "Mind Map",
     description: "Map out your thoughts and ideas.",
     link: "/nexusME/mindMap",
   },
@@ -60,7 +60,7 @@ export default function Navbar({ page }) {
             key={framework.name}
             href={framework.link}
             className={`text-gray-500 font-semibold hover:text-blue-400 ${
-              page === framework.link ? 'text-blue-400' : ''
+              page === framework.link ? 'text-blue-500 border-b border-[#bfdbfe]' : ''
             }`}
           >
             {framework.name}

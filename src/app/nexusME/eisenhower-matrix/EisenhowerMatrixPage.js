@@ -3,7 +3,7 @@
 export default function EisenhowerMatrix() {
   return (
     <div className="min-h-screen h-4/5 flex flex-col items-center text-left p-8">
-      <h1 className="text-5xl text-black font-bold text-left mb-8 lg:text-7xl md:text-3xl">The Eisenhower Matrix</h1>
+      <h1 className="text-5xl text-black font-normal text-left mb-8 lg:text-5xl md:text-3xl 2xl:text-7xl">The Eisenhower Matrix</h1>
       <div className="flex flex-row">
         <div className="flex flex-col justify-center items-center">
           <div>Urgent</div>

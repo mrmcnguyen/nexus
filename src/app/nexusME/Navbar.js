@@ -60,7 +60,7 @@ export default function Navbar({ page }) {
             key={framework.name}
             href={framework.link}
             className={`text-gray-500 font-semibold hover:text-blue-400 ${
-              page === framework.link ? 'text-blue-500 border-b border-[#bfdbfe]' : ''
+              page === framework.link ? 'bg-[#bfdbfe] p-2 rounded-lg text-gray-700 border-b shadow-sl' : ''
             }`}
           >
             {framework.name}

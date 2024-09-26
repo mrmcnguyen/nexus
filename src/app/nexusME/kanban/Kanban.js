@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function KanbanComponent(){
     const initialTasks = [
-        { id: 1, title: 'Task 1', status: 'To Do' },
+        { id: 1, title: 'Link Dataset to application backend', status: 'To Do' },
         { id: 2, title: 'Task 2', status: 'In Progress' },
         { id: 3, title: 'Task 3', status: 'Done' },
     ];
@@ -28,6 +28,13 @@ export default function KanbanComponent(){
             };
             setTasks([...tasks, newTask]);
             setNewTaskTitle(''); // Clear input after adding task
+        }
+    };
+
+    // Handle pressing Enter to add the task
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleAddTask();
         }
     };
 
@@ -55,8 +62,9 @@ export default function KanbanComponent(){
                     type="text"
                     value={newTaskTitle}
                     onChange={(e) => setNewTaskTitle(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     placeholder="Enter new task..."
-                    className="p-2 border border-gray-300 rounded mr-2 flex-grow"
+                    className="p-2 border border-gray-300 rounded mr-2 flex-grow text-black"
                 />
                 <button
                     onClick={handleAddTask}
@@ -73,17 +81,30 @@ export default function KanbanComponent(){
                 <div className="bg-gray-100 p-4 rounded-lg flex flex-col h-full overflow-y-auto">
                     <h2 className="text-xl text-black font-semibold text-center mb-4">To Do</h2>
                     <div className="flex-grow">
-                        {getTasksByStatus('To Do').map(task => (
-                            <div key={task.id} className="p-4 bg-white rounded shadow mb-4">
-                                <p className="text-black">{task.title}</p>
-                                <button
-                                    onClick={() => handleMoveTask(task.id, 'In Progress')}
-                                    className="mt-2 text-sm text-blue-500"
-                                >
-                                    Move to In Progress
-                                </button>
-                            </div>
-                        ))}
+                    {getTasksByStatus('To Do').map((task) => (
+                      <div 
+                          key={task.id} 
+                          className="p-4 bg-white rounded shadow mb-4 group hover:bg-gray-200 transition duration-200 ease-in-out"
+                      >
+                          <div className="flex flex-row justify-between">
+                              <p className="text-black">{task.title}</p>
+                              {/* Hide the image by default and show on hover */}
+                              <Image
+                                  src="/options.svg"
+                                  className="ml-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out"  
+                                  width={14}
+                                  height={14}
+                                  priority
+                              />
+                          </div>
+                          <button
+                              onClick={() => handleMoveTask(task.id, 'In Progress')}
+                              className="mt-2 text-sm text-blue-500"
+                          >
+                              Move to In Progress
+                          </button>
+                      </div>
+                  ))}
                     </div>
                 </div>
 
@@ -92,8 +113,21 @@ export default function KanbanComponent(){
                     <h2 className="text-xl font-semibold text-center text-black mb-4">In Progress</h2>
                     <div className="flex-grow">
                         {getTasksByStatus('In Progress').map(task => (
-                            <div key={task.id} className="p-4 bg-white rounded shadow mb-4">
+                            <div 
+                            key={task.id} 
+                            className="p-4 bg-yellow-50 rounded shadow mb-4 group hover:bg-yellow-200 transition duration-200 ease-in-out"
+                        >
+                            <div className="flex flex-row justify-between">
                                 <p className="text-black">{task.title}</p>
+                                {/* Hide the image by default and show on hover */}
+                                <Image
+                                    src="/options.svg"
+                                    className="ml-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out"  
+                                    width={14}
+                                    height={14}
+                                    priority
+                                />
+                            </div>
                                 <button
                                     onClick={() => handleMoveTask(task.id, 'Done')}
                                     className="mt-2 text-sm text-blue-500"
@@ -110,8 +144,21 @@ export default function KanbanComponent(){
                     <h2 className="text-xl font-semibold text-center text-black mb-4">Done</h2>
                     <div className="flex-grow">
                         {getTasksByStatus('Done').map(task => (
-                            <div key={task.id} className="p-4 bg-white rounded shadow mb-4">
+                            <div 
+                            key={task.id} 
+                            className="p-4 bg-green-50 rounded shadow mb-4 group hover:bg-green-200 transition duration-200 ease-in-out"
+                        >
+                            <div className="flex flex-row justify-between">
                                 <p className="text-black">{task.title}</p>
+                                {/* Hide the image by default and show on hover */}
+                                <Image
+                                    src="/options.svg"
+                                    className="ml-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out"  
+                                    width={14}
+                                    height={14}
+                                    priority
+                                />
+                            </div>
                             </div>
                         ))}
                     </div>

@@ -27,7 +27,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/app/nexusME/pomodoro/Pomodoro.js"  ],
   "exclude": [
     "node_modules"
   ]

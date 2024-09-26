@@ -12,6 +12,8 @@ export default function KanbanComponent(){
 
     const [tasks, setTasks] = useState(initialTasks);
     const [newTaskTitle, setNewTaskTitle] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedTask, setSelectedTask] = useState(null); 
 
     // Handle moving tasks to a new status
     const handleMoveTask = (taskId, newStatus) => {
@@ -39,6 +41,18 @@ export default function KanbanComponent(){
     };
 
     const getTasksByStatus = (status) => tasks.filter(task => task.status === status);
+
+     // Handle task click to open modal
+     const handleTaskClick = (task) => {
+        setSelectedTask(task);
+        setIsModalOpen(true);
+    };
+
+    // Handle closing the modal
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedTask(null);
+    };
 
     return (
         <div className="p-8 min-h-screen flex flex-col">
@@ -85,17 +99,20 @@ export default function KanbanComponent(){
                       <div 
                           key={task.id} 
                           className="p-4 bg-white rounded shadow mb-4 group hover:bg-gray-200 transition duration-200 ease-in-out"
+                          onClick={() => handleTaskClick(task)}
                       >
                           <div className="flex flex-row justify-between">
                               <p className="text-black">{task.title}</p>
                               {/* Hide the image by default and show on hover */}
+                              <div className="bg-gray-100 p-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out rounded-lg">
                               <Image
-                                  src="/options.svg"
-                                  className="ml-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out"  
-                                  width={14}
-                                  height={14}
-                                  priority
-                              />
+                                    src="/options.svg"
+                                    className="opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out"  
+                                    width={14}
+                                    height={14}
+                                    priority
+                                />
+                                </div>
                           </div>
                           <button
                               onClick={() => handleMoveTask(task.id, 'In Progress')}
@@ -116,17 +133,20 @@ export default function KanbanComponent(){
                             <div 
                             key={task.id} 
                             className="p-4 bg-yellow-50 rounded shadow mb-4 group hover:bg-yellow-200 transition duration-200 ease-in-out"
+                            onClick={() => handleTaskClick(task)}
                         >
                             <div className="flex flex-row justify-between">
                                 <p className="text-black">{task.title}</p>
                                 {/* Hide the image by default and show on hover */}
-                                <Image
+                                <div className="bg-yellow-100 p-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out rounded-lg">
+                              <Image
                                     src="/options.svg"
-                                    className="ml-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out"  
+                                    className="opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out"  
                                     width={14}
                                     height={14}
                                     priority
                                 />
+                                </div>
                             </div>
                                 <button
                                     onClick={() => handleMoveTask(task.id, 'Done')}
@@ -147,23 +167,42 @@ export default function KanbanComponent(){
                             <div 
                             key={task.id} 
                             className="p-4 bg-green-50 rounded shadow mb-4 group hover:bg-green-200 transition duration-200 ease-in-out"
+                            onClick={() => handleTaskClick(task)}
                         >
                             <div className="flex flex-row justify-between">
                                 <p className="text-black">{task.title}</p>
                                 {/* Hide the image by default and show on hover */}
-                                <Image
+                                <div className="bg-green-100 p-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out rounded-lg">
+                              <Image
                                     src="/options.svg"
-                                    className="ml-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out"  
+                                    className="opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out"  
                                     width={14}
                                     height={14}
                                     priority
                                 />
+                                </div>
                             </div>
                             </div>
                         ))}
                     </div>
                 </div>
             </div>
+
+            {/* Modal */}
+            {isModalOpen && selectedTask && (
+                <div className="fixed text-black inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
+                        <h2 className="text-2xl font-bold mb-4">{selectedTask.title}</h2>
+                        <p><strong>Status:</strong> {selectedTask.status}</p>
+                        <button 
+                            onClick={closeModal} 
+                            className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

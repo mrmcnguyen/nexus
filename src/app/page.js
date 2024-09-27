@@ -3,11 +3,13 @@ import Image from 'next/image'
 import Link from 'next/link';
 import {useAuthState} from 'react-firebase-hooks/auth'
 import { auth } from './firebase/firebase';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import { useState, useEffect } from 'react';
 
 export default function Home() {
+  
+  redirect('./dashboard');
   
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 export default function KanbanComponent(){
@@ -14,6 +14,9 @@ export default function KanbanComponent(){
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null); 
+    const [dropdownTaskId, setDropdownTaskId] = useState(null);
+
+    const dropdownRef = useRef(null);
 
     // Handle moving tasks to a new status
     const handleMoveTask = (taskId, newStatus) => {
@@ -53,6 +56,24 @@ export default function KanbanComponent(){
         setIsModalOpen(false);
         setSelectedTask(null);
     };
+    
+    const toggleDropdown = (taskId) => {
+        setDropdownTaskId(dropdownTaskId === taskId ? null : taskId); // Toggle between null and taskId
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setDropdownTaskId(null); // Close dropdown if click is outside
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [dropdownRef]);
 
     return (
         <div className="p-8 min-h-screen flex flex-col">
@@ -99,20 +120,27 @@ export default function KanbanComponent(){
                       <div 
                           key={task.id} 
                           className="p-4 bg-white rounded shadow mb-4 group hover:bg-gray-200 transition duration-200 ease-in-out"
-                          onClick={() => handleTaskClick(task)}
                       >
                           <div className="flex flex-row justify-between">
-                              <p className="text-black">{task.title}</p>
+                              <p className="flex items-center pl-2 border-l-4 border-indigo-500 text-black">{task.title}</p>
                               {/* Hide the image by default and show on hover */}
-                              <div className="bg-gray-100 p-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out rounded-lg">
-                              <Image
-                                    src="/options.svg"
-                                    className="opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out"  
-                                    width={14}
-                                    height={14}
-                                    priority
-                                />
-                                </div>
+                              <div className="relative" ref={dropdownRef}>
+                                  <button onClick={() => toggleDropdown(task.id)} className="bg-gray-100 opacity-0 group-hover:opacity-100 p-2 rounded-lg transition">
+                                      <Image
+                                          src="/options.svg"
+                                          width={14}
+                                          height={14}
+                                          priority
+                                      />
+                                  </button>
+                                  {dropdownTaskId === task.id && (
+                                      <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-10">
+                                          <button className="block w-full px-4 py-2 text-left text-black rounded-t-lg hover:bg-gray-100">Edit</button>
+                                          <button className="block w-full px-4 py-2 text-left text-black hover:bg-gray-100">Delete</button>
+                                          <button className="block w-full px-4 py-2 text-left text-black hover:bg-gray-100">Move to In Progress</button>
+                                      </div>
+                                  )}
+                              </div>
                           </div>
                           <button
                               onClick={() => handleMoveTask(task.id, 'In Progress')}
@@ -132,11 +160,10 @@ export default function KanbanComponent(){
                         {getTasksByStatus('In Progress').map(task => (
                             <div 
                             key={task.id} 
-                            className="p-4 bg-yellow-50 rounded shadow mb-4 group hover:bg-yellow-200 transition duration-200 ease-in-out"
-                            onClick={() => handleTaskClick(task)}
+                            className="p-4 bg-yellow-50 rounded-lg shadow mb-4 group hover:bg-yellow-200 transition duration-200 ease-in-out"
                         >
                             <div className="flex flex-row justify-between">
-                                <p className="text-black">{task.title}</p>
+                            <p className="flex items-center pl-2 border-l-4 border-indigo-500 text-black">{task.title}</p>
                                 {/* Hide the image by default and show on hover */}
                                 <div className="bg-yellow-100 p-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out rounded-lg">
                               <Image
@@ -166,11 +193,10 @@ export default function KanbanComponent(){
                         {getTasksByStatus('Done').map(task => (
                             <div 
                             key={task.id} 
-                            className="p-4 bg-green-50 rounded shadow mb-4 group hover:bg-green-200 transition duration-200 ease-in-out"
-                            onClick={() => handleTaskClick(task)}
+                            className="p-4 bg-green-50 rounded-lg shadow mb-4 group hover:bg-green-200 transition duration-200 ease-in-out"
                         >
                             <div className="flex flex-row justify-between">
-                                <p className="text-black">{task.title}</p>
+                            <p className="flex items-center pl-2 border-l-4 border-indigo-500 text-black">{task.title}</p>
                                 {/* Hide the image by default and show on hover */}
                                 <div className="bg-green-100 p-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out rounded-lg">
                               <Image

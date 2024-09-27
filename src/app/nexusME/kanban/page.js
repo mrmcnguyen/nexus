@@ -5,7 +5,7 @@ import { DM_Sans } from "next/font/google";
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
 export const metadata = {
-    title: "Eisenhower Matrix",
+    title: "Individual Kanban Board",
   };
 
 export default function Kanban(){

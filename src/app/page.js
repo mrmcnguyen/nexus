@@ -4,19 +4,27 @@ import {useAuthState} from 'react-firebase-hooks/auth'
 import { auth } from './firebase/firebase';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [user] = useAuthState(auth);
-  const router = useRouter()
-  const userSession = sessionStorage.getItem('user');
+  const [userSession, setUserSession] = useState(null);
+  const router = useRouter();
 
-  console.log({user})
- 
-  if (!user && !userSession){
-    router.push('/signUp')
-  }
+  // Use useEffect to safely access sessionStorage in the client
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedUser = sessionStorage.getItem('user');
+      setUserSession(storedUser);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!user && !userSession) {
+      router.push('/signUp');
+    }
+  }, [user, userSession, router]);
   
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <button onClick={() => {

@@ -32,7 +32,7 @@ export default function TodoList() {
 
   return (
     <div className="min-h-screen flex flex-col p-8 bg-gray-100">
-      <h1 className="text-5xl text-black font-normal text-left mb-8 lg:text-5xl md:text-3xl 2xl:text-7xl">To-Do List</h1>
+      <h1 className="text-5xl text-black font-normal text-left mb-8 lg:text-5xl md:text-3xl 2xl:text-6xl">To-Do List</h1>
       <div className="bg-white shadow-lg w-full rounded-lg p-8 w-full">
         <div className="flex mb-6">
           <input

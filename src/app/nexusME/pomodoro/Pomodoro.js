@@ -37,7 +37,7 @@ export default function Pomodoro() {
 
   return (
     <div className="min-h-screen h-4/5 flex flex-col items-start text-left p-8 bg-[#ba4949]">
-      <h1 className="text-5xl text-white font-normal text-left mb-4 lg:text-5xl md:text-3xl 2xl:text-7xl">Pomodoro Timer</h1>
+      <h1 className="text-5xl text-white font-normal text-left mb-4 lg:text-5xl md:text-3xl 2xl:text-6xl">Pomodoro Timer</h1>
       <p className='text-light text-red-100 text-left mb-4'>The Pomodoro technique helps you manage time more effectively by breaking work into intervals (25 minutes of focused work followed by a short break). This technique improves concentration, prevents burnout, and enhances productivity by allowing structured breaks, making it easier to maintain long periods of focus without feeling overwhelmed.
 
 By using this timer, you can create a productive workflow that balances effort and rest, leading to more efficient task completion.</p>

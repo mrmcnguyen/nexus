@@ -78,7 +78,7 @@ export default function KanbanComponent(){
     return (
         <div className="p-8 min-h-screen flex flex-col">
             <div className="flex flex-row justify-between items-center mb-8">
-                <h1 className="text-5xl text-black font-normal text-left lg:text-5xl md:text-3xl 2xl:text-7xl">Kanban Board</h1>
+                <h1 className="text-5xl text-black font-normal text-left lg:text-5xl md:text-3xl 2xl:text-6xl">Kanban Board</h1>
                 <button className="flex flex-row text-xl items-center px-4 py-2 mr-2 text-gray-600 transition duration-200 border border-[#c2c8d0] align-middle font-semibold rounded-lg hover:bg-gray-300">
                     <Image
                         src="/list.svg"

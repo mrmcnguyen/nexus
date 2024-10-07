@@ -23,7 +23,7 @@ export default function OneThreeFiveFramework() {
 
   return (
     <div className="p-8 min-h-screen bg-gray-100">
-      <h1 className="text-5xl text-black font-normal text-left lg:text-5xl md:text-3xl 2xl:text-7xl">1-3-5 Productivity Framework</h1>
+      <h1 className="text-5xl text-black font-normal text-left lg:text-5xl md:text-3xl 2xl:text-6xl">1-3-5 Productivity Framework</h1>
   <button className="mt-8 mb-8 inline-flex text-gray-400 items-center lg:text-xl" onClick={() => window.open("https://www.timegram.io/blog/1-3-5-rule")}>
   Unsure of how to use this?
   <Image

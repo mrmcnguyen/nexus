@@ -41,7 +41,7 @@ const frameworks = [
 
 export default function Navbar({ page }) {
   return (
-    <nav className={`pt-1 pb-1 h-1/5 flex flex-row items-center border-b border-[#c2c8d0] ${dmSans.className} ${page === '/nexusME/pomodoro' ? 'bg-red-100' : ''}`}>
+    <nav className={`pt-1 pb-1 z-50 flex flex-row items-center border-b border-[#c2c8d0] ${dmSans.className} ${page === '/nexusME/pomodoro' ? 'bg-red-100' : ''}`}>
       {/* Logo */}
       <Link href="/dashboard">
         <Image

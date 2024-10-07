@@ -10,7 +10,7 @@ export const metadata = {
 
 export default function EisenhowerMatrixPage() {
   return (
-    <body className={`min-h-screen ${dmSans.className}`}>
+    <body className={`overflow-y-hidden ${dmSans.className}`}>
     <Navbar page={'/nexusME/eisenhower-matrix'} />
     <EisenhowerMatrix/>
   </body>

@@ -119,7 +119,7 @@ export default function KanbanComponent(){
                     {getTasksByStatus('To Do').map((task) => (
                       <div 
                           key={task.id} 
-                          className="p-4 bg-white rounded shadow mb-4 group hover:bg-gray-200 transition duration-200 ease-in-out"
+                          className="p-4 bg-white border border-gray-300 rounded mb-4 group hover:bg-gray-200 transition duration-200 ease-in-out"
                       >
                           <div className="flex flex-row justify-between">
                               <p className="flex items-center pl-2 border-l-4 border-indigo-500 text-black">{task.title}</p>

@@ -12,7 +12,9 @@ export default function Kanban(){
     return(
         <body className={`text-black ${dmSans.className}`}>
         <Navbar page={'/nexusME/1-3-5'} />
-        <OneThreeFiveFramework/>
+        <div style={{ paddingTop: '60px' }}> 
+          <OneThreeFiveFramework />
+        </div>
         </body>
     )
 }

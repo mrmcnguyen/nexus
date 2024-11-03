@@ -12,7 +12,9 @@ export default function PomodoroPage() {
   return (
     <body className={`overflow-y-hidden ${dmSans.className}`}>
     <Navbar page={'/nexusME/pomodoro'} />
-    <Pomodoro/>
+    <div style={{ paddingTop: '60px' }}> 
+          <Pomodoro />
+        </div>
   </body>
   );
 }

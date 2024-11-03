@@ -10,9 +10,11 @@ export const metadata = {
 
 export default function EisenhowerMatrixPage() {
   return (
-    <body className={`overflow-y-hidden ${dmSans.className}`}>
+    <body className={`${dmSans.className}`}>
     <Navbar page={'/nexusME/eisenhower-matrix'} />
-    <EisenhowerMatrix/>
+    <div style={{ paddingTop: '60px' }}> 
+          <EisenhowerMatrix />
+        </div>
   </body>
   );
 }

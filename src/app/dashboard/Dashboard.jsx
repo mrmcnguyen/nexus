@@ -19,8 +19,8 @@ export default function Dashboard() {
         const fetchUser = async () => {
             const { data, error } = await supabase.auth.getUser();
             console.log(data);
-            if (data.user){
-                setUser(data.user);  // Set the user data
+            if (data !== null){
+                setUser(data);  // Set the user data
                 setLoading(false);  // Stop loading after fetching
             } else{
                 setUser("undefined");

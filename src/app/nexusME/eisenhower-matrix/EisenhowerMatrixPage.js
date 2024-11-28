@@ -29,7 +29,7 @@ export default function EisenhowerMatrixPage() {
     };
 
     return (
-      <div className={`p-4 ${bgColor} text-white ${borderRoundness} shadow-lg flex flex-col h-full`}>
+      <div className={`p-4 bg-[#2F2F2F] text-white ${borderRoundness} shadow-lg flex flex-col h-full`}>
         <h2 className="text-left text-2xl font-semibold">{title}</h2>
         <p className="text-left text-lg font-light mb-4">{description}</p>
         <ul className="flex-grow overflow-y-auto max-h-64 mb-4">
@@ -101,7 +101,7 @@ export default function EisenhowerMatrixPage() {
       </div>
 
       {/* Right Side - Sidebar */}
-      <div className="w-1/4 bg-[#1f1f1f] shadow-lg rounded-lg p-6 h-full">
+      <div className="w-1/4 bg-[#2F2F2F] shadow-lg rounded-lg p-6 h-full">
         <h2 className="text-2xl text-white font-semibold mb-4">Matrix Management</h2>
         {/* Additional functionality can be added here */}
         <p className="text-gray-400">

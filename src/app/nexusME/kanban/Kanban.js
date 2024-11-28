@@ -78,13 +78,14 @@ export default function KanbanComponent(){
     return (
         <div className="p-8 pt-6 min-h-screen flex flex-col bg-[#171717]">
             <div className="flex flex-row justify-between items-center mb-8">
-                <h1 className="text-5xl text-gray-300 font-normal text-left lg:text-5xl md:text-3xl 2xl:text-6xl">Kanban Board</h1>
-                <button className="flex flex-row text-xl items-center px-4 py-2 mr-2 text-gray-300 transition duration-200 border border-[#c2c8d0] align-middle font-semibold rounded-lg hover:bg-gray-300">
+                <h1 className="text-5xl text-gray-300 font-normal text-left lg:text-4xl md:text-3xl 2xl:text-6xl">Kanban Board</h1>
+                <button className="flex flex-row text-xl bg-[#2F2F2F] items-center px-4 py-2 mr-2 text-gray-300 transition duration-200 align-middle font-semibold rounded-lg hover:bg-[#707070]">
                     <Image
                         src="/list.svg"
                         style={{ filter: 'invert(1)' }}
                         className="mr-2"  
                         width={14}
+                        alt='t'
                         height={14}
                         priority
                     />
@@ -104,7 +105,7 @@ export default function KanbanComponent(){
                 />
                 <button
                     onClick={handleAddTask}
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                    className="bg-[#4C6BF5] text-white px-4 py-2 rounded hover:bg-blue-600 transition"
                 >
                     Add Task
                 </button>
@@ -123,7 +124,7 @@ export default function KanbanComponent(){
                           className="p-4 bg-[#585858] rounded-lg shadow mb-4 group hover:bg-[#707070] transition duration-200 ease-in-out"
                       >
                           <div className="flex flex-row justify-between">
-                              <p className="flex items-center pl-2 border-l-4 border-cyan-400 text-gray-200">{task.title}</p>
+                              <p className="flex items-center pl-2 border-l-4 border-[#4C6BF5] text-gray-200">{task.title}</p>
                               {/* Hide the image by default and show on hover */}
                               <div className="relative" ref={dropdownRef}>
                                   <button onClick={() => toggleDropdown(task.id)} className="bg-[#707070] opacity-0 group-hover:opacity-100 p-2 rounded-lg transition">
@@ -131,6 +132,7 @@ export default function KanbanComponent(){
                                           src="/options.svg"
                                           width={14}
                                           height={14}
+                                          alt="t"
                                           priority
                                       />
                                   </button>
@@ -164,7 +166,7 @@ export default function KanbanComponent(){
                             className="p-4 bg-[#585858] rounded-lg shadow mb-4 group hover:bg-[#707070] transition duration-200 ease-in-out"
                         >
                             <div className="flex flex-row justify-between">
-                            <p className="flex items-center pl-2 border-l-4 border-indigo-500 text-gray-200">{task.title}</p>
+                            <p className="flex items-center pl-2 border-l-4 border-[#4C6BF5] text-gray-200">{task.title}</p>
                                 {/* Hide the image by default and show on hover */}
                                 <div className="bg-[#707070] p-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out rounded-lg">
                               <Image
@@ -172,6 +174,7 @@ export default function KanbanComponent(){
                                     className="opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out"  
                                     width={14}
                                     height={14}
+                                    alt="t"
                                     priority
                                 />
                                 </div>
@@ -197,13 +200,14 @@ export default function KanbanComponent(){
                             className="p-4 bg-[#585858] rounded-lg shadow mb-4 group hover:bg-[#707070] transition duration-200 ease-in-out"
                         >
                             <div className="flex flex-row justify-between">
-                            <p className="flex items-center pl-2 border-l-4 border-green-300 text-gray-200">{task.title}</p>
+                            <p className="flex items-center pl-2 border-l-4 border-[#4C6BF5] text-gray-200">{task.title}</p>
                                 {/* Hide the image by default and show on hover */}
                                 <div className="bg-[#707070] p-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out rounded-lg">
                               <Image
                                     src="/options.svg"
                                     className="opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out"  
                                     width={14}
+                                    alt="t"
                                     height={14}
                                     priority
                                 />

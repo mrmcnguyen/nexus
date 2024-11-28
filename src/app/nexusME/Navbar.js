@@ -73,7 +73,7 @@ export default function Navbar({ page }) {
 
       {/* Button on the right side */}
       <div className="flex flex-row ml-auto pr-4">
-  <button className="px-4 py-2 mr-2 text-[#C7D2FE] transition duration-200 border border-[#C7D2FE] align-middle font-semibold rounded-lg hover:bg-[#4C6BF5]">
+  <button className="px-4 py-2 mr-2 text-[#C7D2FE] transition duration-200 border border-gray-500 align-middle font-semibold rounded-lg hover:bg-[#4C6BF5]">
     About
   </button>
   <button className="flex flex-row px-4 py-2 align-middle items-center transition duration-200 bg-[#4C6BF5] text-white font-semibold rounded-lg hover:bg-[#3B55C2]">

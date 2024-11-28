@@ -18,12 +18,16 @@ export default function Dashboard() {
     useEffect(() => {
         const fetchUser = async () => {
             const { data, error } = await supabase.auth.getUser();
-            console.log(data.user);
-            setUser(data.user);  // Set the user data
-            setLoading(false);  // Stop loading after fetching
+            console.log(data);
+            if (!error){
+                setUser(data.user);  // Set the user data
+                setLoading(false);  // Stop loading after fetching
+            } else{
+                setUser("undefined");
+            }
         }
 
-        if (!loading && !user) {
+        if (user === "undefined") {
             router.push('/signIn');  // Redirect only when loading is done and user is still null
         }
 
@@ -56,7 +60,7 @@ export default function Dashboard() {
     }
 
     return (
-        <main className="flex flex-col min-h-screen items-center justify-center p-5 bg-fixed bg-cover bg-center"
+        <main className="flex flex-col min-h-screen items-center justify-center p-5 bg-fixed bg-cover bg-center overflow-hidden"
         style={{ backgroundImage: `url('/6084855.jpg')` }}
         >
             <Image
@@ -68,8 +72,8 @@ export default function Dashboard() {
             />
             <div className="flex flex-col items-center justify-center">
                 <div className="w-full p-10 text-center h-full pt-5">
-                    <h1 className="text-8xl fond-bold text-white mb-4">{currentTime}</h1>
-                    <h2 className="text-4xl text-white">{formatDate()}</h2>
+                    <h1 className="lg:text-7xl md:text-6xl 2xl:text-8xl fond-bold text-white mb-4">{currentTime}</h1>
+                    <h2 className="lg:text-3xl md:text-2xl 2xl:text-4xl text-white">{formatDate()}</h2>
                 </div>
                 <div className="max-w-full p-10 text-center pt-0">
                 {/* <h1 className="text-6xl text-white">Welcome, Kevin</h1><br /> */}

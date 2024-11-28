@@ -18,8 +18,7 @@ export default function Dashboard() {
     useEffect(() => {
         const fetchUser = async () => {
             const { data, error } = await supabase.auth.getUser();
-            console.log(data);
-            if (!error){
+            if (data.user !== null){
                 setUser(data.user);  // Set the user data
                 setLoading(false);  // Stop loading after fetching
             } else{

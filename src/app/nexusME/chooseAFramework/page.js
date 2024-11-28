@@ -42,6 +42,7 @@ export default function ChooseFramework() {
 
   //   const [user, setUser] = useState(null);
   //   const router = useRouter();
+  //   const [loading, setLoading] = useState(true);
 
   //   useEffect(() => {
   //     const fetchUser = async () => {

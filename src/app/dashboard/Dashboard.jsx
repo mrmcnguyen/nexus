@@ -24,6 +24,7 @@ export default function Dashboard() {
             } else{
                 setUser("undefined");
             }
+            console.log(user);
         }
 
         if (user === "undefined") {

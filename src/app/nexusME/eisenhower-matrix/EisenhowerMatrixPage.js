@@ -59,7 +59,7 @@ export default function EisenhowerMatrixPage() {
   };
 
   return (
-    <div className="h-screen flex p-4 bg-gray-100 space-x-8">
+    <div className="h-screen flex p-4 bg-[#171717] space-x-8">
       {/* Left side - Eisenhower Matrix */}
       <div className="grid grid-cols-1 lg:grid-cols-2 w-3/4 h-full">
         <Quadrant
@@ -67,7 +67,7 @@ export default function EisenhowerMatrixPage() {
           tasks={tasks.doNow}
           description="Do: Tasks with deadlines or consequences"
           onAddTask={(task) => addTask('doNow', task)}
-          bgColor="bg-[#61a184]"
+          bgColor="bg-top-left"
           textBoxColor="bg-[#afcfc1]"
           borderRoundness={"rounded-tl-lg"}
         />
@@ -76,7 +76,7 @@ export default function EisenhowerMatrixPage() {
           tasks={tasks.schedule}
           description="Schedule: Tasks with unclear deadlines that contribute to long-term success"
           onAddTask={(task) => addTask('schedule', task)}
-          bgColor="bg-[#ef8d75]"
+          bgColor="bg-top-right"
           textBoxColor="bg-[#f2a18d]"
           borderRoundness={"rounded-tr-lg"}
         />
@@ -85,7 +85,7 @@ export default function EisenhowerMatrixPage() {
           tasks={tasks.delegate}
           description="Delegate: Tasks that must get done but don't require your specific skill set"
           onAddTask={(task) => addTask('delegate', task)}
-          bgColor="bg-[#4672d3]"
+          bgColor="bg-bottom-left"
           textBoxColor="bg-[#98b1e7]"
           borderRoundness={"rounded-bl-lg"}
         />
@@ -94,17 +94,17 @@ export default function EisenhowerMatrixPage() {
           tasks={tasks.eliminate}
           description="Delete: Distractions and unnecessary tasks"
           onAddTask={(task) => addTask('eliminate', task)}
-          bgColor="bg-[#f3676b]"
+          bgColor="bg-bottom-right"
           textBoxColor="bg-[#f5898d]"
           borderRoundness={"rounded-br-lg"}
         />
       </div>
 
       {/* Right Side - Sidebar */}
-      <div className="w-1/4 bg-white shadow-lg rounded-lg p-6 h-full">
-        <h2 className="text-2xl text-black font-semibold mb-4">Matrix Management</h2>
+      <div className="w-1/4 bg-[#1f1f1f] shadow-lg rounded-lg p-6 h-full">
+        <h2 className="text-2xl text-white font-semibold mb-4">Matrix Management</h2>
         {/* Additional functionality can be added here */}
-        <p className="text-gray-700">
+        <p className="text-gray-400">
           What is the Eisenhower Matrix?
         </p>
       </div>

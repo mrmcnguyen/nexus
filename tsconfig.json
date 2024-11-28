@@ -20,14 +20,16 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "target": "ES2017"
   },
   "include": [
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "src/app/nexusME/pomodoro/Pomodoro.js"  ],
+    "**/*.tsx",
+    "src/app/nexusME/pomodoro/Pomodoro.js"
+  ],
   "exclude": [
     "node_modules"
   ]

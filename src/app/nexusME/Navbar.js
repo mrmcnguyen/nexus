@@ -42,8 +42,8 @@ const frameworks = [
 export default function Navbar({ page }) {
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 flex flex-row items-center border-b border-[#c2c8d0] bg-white ${dmSans.className} ${page === '/nexusME/pomodoro' ? 'bg-red-100' : ''}`}
-      style={{ height: '60px' }} // Set height for the navbar
+      className={`fixed top-0 left-0 right-0 z-50 flex flex-row items-center border-b border-gray-500 bg-white ${dmSans.className} ${page === '/nexusME/pomodoro' ? 'bg-red-100' : ''}`}
+      style={{ height: '60px', backgroundColor: '#171717' }} // Set height for the navbar
     >
       {/* Logo */}
       <Link href="/dashboard">
@@ -58,35 +58,35 @@ export default function Navbar({ page }) {
 
       {/* Navigation Links */}
       <div className="p-2 flex-grow flex items-center justify-left space-x-4">
-        {frameworks.map((framework) => (
-          <Link
-            key={framework.name}
-            href={framework.link}
-            className={`text-gray-500 font-semibold hover:text-blue-400 ${
-              page === framework.link ? 'bg-[#bfdbfe] p-2 rounded-lg text-gray-700 border-b shadow-sl' : ''
-            }`}
-          >
-            {framework.name}
-          </Link>
-        ))}
-      </div>
+  {frameworks.map((framework) => (
+    <Link
+      key={framework.name}
+      href={framework.link}
+      className={`text-[#C7D2FE] font-semibold hover:text-[#C7D2FE] ${
+        page === framework.link ? 'bg-[#4C6BF5] p-2 rounded-lg text-white shadow-sl' : ''
+      }`}
+    >
+      {framework.name}
+    </Link>
+  ))}
+</div>
 
       {/* Button on the right side */}
       <div className="flex flex-row ml-auto pr-4">
-        <button className="px-4 py-2 mr-2 text-gray-600 transition duration-200 border border-[#c2c8d0] align-middle font-semibold rounded-lg hover:bg-gray-300">
-          About
-        </button>
-        <button className="flex flex-row px-4 py-2 align-middle items-center transition duration-200 bg-blue-400 text-white font-semibold rounded-lg hover:bg-blue-300">
-          Nexus TEAMS
-          <Image
-            src="/newTab.svg"
-            className="ml-2 filter invert"
-            width={14}
-            height={14}
-            priority
-          />
-        </button>
-      </div>
+  <button className="px-4 py-2 mr-2 text-[#C7D2FE] transition duration-200 border border-[#C7D2FE] align-middle font-semibold rounded-lg hover:bg-[#4C6BF5]">
+    About
+  </button>
+  <button className="flex flex-row px-4 py-2 align-middle items-center transition duration-200 bg-[#4C6BF5] text-white font-semibold rounded-lg hover:bg-[#3B55C2]">
+    Nexus TEAMS
+    <Image
+      src="/newTab.svg"
+      className="ml-2 filter invert"
+      width={14}
+      height={14}
+      priority
+    />
+  </button>
+</div>
     </nav>
   );
 }

@@ -10,11 +10,11 @@ export const metadata = {
 
 export default function EisenhowerMatrixPage() {
   return (
-    <body className={`${dmSans.className}`}>
+<>
     <Navbar page={'/nexusME/eisenhower-matrix'} />
     <div style={{ paddingTop: '60px' }}> 
           <EisenhowerMatrix />
         </div>
-  </body>
+  </>
   );
 }

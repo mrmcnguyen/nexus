@@ -76,12 +76,13 @@ export default function KanbanComponent(){
     }, [dropdownRef]);
 
     return (
-        <div className="p-8 pt-6 min-h-screen flex flex-col">
+        <div className="p-8 pt-6 min-h-screen flex flex-col bg-[#171717]">
             <div className="flex flex-row justify-between items-center mb-8">
-                <h1 className="text-5xl text-black font-normal text-left lg:text-5xl md:text-3xl 2xl:text-6xl">Kanban Board</h1>
-                <button className="flex flex-row text-xl items-center px-4 py-2 mr-2 text-gray-600 transition duration-200 border border-[#c2c8d0] align-middle font-semibold rounded-lg hover:bg-gray-300">
+                <h1 className="text-5xl text-gray-300 font-normal text-left lg:text-5xl md:text-3xl 2xl:text-6xl">Kanban Board</h1>
+                <button className="flex flex-row text-xl items-center px-4 py-2 mr-2 text-gray-300 transition duration-200 border border-[#c2c8d0] align-middle font-semibold rounded-lg hover:bg-gray-300">
                     <Image
                         src="/list.svg"
+                        style={{ filter: 'invert(1)' }}
                         className="mr-2"  
                         width={14}
                         height={14}
@@ -99,7 +100,7 @@ export default function KanbanComponent(){
                     onChange={(e) => setNewTaskTitle(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Enter new task..."
-                    className="p-2 border border-gray-300 rounded mr-2 flex-grow text-black"
+                    className="p-2 bg-[#313131] border border-gray-500 focus-visible:outline-none rounded mr-2 flex-grow text-gray-300"
                 />
                 <button
                     onClick={handleAddTask}
@@ -113,19 +114,19 @@ export default function KanbanComponent(){
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 flex-grow">
                 
                 {/* To Do Column */}
-                <div className="bg-gray-100 p-4 rounded-lg flex flex-col h-full overflow-y-auto">
-                    <h2 className="text-xl text-black font-semibold text-center mb-4">To Do</h2>
+                <div className="bg-[#2F2F2F] p-4 rounded-lg flex flex-col h-full overflow-y-auto">
+                    <h2 className="text-xl text-gray-300 font-semibold text-center mb-4">To Do</h2>
                     <div className="flex-grow">
                     {getTasksByStatus('To Do').map((task) => (
                       <div 
                           key={task.id} 
-                          className="p-4 bg-white border border-gray-300 rounded mb-4 group hover:bg-gray-200 transition duration-200 ease-in-out"
+                          className="p-4 bg-[#585858] rounded-lg shadow mb-4 group hover:bg-[#707070] transition duration-200 ease-in-out"
                       >
                           <div className="flex flex-row justify-between">
-                              <p className="flex items-center pl-2 border-l-4 border-indigo-500 text-black">{task.title}</p>
+                              <p className="flex items-center pl-2 border-l-4 border-cyan-400 text-gray-200">{task.title}</p>
                               {/* Hide the image by default and show on hover */}
                               <div className="relative" ref={dropdownRef}>
-                                  <button onClick={() => toggleDropdown(task.id)} className="bg-gray-100 opacity-0 group-hover:opacity-100 p-2 rounded-lg transition">
+                                  <button onClick={() => toggleDropdown(task.id)} className="bg-[#707070] opacity-0 group-hover:opacity-100 p-2 rounded-lg transition">
                                       <Image
                                           src="/options.svg"
                                           width={14}
@@ -154,18 +155,18 @@ export default function KanbanComponent(){
                 </div>
 
                 {/* In Progress Column */}
-                <div className="bg-yellow-100 p-4 rounded-lg flex flex-col h-full overflow-y-auto">
-                    <h2 className="text-xl font-semibold text-center text-black mb-4">In Progress</h2>
+                <div className="bg-[#2F2F2F] p-4 rounded-lg flex flex-col h-full overflow-y-auto">
+                    <h2 className="text-xl font-semibold text-center text-gray-300 mb-4">In Progress</h2>
                     <div className="flex-grow">
                         {getTasksByStatus('In Progress').map(task => (
                             <div 
                             key={task.id} 
-                            className="p-4 bg-yellow-50 rounded-lg shadow mb-4 group hover:bg-yellow-200 transition duration-200 ease-in-out"
+                            className="p-4 bg-[#585858] rounded-lg shadow mb-4 group hover:bg-[#707070] transition duration-200 ease-in-out"
                         >
                             <div className="flex flex-row justify-between">
-                            <p className="flex items-center pl-2 border-l-4 border-indigo-500 text-black">{task.title}</p>
+                            <p className="flex items-center pl-2 border-l-4 border-indigo-500 text-gray-200">{task.title}</p>
                                 {/* Hide the image by default and show on hover */}
-                                <div className="bg-yellow-100 p-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out rounded-lg">
+                                <div className="bg-[#707070] p-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out rounded-lg">
                               <Image
                                     src="/options.svg"
                                     className="opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out"  
@@ -187,18 +188,18 @@ export default function KanbanComponent(){
                 </div>
 
                 {/* Done Column */}
-                <div className="bg-green-100 p-4 rounded-lg flex flex-col h-full overflow-y-auto">
-                    <h2 className="text-xl font-semibold text-center text-black mb-4">Done</h2>
+                <div className="bg-[#2F2F2F] p-4 rounded-lg flex flex-col h-full overflow-y-auto">
+                    <h2 className="text-xl font-semibold text-center text-gray-300 mb-4">Done</h2>
                     <div className="flex-grow">
                         {getTasksByStatus('Done').map(task => (
                             <div 
                             key={task.id} 
-                            className="p-4 bg-green-50 rounded-lg shadow mb-4 group hover:bg-green-200 transition duration-200 ease-in-out"
+                            className="p-4 bg-[#585858] rounded-lg shadow mb-4 group hover:bg-[#707070] transition duration-200 ease-in-out"
                         >
                             <div className="flex flex-row justify-between">
-                            <p className="flex items-center pl-2 border-l-4 border-indigo-500 text-black">{task.title}</p>
+                            <p className="flex items-center pl-2 border-l-4 border-green-300 text-gray-200">{task.title}</p>
                                 {/* Hide the image by default and show on hover */}
-                                <div className="bg-green-100 p-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out rounded-lg">
+                                <div className="bg-[#707070] p-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out rounded-lg">
                               <Image
                                     src="/options.svg"
                                     className="opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out"  

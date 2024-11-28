@@ -1,28 +1,34 @@
 'use client'
-import { getAuth } from "firebase/auth";
-import { auth } from "../firebase/firebase";
 import Image from "next/image";
+import { useRouter } from 'next/navigation';
 import Link from "next/link";
 import { DM_Sans } from 'next/font/google';
 import { useState, useEffect } from 'react';
+import { supabase } from '../supabase/supabaseClient';
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
 export default function Dashboard() {
 
-    const name = getAuth().currentUser;
-    // Function to format the date
-    const formatDate = () => {
-        const date = new Date();
-        const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-        const day = date.toLocaleDateString('en-US', { day: 'numeric' });
-        const suffix = (day % 10 === 1 && day !== '11') ? 'st' :
-                       (day % 10 === 2 && day !== '12') ? 'nd' :
-                       (day % 10 === 3 && day !== '13') ? 'rd' : 'th';
-        return date.toLocaleDateString('en-US', options).replace(day, `${day}${suffix}`);
-    };
-
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const router = useRouter();
     const [currentTime, setCurrentTime] = useState('');
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const { data, error } = await supabase.auth.getUser();
+            console.log(data.user);
+            setUser(data.user);  // Set the user data
+            setLoading(false);  // Stop loading after fetching
+        }
+
+        if (!loading && !user) {
+            router.push('/signIn');  // Redirect only when loading is done and user is still null
+        }
+
+        fetchUser();
+    }, []);
 
     useEffect(() => {
         const updateTime = () => {
@@ -34,14 +40,30 @@ export default function Dashboard() {
         return () => clearInterval(interval); // Clean up interval on component unmount
     }, []);
 
+    // Function to format the date
+    const formatDate = () => {
+        const date = new Date();
+        const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        const day = date.toLocaleDateString('en-US', { day: 'numeric' });
+        const suffix = (day % 10 === 1 && day !== '11') ? 'st' :
+                       (day % 10 === 2 && day !== '12') ? 'nd' :
+                       (day % 10 === 3 && day !== '13') ? 'rd' : 'th';
+        return date.toLocaleDateString('en-US', options).replace(day, `${day}${suffix}`);
+    };
+
+    if (loading) {
+        return <div>Loading...</div>;  // Show loading state until user data is fetched
+    }
 
     return (
-        <body className={dmSans.className}>
-        <main className="flex flex-col min-h-screen items-center justify-center p-5 bg-[#0f172a]">
+        <main className="flex flex-col min-h-screen items-center justify-center p-5 bg-fixed bg-cover bg-center"
+        style={{ backgroundImage: `url('/6084855.jpg')` }}
+        >
             <Image
                 src="/nexusLogo.png"
                 width={200}
                 height={20}
+                alt="Nexus Logo"
                 priority
             />
             <div className="flex flex-col items-center justify-center">
@@ -58,6 +80,7 @@ export default function Dashboard() {
                                 src="/individual.svg"
                                 className="mr-4 filter invert"
                                 width={24}
+                                alt="t"
                                 height={24}
                                 priority
                             />
@@ -71,6 +94,7 @@ export default function Dashboard() {
                                 src="/team.svg"
                                 className="mr-4 filter invert"
                                 width={24}
+                                alt="t"
                                 height={24}
                                 priority
                             />
@@ -88,6 +112,7 @@ export default function Dashboard() {
                                 className="mr-4"
                                 width={24}
                                 height={24}
+                                alt="t"
                                 priority
                             />
                             Pomodoro Timer
@@ -98,6 +123,7 @@ export default function Dashboard() {
                                 className="mr-4"
                                 width={24}
                                 height={24}
+                                alt="t"
                                 priority
                             />
                             Map your thoughts
@@ -108,6 +134,7 @@ export default function Dashboard() {
                                 className="mr-4"
                                 width={24}
                                 height={24}
+                                alt="t"
                                 priority
                             />
                             Plan out a project
@@ -118,6 +145,7 @@ export default function Dashboard() {
                                 className="mr-4"
                                 width={24}
                                 height={24}
+                                alt="t"
                                 priority
                             />
                             Plan a meeting
@@ -127,6 +155,5 @@ export default function Dashboard() {
                 </div>
             </div>
         </main>
-        </body>
     );
 }

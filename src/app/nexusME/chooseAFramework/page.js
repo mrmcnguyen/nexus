@@ -42,11 +42,9 @@ export default function ChooseFramework() {
     ];
   
     return (
-      <body className={dmSans.className}>
-      <main>
+      <main className="bg-[#12172a] bg-fixed bg-cover bg-center" style={{ backgroundImage: `url('/6084855.jpg')` }}>
       <SelectionPane frameworks={frameworks}/>
       </main>
-      </body>
     );
   }
   

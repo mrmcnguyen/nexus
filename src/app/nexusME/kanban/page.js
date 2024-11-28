@@ -10,12 +10,12 @@ export const metadata = {
 
   export default function Kanban() {
     return (
-      <body className={`text-black ${dmSans.className}`}>
+      <>
         <Navbar page={'/nexusME/kanban'} />
         <div style={{ paddingTop: '60px' }}> 
           <KanbanComponent />
         </div>
-      </body>
+        </>
     );
   }
   

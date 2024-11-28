@@ -1,11 +1,10 @@
-import SelectionPane from './SelectionPane'
+'use client'
+import SelectionPane from './SelectionPane';
 import { DM_Sans } from 'next/font/google';
+import {useRouter} from 'next/navigation';
+import { useState, useEffect } from 'react';
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
-
-export const metadata = {
-  title: "Choose a Framework",
-};
 
 export default function ChooseFramework() {
     const frameworks = [
@@ -40,6 +39,28 @@ export default function ChooseFramework() {
         link: "/nexusME/mindMap",
       },
     ];
+
+  //   const [user, setUser] = useState(null);
+  //   const router = useRouter();
+
+  //   useEffect(() => {
+  //     const fetchUser = async () => {
+  //         const { data, error } = await supabase.auth.getUser();
+  //         console.log(data);
+  //         if (!error){
+  //             setUser(data.user);  // Set the user data
+  //             setLoading(false);  // Stop loading after fetching
+  //         } else{
+  //             setUser("undefined");
+  //         }
+  //     }
+
+  //     if (user === "undefined") {
+  //         router.push('/signIn');  // Redirect only when loading is done and user is still null
+  //     }
+
+  //     fetchUser();
+  // }, []);
   
     return (
       <main className="bg-[#12172a] bg-fixed bg-cover bg-center" style={{ backgroundImage: `url('/6084855.jpg')` }}>

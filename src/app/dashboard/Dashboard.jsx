@@ -27,7 +27,7 @@ export default function Dashboard() {
             console.log(user);
         }
 
-        if (user === "undefined") {
+        if (user === "undefined" || user === null) {
             router.push('/signIn');  // Redirect only when loading is done and user is still null
         }
 

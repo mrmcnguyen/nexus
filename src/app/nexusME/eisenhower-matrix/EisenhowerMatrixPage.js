@@ -17,7 +17,7 @@ export default function EisenhowerMatrixPage() {
     }));
   };
 
-  const Quadrant = ({ title, tasks, description, onAddTask, bgColor, textBoxColor, borderRoundness }) => {
+  const Quadrant = ({ title, tasks, description, onAddTask, bgColor, textBoxColor, borderRoundness, border }) => {
     const [newTask, setNewTask] = useState('');
 
     const handleSubmit = (e) => {
@@ -29,23 +29,23 @@ export default function EisenhowerMatrixPage() {
     };
 
     return (
-      <div className={`p-4 bg-[#2F2F2F] text-white ${borderRoundness} shadow-lg flex flex-col h-full`}>
-        <h2 className="text-left text-2xl font-semibold">{title}</h2>
-        <p className="text-left text-lg font-light mb-4">{description}</p>
-        <ul className="flex-grow overflow-y-auto max-h-64 mb-4">
+      <div className={`p-4 bg-[#2F2F2F] text-white ${borderRoundness} shadow-lg flex flex-col h-full ${border}`}>
+        <h2 className="text-left lg:text-base 2xl:text-2xl text-gray-300">{title}</h2>
+        <p className={`text-left lg:text-sm 2xl:text-base font-extralight text-gray-400 mb-4`}>{description}</p>
+        <ul className="flex-grow overflow-y-auto max-h-64 mb-4 bg-[#585858]">
           {tasks.map((task, index) => (
-            <li key={index} className={`${textBoxColor} text-black p-2 my-2 rounded-full`}>
+            <li key={index} className={`bg-[${textBoxColor}] text-black p-2 my-2 rounded-full`}>
               {task}
             </li>
           ))}
         </ul>
-        <form onSubmit={handleSubmit} className="flex space-x-2 mt-auto">
+        {/* <form onSubmit={handleSubmit} className="flex space-x-2 mt-auto">
           <input
             type="text"
             value={newTask}
             onChange={(e) => setNewTask(e.target.value)}
             placeholder="Add a task"
-            className={`placeholder:text-gray-100 ${textBoxColor} p-3 border rounded-full w-full text-black focus-visible:outline-none`}
+            className={`placeholder:text-gray-100 bg-[${textBoxColor}] p-3 border rounded-full w-full text-black focus-visible:outline-none`}
           />
           <button
             type="submit"
@@ -53,7 +53,7 @@ export default function EisenhowerMatrixPage() {
           >
             Add
           </button>
-        </form>
+        </form> */}
       </div>
     );
   };
@@ -68,8 +68,9 @@ export default function EisenhowerMatrixPage() {
           description="Do: Tasks with deadlines or consequences"
           onAddTask={(task) => addTask('doNow', task)}
           bgColor="bg-top-left"
-          textBoxColor="bg-[#afcfc1]"
+          textBoxColor="#afcfc1"
           borderRoundness={"rounded-tl-lg"}
+          border={"border-r border-b border-gray-500"}
         />
         <Quadrant
           title="Not Urgent but Important"
@@ -77,8 +78,9 @@ export default function EisenhowerMatrixPage() {
           description="Schedule: Tasks with unclear deadlines that contribute to long-term success"
           onAddTask={(task) => addTask('schedule', task)}
           bgColor="bg-top-right"
-          textBoxColor="bg-[#f2a18d]"
+          textBoxColor="#f2a18d"
           borderRoundness={"rounded-tr-lg"}
+          border={"border-b border-gray-500"}
         />
         <Quadrant
           title="Urgent but Not Important"
@@ -86,8 +88,9 @@ export default function EisenhowerMatrixPage() {
           description="Delegate: Tasks that must get done but don't require your specific skill set"
           onAddTask={(task) => addTask('delegate', task)}
           bgColor="bg-bottom-left"
-          textBoxColor="bg-[#98b1e7]"
+          textBoxColor="#98b1e7"
           borderRoundness={"rounded-bl-lg"}
+          border={"border-r border-gray-500"}
         />
         <Quadrant
           title="Not Urgent and Not Important"
@@ -95,16 +98,16 @@ export default function EisenhowerMatrixPage() {
           description="Delete: Distractions and unnecessary tasks"
           onAddTask={(task) => addTask('eliminate', task)}
           bgColor="bg-bottom-right"
-          textBoxColor="bg-[#f5898d]"
+          textBoxColor="#f5898d"
           borderRoundness={"rounded-br-lg"}
         />
       </div>
 
       {/* Right Side - Sidebar */}
       <div className="w-1/4 bg-[#2F2F2F] shadow-lg rounded-lg p-6 h-full">
-        <h2 className="text-2xl text-white font-semibold mb-4">Matrix Management</h2>
+        <h2 className="lg:text-lg 2xl:text-2xl text-white font-light mb-4">Matrix Management</h2>
         {/* Additional functionality can be added here */}
-        <p className="text-gray-400">
+        <p className="font-extralight lg:text-sm 2xl:text-base text-gray-400">
           What is the Eisenhower Matrix?
         </p>
       </div>

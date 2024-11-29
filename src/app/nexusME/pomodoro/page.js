@@ -10,11 +10,11 @@ export const metadata = {
 
 export default function PomodoroPage() {
   return (
-    <body className={`overflow-y-hidden ${dmSans.className}`}>
+    <>
     <Navbar page={'/nexusME/pomodoro'} />
-    <div style={{ paddingTop: '60px' }}> 
+    <div style={{ paddingTop: '50px' }}> 
           <Pomodoro />
         </div>
-  </body>
+        </>
   );
 }

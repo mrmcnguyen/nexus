@@ -4,9 +4,11 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { DM_Sans } from 'next/font/google';
-import { supabase } from '../supabase/supabaseClient';
+import { createClient } from '../../../supabase/client'
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
+
+//!!!!!!!! REMEMBER TO VALIDATE INPUTS !!!!!!!!!
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -14,6 +16,7 @@ const SignIn = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false); // Loading state
   const router = useRouter();
+  const supabase = createClient();
 
   const handleSignIn = async () => {
     try {

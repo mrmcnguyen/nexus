@@ -20,6 +20,9 @@ module.exports = {
       colors: {
         'border-default': 'hsl(0deg 0% 18%;)'
       },
+      dropShadow: {
+        "3xl": "0px 0px 5px rgba(0, 0, 0, 0.5);"
+      },
     },
   },
   plugins: [],

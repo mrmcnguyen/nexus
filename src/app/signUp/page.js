@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { DM_Sans } from 'next/font/google';
 
+//!!!!!!!! REMEMBER TO VALIDATE INPUTS !!!!!!!!!
+
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
 const SignUp = () => {

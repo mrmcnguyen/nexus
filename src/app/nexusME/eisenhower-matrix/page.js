@@ -12,7 +12,7 @@ export default function EisenhowerMatrixPage() {
   return (
 <>
     <Navbar page={'/nexusME/eisenhower-matrix'} />
-    <div style={{ paddingTop: '60px' }}> 
+    <div style={{ paddingTop: '50px', backgroundColor:'#171717' }}> 
           <EisenhowerMatrix />
         </div>
   </>

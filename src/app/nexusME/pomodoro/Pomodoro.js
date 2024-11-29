@@ -36,9 +36,9 @@ export default function Pomodoro() {
   };
 
   return (
-    <div className="min-h-screen h-4/5 flex flex-col items-start text-left p-8 bg-[#ba4949]">
-      <h1 className="text-5xl text-white font-normal text-left mb-4 lg:text-5xl md:text-3xl 2xl:text-6xl">Pomodoro Timer</h1>
-      <p className='text-light text-red-100 text-left mb-4'>The Pomodoro technique helps you manage time more effectively by breaking work into intervals (25 minutes of focused work followed by a short break). This technique improves concentration, prevents burnout, and enhances productivity by allowing structured breaks, making it easier to maintain long periods of focus without feeling overwhelmed.
+    <div className="min-h-screen h-4/5 flex flex-col items-start text-left p-8 bg-[#171717]">
+      <h1 className="text-5xl text-gray-400 font-normal text-left mb-4 lg:text-5xl md:text-3xl 2xl:text-6xl">Pomodoro Timer</h1>
+      <p className='text-light text-gray-300 text-left mb-4'>The Pomodoro technique helps you manage time more effectively by breaking work into intervals (25 minutes of focused work followed by a short break). This technique improves concentration, prevents burnout, and enhances productivity by allowing structured breaks, making it easier to maintain long periods of focus without feeling overwhelmed.
 
 By using this timer, you can create a productive workflow that balances effort and rest, leading to more efficient task completion.</p>
       <div className='flex flex-col justify-center items-center w-full'>
@@ -48,13 +48,13 @@ By using this timer, you can create a productive workflow that balances effort a
       <div className="flex space-x-4">
         <button
           onClick={toggleStartPause}
-          className="bg-white text-[#ba4949] px-6 py-2 rounded-lg text-xl"
+          className="bg-white text-gray-600 px-6 py-2 rounded-lg text-xl"
         >
           {isActive && !isPaused ? 'Pause' : 'Start'}
         </button>
         <button
           onClick={resetTimer}
-          className="bg-white text-[#ba4949] px-6 py-2 rounded-lg text-xl"
+          className="bg-white text-gray-600 px-6 py-2 rounded-lg text-xl"
         >
           Reset
         </button>

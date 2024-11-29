@@ -12,7 +12,7 @@ export const metadata = {
     return (
       <>
         <Navbar page={'/nexusME/kanban'} />
-        <div style={{ paddingTop: '60px' }}> 
+        <div style={{ paddingTop: '50px' }}> 
           <KanbanComponent />
         </div>
         </>

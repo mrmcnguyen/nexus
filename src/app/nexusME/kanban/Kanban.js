@@ -16,6 +16,8 @@ export default function KanbanComponent(){
     const [selectedTask, setSelectedTask] = useState(null); 
     const [dropdownTaskId, setDropdownTaskId] = useState(null);
 
+    // Variables for task count
+    
     const dropdownRef = useRef(null);
 
     // Handle moving tasks to a new status
@@ -76,24 +78,41 @@ export default function KanbanComponent(){
     }, [dropdownRef]);
 
     return (
-        <div className="p-8 pt-6 min-h-screen flex flex-col bg-[#171717]">
-            <div className="flex flex-row justify-between items-center mb-8">
-                <h1 className="text-5xl text-gray-300 font-normal text-left lg:text-4xl md:text-3xl 2xl:text-6xl">Kanban Board</h1>
-                <button className="flex flex-row text-xl bg-[#2F2F2F] items-center px-4 py-2 mr-2 text-gray-300 transition duration-200 align-middle font-semibold rounded-lg hover:bg-[#707070]">
-                    <Image
-                        src="/list.svg"
-                        style={{ filter: 'invert(1)' }}
-                        className="mr-2"  
-                        width={14}
-                        alt='t'
-                        height={14}
-                        priority
-                    />
-                    View as List
-                </button>
+        <div className="p-8 pt-4 min-h-screen flex flex-col bg-[#171717]">
+            <div className="flex flex-row justify-between items-center mb-4">
+                <div className="flex flex-row items-center">
+                    <h1 className="text-5xl text-gray-300 font-normal text-left lg:text-4xl md:text-3xl 2xl:text-6xl">Kanban Board</h1>
+                    <span className="flex flex-row items-center m-4 border border-[#2F2F2F] bg-[#2F2F2F] text-gray-400 text-xs rounded-2xl px-2"><div className="w-2 h-2 bg-emerald-400 mr-2 rounded-full"></div>Synced</span>
+                    </div>
+                <div className="flex flex-row space-x-4">
+        <button className="flex flex-row lg:text-sm 2xl:text-lg bg-[#2F2F2F] items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-lg hover:bg-[#707070]">
+            <Image
+                src="/list.svg"
+                style={{ filter: 'invert(1)' }}
+                className="mr-2"  
+                width={14}
+                alt="t"
+                height={14}
+                priority
+            />
+            View as List
+        </button>
+        <button className="flex flex-row drop-shadow-3xl lg:text-sm 2xl:text-lg bg-[#2F2F2F] items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-lg hover:bg-[#707070]">
+            <Image
+                src="/team.svg" 
+                style={{ filter: 'invert(1)' }}
+                className="mr-2"  
+                width={14}
+                alt="team"
+                height={14}
+                priority
+            />
+            View Team Kanban Board
+        </button>
+    </div>
             </div>
 
-            {/* Task Input for "To Do" */}
+            {/* Task Input for "To Do"
             <div className="flex flex-row mb-6 items-center">
                 <input
                     type="text"
@@ -105,18 +124,18 @@ export default function KanbanComponent(){
                 />
                 <button
                     onClick={handleAddTask}
-                    className="bg-[#4C6BF5] text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                    className="bg-[#6f99da] text-white px-4 py-2 rounded hover:bg-blue-600 transition"
                 >
                     Add Task
                 </button>
-            </div>
+            </div> */}
 
             {/* Kanban Board */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 flex-grow">
                 
                 {/* To Do Column */}
-                <div className="bg-[#2F2F2F] p-4 rounded-lg flex flex-col h-full overflow-y-auto">
-                    <h2 className="text-xl text-gray-300 font-semibold text-center mb-4">To Do</h2>
+                <div className="bg-[#2F2F2F] p-4 border-2 border-[#2F2F2F] rounded-lg border-t-red-500 flex flex-col h-full overflow-y-auto">
+                    <h2 className="text-xl text-gray-300 font-extralight text-left mb-4">To Do</h2>
                     <div className="flex-grow">
                     {getTasksByStatus('To Do').map((task) => (
                       <div 
@@ -124,13 +143,14 @@ export default function KanbanComponent(){
                           className="p-4 bg-[#585858] rounded-lg shadow mb-4 group hover:bg-[#707070] transition duration-200 ease-in-out"
                       >
                           <div className="flex flex-row justify-between">
-                              <p className="flex items-center pl-2 border-l-4 border-[#4C6BF5] text-gray-200">{task.title}</p>
+                              <p className="flex items-center pl-2 border-l-4 border-red-500 text-gray-200">{task.title}</p>
                               {/* Hide the image by default and show on hover */}
                               <div className="relative" ref={dropdownRef}>
                                   <button onClick={() => toggleDropdown(task.id)} className="bg-[#707070] opacity-0 group-hover:opacity-100 p-2 rounded-lg transition">
                                       <Image
                                           src="/options.svg"
                                           width={14}
+                                          className="filter invert"
                                           height={14}
                                           alt="t"
                                           priority
@@ -140,7 +160,6 @@ export default function KanbanComponent(){
                                       <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-10">
                                           <button className="block w-full px-4 py-2 text-left text-black rounded-t-lg hover:bg-gray-100">Edit</button>
                                           <button className="block w-full px-4 py-2 text-left text-black hover:bg-gray-100">Delete</button>
-                                          <button className="block w-full px-4 py-2 text-left text-black hover:bg-gray-100">Move to In Progress</button>
                                       </div>
                                   )}
                               </div>
@@ -157,8 +176,8 @@ export default function KanbanComponent(){
                 </div>
 
                 {/* In Progress Column */}
-                <div className="bg-[#2F2F2F] p-4 rounded-lg flex flex-col h-full overflow-y-auto">
-                    <h2 className="text-xl font-semibold text-center text-gray-300 mb-4">In Progress</h2>
+                <div className="bg-[#2F2F2F] border-2 border-[#2F2F2F] rounded-lg border-t-blue-500 p-4 flex flex-col h-full overflow-y-auto">
+                    <h2 className="text-xl font-extralight text-left text-gray-300 mb-4">In Progress</h2>
                     <div className="flex-grow">
                         {getTasksByStatus('In Progress').map(task => (
                             <div 
@@ -166,7 +185,7 @@ export default function KanbanComponent(){
                             className="p-4 bg-[#585858] rounded-lg shadow mb-4 group hover:bg-[#707070] transition duration-200 ease-in-out"
                         >
                             <div className="flex flex-row justify-between">
-                            <p className="flex items-center pl-2 border-l-4 border-[#4C6BF5] text-gray-200">{task.title}</p>
+                            <p className="flex items-center pl-2 border-l-4 border-blue-500 text-gray-200">{task.title}</p>
                                 {/* Hide the image by default and show on hover */}
                                 <div className="bg-[#707070] p-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out rounded-lg">
                               <Image
@@ -191,8 +210,8 @@ export default function KanbanComponent(){
                 </div>
 
                 {/* Done Column */}
-                <div className="bg-[#2F2F2F] p-4 rounded-lg flex flex-col h-full overflow-y-auto">
-                    <h2 className="text-xl font-semibold text-center text-gray-300 mb-4">Done</h2>
+                <div className="bg-[#2F2F2F] p-4 border-2 border-[#2F2F2F] rounded-lg border-t-emerald-500 flex flex-col h-full overflow-y-auto">
+                    <h2 className="text-xl font-extralight text-left text-gray-300 mb-4">Done</h2>
                     <div className="flex-grow">
                         {getTasksByStatus('Done').map(task => (
                             <div 
@@ -200,7 +219,7 @@ export default function KanbanComponent(){
                             className="p-4 bg-[#585858] rounded-lg shadow mb-4 group hover:bg-[#707070] transition duration-200 ease-in-out"
                         >
                             <div className="flex flex-row justify-between">
-                            <p className="flex items-center pl-2 border-l-4 border-[#4C6BF5] text-gray-200">{task.title}</p>
+                            <p className="flex items-center pl-2 border-l-4 border-emerald-500 text-gray-200">{task.title}</p>
                                 {/* Hide the image by default and show on hover */}
                                 <div className="bg-[#707070] p-2 opacity-0 group-hover:opacity-100 transition duration-200 ease-in-out rounded-lg">
                               <Image

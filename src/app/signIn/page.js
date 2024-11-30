@@ -57,7 +57,8 @@ const SignIn = () => {
   return (
       <div className="min-h-screen flex flex-col items-center justify-center">
         <Image alt="logo" src="/nexusLogo.png" width={400} height={24} priority/>
-        <div className="p-10 pb-5 pt-0 rounded-lg w-1/3">
+        <div>
+        <div className="p-10 pb-5 pt-0 rounded-lg">
           <h1 className="text-[#7098DA] font-normal text-2xl mb-5 text-center">
             Welcome back
           </h1>
@@ -95,13 +96,13 @@ const SignIn = () => {
           )}
         </div>
 
-        <div className="divider-wrapper relative flex items-center justify-center w-1/3">
+        <div className="divider-wrapper relative flex items-center justify-center">
           <span className="flex-grow h-[0.5em] border-b border-[#c2c8d0]"></span>
           <span className="mx-2 text-white text-light">OR</span>
           <span className="flex-grow h-[0.5em] border-b border-[#c2c8d0]"></span>
         </div>
         {!loading && (
-          <div className="p-10 pt-5 pt-0 rounded-lg w-1/3 text-center">
+          <div className="p-10 pt-5 pt-0 rounded-lg text-center">
             <button
               onClick={() => handleOAuthSignIn('google')}
               className="flex flex-row w-full p-3 mb-3 border-solid border border-[#2F2F2F] text-gray-300 font-light rounded hover:bg-[#0000001a]"
@@ -136,6 +137,7 @@ const SignIn = () => {
             </Link>
           </div>
         )}
+        </div>
         <footer className="text-gray-500">Nexus 2024 © </footer>
       </div>
   );

@@ -46,6 +46,8 @@ export default function Navbar({ page }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouter();
 
+  console.log(page);
+
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -64,7 +66,7 @@ export default function Navbar({ page }) {
       style={{ height: '50px', backgroundColor: '#171717' }} // Set height for the navbar
     >
       {/* Logo */}
-      <Link href="/dashboard">
+      <Link href="/dashboard" className='px-4'>
         <Image
           src="/nexusLogo.png"
           alt="Logo"

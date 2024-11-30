@@ -64,7 +64,7 @@ export default function ChooseFramework() {
   // }, []);
   
     return (
-      <main className="bg-[#12172a] bg-fixed bg-cover bg-center" style={{ backgroundImage: `url('/6084855.jpg')` }}>
+      <main className="bg-fixed bg-cover bg-center">
       <SelectionPane frameworks={frameworks}/>
       </main>
     );

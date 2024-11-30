@@ -72,13 +72,12 @@ export default function Dashboard() {
 
     if (loading) {
         return <div className="flex flex-col min-h-screen items-center justify-center p-5 bg-fixed bg-cover bg-center overflow-hidden"
-        style={{ backgroundImage: `url('/6084855.jpg')` }}>Loading...</div>;  // Show loading state until user data is fetched
+        >Loading...</div>;  // Show loading state until user data is fetched
     }
 
     return (
         <main
             className="flex flex-col min-h-screen items-center justify-center p-5 bg-fixed bg-cover bg-center overflow-hidden"
-            style={{ backgroundImage: `url('/6084855.jpg')` }}
         >
             {/* Logout Button */}
             <button
@@ -102,7 +101,7 @@ export default function Dashboard() {
                 </div>
                 <div className="max-w-full p-10 text-center pt-0">
                     <div className="max-w-full grid grid-cols-2 gap-4">
-                        <Link className="p-6 bg-[#1e293b] rounded-lg border border-[#ffffff1a] transition duration-300 ease-in-out cursor-pointer hover:shadow-blue-200 transform hover:scale-105" href={'./nexusME/chooseAFramework/'}>
+                        <Link className="p-6 bg-[#1f1f1f] p-4 border border-[#2F2F2F] rounded-lg transition duration-300 ease-in-out cursor-pointer hover:shadow-blue-200 transform hover:scale-105" href={'./nexusME/chooseAFramework/'}>
                             <div className="flex flex-row mb-6">
                                 <Image
                                     src="/individual.svg"
@@ -116,7 +115,7 @@ export default function Dashboard() {
                             </div>
                             <p className="text-gray-200">Everything you need for your individual productivity.</p>
                         </Link>
-                        <Link className="p-6 bg-[#1e293b] rounded-lg border border-[#ffffff1a] transition duration-300 ease-in-out cursor-pointer hover:shadow-blue-200 transform hover:scale-105" href={'./nexusME/chooseAFramework/'}>
+                        <Link className="p-6 bg-[#1f1f1f] p-4 border border-[#2F2F2F] rounded-lg transition duration-300 ease-in-out cursor-pointer hover:shadow-blue-200 transform hover:scale-105" href={'./nexusME/chooseAFramework/'}>
                             <div className="flex flex-row mb-6">
                                 <Image
                                     src="/team.svg"

@@ -73,14 +73,14 @@ const SignIn = () => {
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 mb-4 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded border-solid border border-[#c2c8d0] outline-none text-[#2d333a] placeholder-gray-500"
+                className="w-full p-3 bg-[#292929] mb-4 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded border-solid border border-gray-700 outline-none text-white placeholder-gray-500"
               />
               <input
                 type="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 mb-4 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded border-solid border border-[#c2c8d0] outline-none text-[#2d333a] placeholder-gray-500"
+                className="w-full p-3 mb-4 bg-[#292929] focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded border-solid border border-gray-700 outline-none text-white placeholder-gray-500"
               />
               {errorMessage && (
                 <div className="text-center mb-2 text-red-500">{errorMessage}</div>
@@ -97,14 +97,14 @@ const SignIn = () => {
 
         <div className="divider-wrapper relative flex items-center justify-center w-1/3">
           <span className="flex-grow h-[0.5em] border-b border-[#c2c8d0]"></span>
-          <span className="mx-2 text-black text-light">OR</span>
+          <span className="mx-2 text-white text-light">OR</span>
           <span className="flex-grow h-[0.5em] border-b border-[#c2c8d0]"></span>
         </div>
         {!loading && (
           <div className="p-10 pt-5 pt-0 rounded-lg w-1/3 text-center">
             <button
               onClick={() => handleOAuthSignIn('google')}
-              className="flex flex-row w-full p-3 mb-3 border-solid border border-[#c2c8d0] text-black font-light rounded hover:bg-[#0000001a]"
+              className="flex flex-row w-full p-3 mb-3 border-solid border border-[#2F2F2F] text-gray-300 font-light rounded hover:bg-[#0000001a]"
             >
               <Image
                 src="/googleLogo.svg"
@@ -119,7 +119,7 @@ const SignIn = () => {
 
             <button
               onClick={() => handleOAuthSignIn('azure')}
-              className="flex flex-row w-full p-3 mb-3 border-solid border border-[#c2c8d0] text-black font-light rounded hover:bg-[#0000001a]"
+              className="flex flex-row w-full p-3 mb-3 border-solid border border-[#2F2F2F] text-gray-300 font-light rounded hover:bg-[#0000001a]"
             >
               <Image
                 src="/Microsoft_logo.svg"

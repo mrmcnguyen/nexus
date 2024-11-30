@@ -29,10 +29,10 @@ export default function EisenhowerMatrixPage() {
     };
 
     return (
-      <div className={`p-4 bg-[#2F2F2F] text-white ${borderRoundness} shadow-lg flex flex-col h-full ${border}`}>
+      <div className={`p-4 bg-[#1f1f1f] text-white ${borderRoundness} shadow-lg flex flex-col h-full ${border}`}>
         <h2 className="text-left lg:text-base 2xl:text-2xl text-gray-300">{title}</h2>
         <p className={`text-left lg:text-sm 2xl:text-base font-extralight text-gray-400 mb-4`}>{description}</p>
-        <ul className="flex-grow overflow-y-auto max-h-64 mb-4 bg-[#585858]">
+        <ul className="flex-grow overflow-y-auto max-h-64 mb-4 bg-[#292929]">
           {tasks.map((task, index) => (
             <li key={index} className={`bg-[${textBoxColor}] text-black p-2 my-2 rounded-full`}>
               {task}
@@ -70,7 +70,7 @@ export default function EisenhowerMatrixPage() {
           bgColor="bg-top-left"
           textBoxColor="#afcfc1"
           borderRoundness={"rounded-tl-lg"}
-          border={"border-r border-b border-gray-500"}
+          border={"border border-[#2F2F2F]"}
         />
         <Quadrant
           title="Not Urgent but Important"
@@ -80,7 +80,7 @@ export default function EisenhowerMatrixPage() {
           bgColor="bg-top-right"
           textBoxColor="#f2a18d"
           borderRoundness={"rounded-tr-lg"}
-          border={"border-b border-gray-500"}
+          border={"border-t border-r border-b border-[#2F2F2F]"}
         />
         <Quadrant
           title="Urgent but Not Important"
@@ -90,7 +90,7 @@ export default function EisenhowerMatrixPage() {
           bgColor="bg-bottom-left"
           textBoxColor="#98b1e7"
           borderRoundness={"rounded-bl-lg"}
-          border={"border-r border-gray-500"}
+          border={"border-b border-l border-r border-[#2F2F2F]"}
         />
         <Quadrant
           title="Not Urgent and Not Important"
@@ -99,16 +99,15 @@ export default function EisenhowerMatrixPage() {
           onAddTask={(task) => addTask('eliminate', task)}
           bgColor="bg-bottom-right"
           textBoxColor="#f5898d"
-          borderRoundness={"rounded-br-lg"}
+          borderRoundness={"border-b border-r border-[#2F2F2F] rounded-br-lg"}
         />
       </div>
 
       {/* Right Side - Sidebar */}
-      <div className="w-1/4 bg-[#2F2F2F] shadow-lg rounded-lg p-6 h-full">
+      <div className="w-1/4 bg-[#1f1f1f] border border-[#2F2F2F] shadow-lg rounded-lg p-6 h-full">
         <h2 className="lg:text-lg 2xl:text-2xl text-white font-light mb-4">Matrix Management</h2>
         {/* Additional functionality can be added here */}
         <p className="font-extralight lg:text-sm 2xl:text-base text-gray-400">
-          What is the Eisenhower Matrix?
         </p>
       </div>
     </div>

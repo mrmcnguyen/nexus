@@ -17,7 +17,6 @@ export default function KanbanComponent(){
     const [dropdownTaskId, setDropdownTaskId] = useState(null);
 
     // Variables for task count
-    
     const dropdownRef = useRef(null);
 
     // Handle moving tasks to a new status
@@ -29,7 +28,7 @@ export default function KanbanComponent(){
     const handleAddTask = () => {
         if (newTaskTitle.trim()) {
             const newTask = {
-                id: tasks.length + 1, 
+                id: tasks.length + 1,
                 title: newTaskTitle,
                 status: 'To Do'
             };
@@ -81,7 +80,7 @@ export default function KanbanComponent(){
         <div className="p-8 pt-4 min-h-screen flex flex-col bg-[#171717]">
             <div className="flex flex-row justify-between items-center mb-4">
                 <div className="flex flex-row items-center">
-                    <h1 className="text-5xl text-gray-300 font-normal text-left lg:text-4xl md:text-3xl 2xl:text-6xl">Kanban Board</h1>
+                    <h1 className="text-5xl text-gray-300 font-normal text-left lg:text-4xl md:text-3xl 2xl:text-4xl">Kanban Board</h1>
                     <span className="flex flex-row items-center m-4 border border-[#2F2F2F] bg-[#2F2F2F] text-gray-400 text-xs rounded-2xl px-2"><Image
                                           src="/synced.svg"
                                           width={14}
@@ -92,7 +91,7 @@ export default function KanbanComponent(){
                                       />Synced</span>
                     </div>
                 <div className="flex flex-row space-x-4">
-        <button className="flex flex-row border border-[#2F2F2F] lg:text-sm 2xl:text-lg bg-[#1f1f1f] items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-lg hover:bg-[#707070]">
+        <button className="flex flex-row border border-[#2F2F2F] lg:text-sm 2xl:text-base bg-[#1f1f1f] items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-lg hover:bg-[#707070]">
             <Image
                 src="/list.svg"
                 style={{ filter: 'invert(1)' }}
@@ -104,7 +103,7 @@ export default function KanbanComponent(){
             />
             View as List
         </button>
-        <button className="flex flex-row border border-[#2F2F2F] lg:text-sm 2xl:text-lg bg-[#1f1f1f] items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-lg hover:bg-[#707070]">
+        <button className="flex flex-row border border-[#2F2F2F] lg:text-sm 2xl:text-base bg-[#1f1f1f] items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-lg hover:bg-[#707070]">
             <Image
                 src="/team.svg" 
                 style={{ filter: 'invert(1)' }}

@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Quadrant from './Quadrant'; // Adjust the path based on your project structure
+import { createClient } from '../../../../supabase/client';
 
 export default function EisenhowerMatrixPage() {
   const [tasks, setTasks] = useState({
@@ -10,6 +12,22 @@ export default function EisenhowerMatrixPage() {
     eliminate: []
   });
 
+  const [userID, setUserID] = useState(null);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchUser = async() => {
+      const { data: user, error } = await supabase.auth.getUser();
+    if (user) { 
+      setUserID(user.user.id);
+    } else{
+      console.error("Error while fetching user ID: ", error);
+    }
+  }
+
+    fetchUser();
+  }, []);
+
   const addTask = (quadrant, task) => {
     setTasks(prevTasks => ({
       ...prevTasks,
@@ -17,50 +35,8 @@ export default function EisenhowerMatrixPage() {
     }));
   };
 
-  const Quadrant = ({ title, tasks, description, onAddTask, bgColor, textBoxColor, borderRoundness, border }) => {
-    const [newTask, setNewTask] = useState('');
-
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      if (newTask.trim()) {
-        onAddTask(newTask);
-        setNewTask(''); // Clear the input after adding the task
-      }
-    };
-
-    return (
-      <div className={`p-4 bg-[#1f1f1f] text-white ${borderRoundness} shadow-lg flex flex-col h-full ${border}`}>
-        <h2 className="text-left lg:text-base 2xl:text-2xl text-gray-300">{title}</h2>
-        <p className={`text-left lg:text-sm 2xl:text-base font-extralight text-gray-400 mb-4`}>{description}</p>
-        <ul className="flex-grow overflow-y-auto max-h-64 mb-4 bg-[#292929]">
-          {tasks.map((task, index) => (
-            <li key={index} className={`bg-[${textBoxColor}] text-black p-2 my-2 rounded-full`}>
-              {task}
-            </li>
-          ))}
-        </ul>
-        {/* <form onSubmit={handleSubmit} className="flex space-x-2 mt-auto">
-          <input
-            type="text"
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-            placeholder="Add a task"
-            className={`placeholder:text-gray-100 bg-[${textBoxColor}] p-3 border rounded-full w-full text-black focus-visible:outline-none`}
-          />
-          <button
-            type="submit"
-            className="bg-gray-800 rounded-full text-white px-4 py-2 hover:bg-gray-700"
-          >
-            Add
-          </button>
-        </form> */}
-      </div>
-    );
-  };
-
   return (
     <div className="h-screen flex p-4 bg-[#171717] space-x-8">
-      {/* Left side - Eisenhower Matrix */}
       <div className="grid grid-cols-1 lg:grid-cols-2 w-3/4 h-full">
         <Quadrant
           title="Urgent and Important"
@@ -69,8 +45,10 @@ export default function EisenhowerMatrixPage() {
           onAddTask={(task) => addTask('doNow', task)}
           bgColor="bg-top-left"
           textBoxColor="#afcfc1"
-          borderRoundness={"rounded-tl-lg"}
-          border={"border border-[#2F2F2F]"}
+          borderRoundness="rounded-tl-lg"
+          border="border border-[#2F2F2F]"
+          userID={userID}
+          quadrant={"do"}
         />
         <Quadrant
           title="Not Urgent but Important"
@@ -79,8 +57,10 @@ export default function EisenhowerMatrixPage() {
           onAddTask={(task) => addTask('schedule', task)}
           bgColor="bg-top-right"
           textBoxColor="#f2a18d"
-          borderRoundness={"rounded-tr-lg"}
-          border={"border-t border-r border-b border-[#2F2F2F]"}
+          borderRoundness="rounded-tr-lg"
+          border="border-t border-r border-b border-[#2F2F2F]"
+          userID={userID}
+          quadrant={"schedule"}
         />
         <Quadrant
           title="Urgent but Not Important"
@@ -89,8 +69,10 @@ export default function EisenhowerMatrixPage() {
           onAddTask={(task) => addTask('delegate', task)}
           bgColor="bg-bottom-left"
           textBoxColor="#98b1e7"
-          borderRoundness={"rounded-bl-lg"}
-          border={"border-b border-l border-r border-[#2F2F2F]"}
+          borderRoundness="rounded-bl-lg"
+          border="border-b border-l border-r border-[#2F2F2F]"
+          userID={userID}
+          quadrant={"delegate"}
         />
         <Quadrant
           title="Not Urgent and Not Important"
@@ -99,17 +81,23 @@ export default function EisenhowerMatrixPage() {
           onAddTask={(task) => addTask('eliminate', task)}
           bgColor="bg-bottom-right"
           textBoxColor="#f5898d"
-          borderRoundness={"border-b border-r border-[#2F2F2F] rounded-br-lg"}
+          borderRoundness="border-b border-r border-[#2F2F2F] rounded-br-lg"
+          userID={userID}
+          quadrant={"delete"}
         />
       </div>
 
-      {/* Right Side - Sidebar */}
       <div className="w-1/4 bg-[#1f1f1f] border border-[#2F2F2F] shadow-lg rounded-lg p-6 h-full">
-        <h2 className="lg:text-lg 2xl:text-2xl text-white font-light mb-4">Matrix Management</h2>
-        {/* Additional functionality can be added here */}
-        <p className="font-extralight lg:text-sm 2xl:text-base text-gray-400">
-        </p>
-      </div>
+  <h2 className="lg:text-lg 2xl:text-2xl text-gray-300 font-light mb-4">Matrix Management</h2>
+  {Object.values(tasks).flat().map((task, index) => (
+    <li
+      key={index}
+      className={`bg-[#292929] text-gray-400 p-2 my-2 rounded-lg px-4 border border-[#454545]`}
+    >
+      {task}
+    </li>
+  ))}
+</div>
     </div>
   );
 }

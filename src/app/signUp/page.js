@@ -1,21 +1,19 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '../../../supabase/client'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { DM_Sans } from 'next/font/google';
+import { addUser } from '../../lib/db/queries'
 
 //!!!!!!!! REMEMBER TO VALIDATE INPUTS !!!!!!!!!
-
-const dmSans = DM_Sans({ subsets: ["latin"] });
 
 const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const supabase = createClientComponentClient(); // Supabase client
+  const supabase = createClient(); // Supabase client
   const router = useRouter();
 
   const handleSignUp = async () => {
@@ -33,7 +31,7 @@ const SignUp = () => {
         setEmail('');
         setPassword('');
         sessionStorage.setItem('user', true);
-        router.push('/dashboard'); // Redirect after successful sign-up
+        router.push('/signIn'); // Redirect after successful sign-up
       }
     } catch (e) {
       console.error('Unexpected error:', e);
@@ -61,14 +59,18 @@ const SignUp = () => {
 
   return (
       <div className="min-h-screen flex flex-col items-center justify-center">
-        <Image src="/nexusLogo.png" width={400} height={24} priority />
+        <Image alt="nexus Logo" src="/nexusLogo.png" width={400} height={24} priority />
+        <div>
         {loading ? ( // Show loading spinner when loading is true
-          <div className="flex items-center justify-center h-screen">
-            <div className="loader border-t-4 border-blue-500 border-solid rounded-full w-16 h-16 animate-spin"></div>
+          <div className="flex flex-col items-center justify-center h-screen">
+            <h1 className='text-gray-400'>Signing you up...</h1>
+            <div className="loader my-6 border-t-4 border-blue-500 border-solid rounded-full w-16 h-16 animate-spin"></div>
+            <h1 className='text-gray-400'>Please confirm your email address before signing in.</h1>
           </div>
+          
         ) : (
-          <>
-            <div className="p-10 pb-5 pt-0 rounded-lg w-1/3">
+          <div>
+            <div className="p-10 pb-5 pt-0 rounded-lg">
               <h1 className="text-[#7098DA] font-normal text-2xl mb-5 text-center">Sign Up</h1>
               <input
                 type="email"
@@ -95,12 +97,12 @@ const SignUp = () => {
               </button>
             </div>
 
-            <div className="divider-wrapper relative flex items-center justify-center w-1/3">
+            <div className="divider-wrapper relative flex items-center justify-center">
               <span className="flex-grow h-[0.5em] border-b border-[#c2c8d0]"></span>
               <span className="mx-2 text-light text-white">OR</span>
               <span className="flex-grow h-[0.5em] border-b border-[#c2c8d0]"></span>
             </div>
-            <div className="p-10 pt-5 pt-0 rounded-lg w-1/3 text-center">
+            <div className="p-10 pt-5 pt-0 rounded-lg text-center">
               <button
                 onClick={() => handleOAuthSignUp('google')}
                 className="flex flex-row w-full p-3 mb-3 border-solid border border-[#2F2F2F] text-gray-300 font-light rounded hover:bg-[#0000001a]"
@@ -110,6 +112,7 @@ const SignUp = () => {
                   className="mr-4"
                   width={24}
                   height={24}
+                  alt="Google Logo"
                   priority
                 />{' '}
                 Continue with Google
@@ -123,6 +126,7 @@ const SignUp = () => {
                   src="/Microsoft_logo.svg"
                   className="mr-4"
                   width={24}
+                  alt="Microsoft Logo"
                   height={24}
                   priority
                 />{' '}
@@ -135,8 +139,9 @@ const SignUp = () => {
                 Already have an account? Log In
               </Link>
             </div>
-          </>
+          </div>
         )}
+        </div>
         <footer className="text-gray-500">Nexus 2024 © </footer>
       </div>
   );

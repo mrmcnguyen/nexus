@@ -1,10 +1,11 @@
 'use client';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { DM_Sans } from 'next/font/google';
 import { createClient } from '../../../supabase/client'
+import { addUser, trial } from '../../lib/db/queries';
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
 
@@ -65,7 +66,7 @@ const SignIn = () => {
           {loading ? (
             // Show a loading spinner while loading
             <div className="flex justify-center items-center">
-              <div className="spinner-border animate-spin w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full"></div>
+              <div className="loader my-4 border-t-4 border-blue-500 border-solid rounded-full w-16 h-16 animate-spin"></div>
             </div>
           ) : (
             <>
@@ -90,7 +91,7 @@ const SignIn = () => {
                 onClick={handleSignIn}
                 className="w-full p-3 bg-[#6EB6FF] rounded font-light text-white hover:opacity-70"
               >
-                Continue
+                Sign In
               </button>
             </>
           )}

@@ -6,7 +6,11 @@ export default function HelpModal({ isVisible, closeModal }) {
         <div className="bg-[#212121] rounded-lg w-3/5 max-h-[80vh] overflow-hidden">
           <div className="w-full flex flex-col items-center p-6 pb-2 border-b border-[#656565]">
             <div className="w-full flex flex-row items-center justify-between">
-              <h2 className="text-xl font-light">The Eisenhower Matrix</h2>
+              <div className="flex flex-row items-center">
+              <h2 className="lg:text-lg 2xl:text-2xl font-light">The Eisenhower Matrix</h2>
+              <p className="lg:text-xs mx-4 2xl:text-sm text-[#656565]">Nexus ME/Eisenhower Matrix</p>
+              </div>
+              
               <button
                 onClick={closeModal}
                 className="text-gray-400 hover:text-gray-700 transition"
@@ -20,7 +24,6 @@ export default function HelpModal({ isVisible, closeModal }) {
                 <a href="https://asana.com/resources/eisenhower-matrix" target="_blank" className="text-blue-500 lg:text-xs 2xl:text-sm mr-2 hover:underline">How to Use</a>
                 <a href="https://www.productplan.com/glossary/eisenhower-matrix/" target="_blank" className="text-blue-500 lg:text-xs 2xl:text-sm hover:underline">Summary</a>
               </nav>
-              <p className="lg:text-xs 2xl:text-sm text-[#656565]">Nexus ME/Eisenhower Matrix</p>
             </div>
           </div>
           <div className="flex flex-row overflow-y-auto max-h-[70vh]">
@@ -41,7 +44,7 @@ export default function HelpModal({ isVisible, closeModal }) {
                 <a
                   target="_blank"
                   href="https://ideascale.com/blog/eisenhower-matrix-a-guide/#:~:text=The%20United%20States'%2034th%20President,guide%20on%20the%20Eisenhower%20Matrix."
-                  className="text-blue-500"
+                  className="lg:text-xs 2xl:text-sm text-blue-500"
                 >
                   Source
                 </a>

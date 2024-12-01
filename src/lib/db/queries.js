@@ -1,3 +1,4 @@
+import { create } from "domain";
 import { createClient } from "../../../supabase/client";
 import { supabase } from "../../app/supabase/supabaseClient";
 
@@ -29,7 +30,6 @@ export async function addEisenhowerTask(a_user_id, a_title, a_task_type, a_quadr
     else console.log(data);
 
     if (data) {  // Add to Eisenhower Matrix Table
-        console.log("DATA", data);
         const taskId = data?.task_id; // Access the task_id from the returned data
 
         const { error: matrixError } = await supabase
@@ -56,9 +56,44 @@ export async function addEisenhowerTask(a_user_id, a_title, a_task_type, a_quadr
     }
 }
 
-// export async function getEisenhowerTasks(a_user_id){
+export async function getEisenhowerTasks(a_user_id) {
 
-//     const supabase = createClient();
-//     const { data, error } = await supabase
+    const supabase = createClient();
 
-// }
+    const { data, error } = await supabase
+    .from('eisenhowerMatrixTasks')
+    .select(`
+      matrix_type,
+      status,
+      tasks (
+        title,
+        description,
+        created_at,
+        updated_at
+      )
+    `)
+    .eq('user_id', a_user_id); // Filters for the specific user ID
+
+  if (error) {
+    console.error('Error fetching data:', error);
+    return null;
+  }
+  console.log(data)
+  return data;
+}
+
+export async function getEisenhowerTaskByID(a_task_id, a_user_id){
+    const supabase = createClient();
+
+    let { data, error } = await supabase
+    .rpc('getEisenhowerTaskByID', {
+    a_task_id, 
+    a_user_id
+    })
+    if (error) console.error(error)
+    else {
+    console.log("Newly added task: ", data);
+    return data;
+}
+
+}

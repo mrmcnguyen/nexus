@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { addEisenhowerTask } from '../../../lib/db/queries';
-import { fetchAllTasks } from '../../../lib/db/queries';
+import { addEisenhowerTask, getEisenhowerTaskByID } from '../../../lib/db/queries';
+import { getEisenhowerTasks } from '../../../lib/db/queries';
 
 export default function Quadrant({
   title,
@@ -34,7 +34,6 @@ export default function Quadrant({
   useEffect(() => {
     // Initial height capture
     updateHeight();
-
     // Add the resize event listener
     window.addEventListener('resize', updateHeight);
 
@@ -48,16 +47,18 @@ export default function Quadrant({
     e.preventDefault();
     if (newTask.trim()) {
       const result = await addEisenhowerTask(userID, newTask, "eisenhower", quadrant);
-
+  
       if (result.success) {
-        onAddTask(newTask); // Update the UI if the task was added successfully
+        const taskID = result.data.task_id;
+        const updatedTask = await getEisenhowerTaskByID(taskID, userID); // Query the database for updated tasks
+        onAddTask(updatedTask); // Update the parent component's task state
         setNewTask('');
       } else {
         console.error('Failed to add task:', result.error);
       }
     }
   };
-
+  
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       handleSubmit(e); // Trigger the handleSubmit when Enter is pressed
@@ -84,14 +85,23 @@ export default function Quadrant({
         onMouseEnter={() => setIsHovered(true)} // Show "Add Task" when hovered
         onMouseLeave={() => setIsHovered(false)} // Hide "Add Task" when not hovered
       >
-        {tasks.map((task, index) => (
-          <li
-            key={index}
-            className={`bg-[#292929] text-gray-400 p-2 my-2 rounded-lg px-4 border border-[#454545]`}
-          >
-            {task}
-          </li>
-        ))}
+        {tasks.map((task, index) => {
+          return (
+            <li
+              key={index}
+              className={`bg-[#292929] lg:text-sm 2xl:text-base text-gray-400 p-2 my-2 rounded-lg px-4 border border-[#454545] hover:bg-[#414141] transition duration-200 ease-in-out`}
+            >
+              {/* Check if task.tasks.title exists, otherwise fallback to task.title or the whole task object */}
+              {task?.tasks?.title ? (
+                task.tasks.title
+              ) : task?.title ? (
+                task.title
+              ) : (
+                JSON.stringify(task) // Display the entire task object if no title is available
+              )}
+            </li>
+          );
+        })}
 
         {/* Conditionally render input box or button */}
         {isEditing ? (
@@ -101,12 +111,12 @@ export default function Quadrant({
             onChange={(e) => setNewTask(e.target.value)}
             onKeyDown={handleKeyPress} // Handle Enter key press
             onBlur={() => setIsEditing(false)} // Exit editing when the input loses focus
-            className="p-2 mt-2 rounded-md bg-[#292929] text-gray-400 w-full focus-visible:outline-none"
+            className="p-2 mt-2 lg:text-sm 2xl:text-base rounded-md bg-[#292929] text-gray-400 w-full focus-visible:outline-none"
             placeholder="Add new task..."
           />
         ) : (
           <button
-            className={`flex flex-row items-center w-full text-gray-400 p-2 mt-2 transition-opacity duration-300 ease-in-out ${
+            className={`flex flex-row items-center lg:text-sm 2xl:text-base w-full text-gray-400 p-2 mt-2 transition-opacity duration-300 ease-in-out ${
               isHovered ? 'opacity-100' : 'opacity-0'
             }`}
             onClick={() => setIsEditing(true)} // Switch to input box on click

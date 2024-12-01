@@ -1,8 +1,7 @@
 import EisenhowerMatrix from "./EisenhowerMatrixPage";
 import Navbar from "../Navbar"
-import { DM_Sans } from "next/font/google";
-
-const dmSans = DM_Sans({ subsets: ["latin"] });
+import { Suspense } from "react";
+import Loading from './loading'
 
 export const metadata = {
   title: "Eisenhower Matrix",
@@ -13,7 +12,9 @@ export default function EisenhowerMatrixPage() {
 <>
     <Navbar page={'/nexusME/eisenhower-matrix'} />
     <div style={{ paddingTop: '50px', backgroundColor:'#171717' }}> 
+          <Suspense fallback={<Loading />}>
           <EisenhowerMatrix />
+          </Suspense>
         </div>
   </>
   );

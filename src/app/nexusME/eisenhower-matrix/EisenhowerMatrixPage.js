@@ -6,6 +6,7 @@ import { createClient } from '../../../../supabase/client';
 import { getEisenhowerTasks } from '../../../lib/db/queries';
 import HelpModal from './helpModal';
 import Image from 'next/image';
+import TaskModal from './taskModal'
 import Loading from './loading';
 
 export default function EisenhowerMatrixPage() {
@@ -18,6 +19,9 @@ export default function EisenhowerMatrixPage() {
 
   const [allTasks, setAllTasks] = useState(null); // Initialize as null to signify loading state
   const [userID, setUserID] = useState(null);
+  const [taskModalClick, setTaskModalClick] = useState(null);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [isModalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Add a loading state
   const [helpClick, setHelpClick] = useState(false);
   const supabase = createClient();
@@ -76,6 +80,19 @@ export default function EisenhowerMatrixPage() {
     }));
   };
 
+  const openModal = (task) => {
+    setTaskModalClick(task);
+  }
+
+  const closeModal = () => {
+    setTaskModalClick(null);
+  }
+
+  const handleTaskClick = (task) => {
+    setSelectedTask(task);
+    setModalVisible(true);
+  };
+
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       handleSubmit(e); // Trigger the handleSubmit when Enter is pressed
@@ -124,6 +141,11 @@ export default function EisenhowerMatrixPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 w-3/4 h-full">
+      <TaskModal
+        isVisible={isModalVisible}
+        closeModal={() => setModalVisible(false)}
+        task={selectedTask}
+      />
         <Quadrant
           title="Urgent and Important"
           tasks={tasks.do}
@@ -131,6 +153,7 @@ export default function EisenhowerMatrixPage() {
           onAddTask={(task) => addTask('do', task)}
           bgColor="bg-top-left"
           textBoxColor="#afcfc1"
+          onTaskClick={handleTaskClick}
           borderRoundness="rounded-tl-lg"
           border="border border-[#2F2F2F]"
           userID={userID}
@@ -144,6 +167,7 @@ export default function EisenhowerMatrixPage() {
           bgColor="bg-top-right"
           textBoxColor="#f2a18d"
           borderRoundness="rounded-tr-lg"
+          onTaskClick={handleTaskClick}
           border="border-t border-r border-b border-[#2F2F2F]"
           userID={userID}
           quadrant="schedule"
@@ -156,6 +180,7 @@ export default function EisenhowerMatrixPage() {
           bgColor="bg-bottom-left"
           textBoxColor="#98b1e7"
           borderRoundness="rounded-bl-lg"
+          onTaskClick={handleTaskClick}
           border="border-b border-l border-r border-[#2F2F2F]"
           userID={userID}
           quadrant="delegate"
@@ -167,6 +192,7 @@ export default function EisenhowerMatrixPage() {
           onAddTask={(task) => addTask('eliminate', task)}
           bgColor="bg-bottom-right"
           textBoxColor="#f5898d"
+          onTaskClick={handleTaskClick}
           borderRoundness="border-b border-r border-[#2F2F2F] rounded-br-lg"
           userID={userID}
           quadrant="eliminate"

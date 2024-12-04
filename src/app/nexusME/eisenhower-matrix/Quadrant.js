@@ -10,6 +10,7 @@ export default function Quadrant({
   tasks,
   description,
   onAddTask,
+  onTaskClick,
   bgColor,
   textBoxColor,
   borderRoundness,
@@ -58,7 +59,7 @@ export default function Quadrant({
       }
     }
   };
-  
+
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       handleSubmit(e); // Trigger the handleSubmit when Enter is pressed
@@ -90,6 +91,7 @@ export default function Quadrant({
             <li
               key={index}
               className={`bg-[#292929] lg:text-sm 2xl:text-base text-gray-400 p-2 my-2 rounded-lg px-4 border border-[#454545] hover:bg-[#414141] transition duration-200 ease-in-out`}
+              onClick={() => onTaskClick(task)}
             >
               {/* Check if task.tasks.title exists, otherwise fallback to task.title or the whole task object */}
               {task?.tasks?.title ? (

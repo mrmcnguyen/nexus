@@ -55,7 +55,7 @@ export default function HelpModal({ isVisible, closeModal }) {
               <p className="lg:text-sm 2xl:text-base text-gray-400 mb-2">Use it <a className="underline font-bold decoration-sky-500">
                       anytime.{" "}
                     </a> When you're overwhelmed with a long to-do list, unsure how to prioritize, or need to avoid distractions and improve productivity.
-                    It helps identify tasks to delegate and ensures you're focusing on what's most important for your long-term goals.
+                    It helps identify tasks to delegate and ensures you're focusing on what's most important for your long-term goals. 
             </p>
               <h2 className="lg:text-xl 2xl:text-2xl font-bold text-gray-300 mb-2">The Quadrants</h2>
               <ul className="">

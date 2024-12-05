@@ -66,6 +66,7 @@ export async function getEisenhowerTasks(a_user_id) {
       matrix_type,
       status,
       tasks (
+        task_id, 
         title,
         description,
         created_at,
@@ -97,3 +98,22 @@ export async function getEisenhowerTaskByID(a_task_id, a_user_id){
 }
 
 }
+
+export async function deleteEisenhowerTaskByID(a_task_id){
+    console.log("Delete task with task id of :", a_task_id);
+    const supabase = createClient();
+
+    let { data, error } = await supabase
+    .rpc('deleteEisenhowerTaskByID1', {
+        a_task_id
+    })
+    if (error){
+        console.error(error);
+    } else{
+        console.log("Task deleted", data);
+    }
+}
+
+// export async function completeEisenhowerTaskByID(a_task_id){
+
+// }

@@ -24,6 +24,7 @@ export default function EisenhowerMatrixPage() {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Add a loading state
   const [helpClick, setHelpClick] = useState(false);
+  const [deletionNotification, setDeletionNotification] = useState(null);
   const supabase = createClient();
 
   // Fetch user ID
@@ -80,12 +81,11 @@ export default function EisenhowerMatrixPage() {
     }));
   };
 
-  const openModal = (task) => {
-    setTaskModalClick(task);
-  }
-
-  const closeModal = () => {
-    setTaskModalClick(null);
+  const removeTask = (quadrant, task) => {
+    setTasks((prevTasks) => ({
+      ...prevTasks,
+      [quadrant]: prevTasks[quadrant].filter((t) => t.task_id !== task.task_id),
+    }));
   }
 
   const handleTaskClick = (task) => {
@@ -95,8 +95,21 @@ export default function EisenhowerMatrixPage() {
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      handleSubmit(e); // Trigger the handleSubmit when Enter is pressed
+      handleSubmit(e); // Trigger handleSubmit when Enter is pressed
     }
+  };
+
+  // Function to show deletion notification
+  const showDeletionNotification = (task) => {
+    setDeletionNotification(task);
+    
+    // Clear notification after 3 seconds
+    const timer = setTimeout(() => {
+      setDeletionNotification(null);
+    }, 3000);
+
+    // Cleanup the timer if component unmounts
+    return () => clearTimeout(timer);
   };
 
   // Show loading spinner or placeholder while fetching tasks
@@ -105,7 +118,16 @@ export default function EisenhowerMatrixPage() {
   }
 
   return (
-    <div className="h-screen flex p-4 bg-[#171717] space-x-8">
+    <div className="h-screen flex p-4 bg-[#171717] space-x-8 relative">
+      {/* Deletion Notification */}
+
+      <style jsx global>{`
+        @keyframes fadeInOut {
+          0%, 100% { opacity: 0; }
+          10%, 90% { opacity: 1; }
+        }
+      `}</style>
+
       <div className="w-1/4 bg-[#1f1f1f] border border-[#2F2F2F] shadow-lg rounded-lg p-4 h-full">
         <div className='flex flex-row justify-between align-center'>
         <h2 className="lg:text-lg 2xl:text-2xl text-gray-300 font-light">Enter your tasks</h2>
@@ -123,10 +145,10 @@ export default function EisenhowerMatrixPage() {
       <HelpModal isVisible={helpClick} closeModal={() => setHelpClick(false)} />
         </div>
         <input 
-  className='bg-[#292929] w-full lg:text-sm 2xl:text-base text-gray-400 p-2 my-2 rounded-lg px-4 focus-visible:outline-none placeholder:text-gray-500'
-  placeholder='Enter everything you need done...'
-  onKeyDown={handleKeyPress} // Handle Enter key press
-/>
+          className='bg-[#292929] w-full lg:text-sm 2xl:text-base text-gray-400 p-2 my-2 rounded-lg px-4 focus-visible:outline-none placeholder:text-gray-500'
+          placeholder='Enter everything you need done...'
+          onKeyDown={handleKeyPress} // Handle Enter key press
+        />
 
         {Object.values(allTasks || {})
           .flat()
@@ -145,7 +167,24 @@ export default function EisenhowerMatrixPage() {
         isVisible={isModalVisible}
         closeModal={() => setModalVisible(false)}
         task={selectedTask}
+        onDeleteTask={(quadrant, task) => {
+          removeTask(quadrant, task);
+          showDeletionNotification(task);
+          setModalVisible(false);
+        }}
       />
+
+      {deletionNotification && (
+        <div 
+          className="fixed bottom-4 right-4 bg-[#541c15] border border-[#7f2315] text-white p-4 rounded-lg shadow-lg z-50 transition-all duration-300 ease-in-out"
+          style={{
+            animation: 'fadeInOut 3s ease-in-out'
+          }}
+        >
+          Task deleted
+        </div>
+      )}
+
         <Quadrant
           title="Urgent and Important"
           tasks={tasks.do}

@@ -1,8 +1,10 @@
 import Image from "next/image";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { deleteEisenhowerTaskByID } from "../../../lib/db/queries";
 
-export default function TaskModal({ isVisible, closeModal, task, onUpdateTask }) {
+export default function TaskModal({ isVisible, closeModal, task, onUpdateTask, onDeleteTask }) {
+  console.log(task)
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState('');
 
@@ -10,6 +12,7 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask })
 
   // Determine task details
   const title = task.tasks?.title || task.title || 'Untitled Task';
+  const taskID = task.tasks?.task_id || task.task_id || 'Unknown Task ID';
   const description = task.tasks?.description || task.description || 'No description available';
   const createdAt = task.tasks?.created_at || task.created_at || 'Unknown';
   const updatedAt = task.tasks?.updated_at || task.updated_at || 'Unknown';
@@ -62,6 +65,16 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask })
     }
     setIsEditing(false);
   };
+
+  const handleDeleteTask = (quadrant, task) => {
+    let res = deleteEisenhowerTaskByID(taskID);
+    if (res){
+      onDeleteTask(quadrant, task);
+      closeModal();
+    } else{
+      console.error("Deleting Task Failed. See console error from query.js.");
+    }
+  }
 
   return (
     <AnimatePresence>
@@ -180,7 +193,9 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask })
                 />
                 Send to Kanban 
               </button>
-              <button className="lg:text-xs 2xl:text-sm w-full rounded-lg bg-[#541c15] border border-[#7f2315] flex justify-center items-center p-2 hover:bg-[#e54d2e80] hover:border-[#e54d2e] transition-all duration-200">
+              <button className="lg:text-xs 2xl:text-sm w-full rounded-lg bg-[#541c15] border border-[#7f2315] flex justify-center items-center p-2 hover:bg-[#e54d2e80] hover:border-[#e54d2e] transition-all duration-200"
+                onClick={() => handleDeleteTask(task.matrix_type, task)}
+              >
                 <Image
                   src="/delete.svg"
                   className="mx-2"  

@@ -19,28 +19,24 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask })
       label: 'Urgent and Important',
       explanation:
         'This means you should be putting most of your time and effort into this task because it is both time-sensitive and critical for your objectives.',
-      color: 'bg-yellow-900/50 border-yellow-700',
       icon: '🔥'
     },
     schedule: {
       label: 'Not Urgent but Important',
       explanation:
         'This means the task is important to your goals but not time-sensitive. You should plan to work on it later or at a more suitable time.',
-      color: 'bg-yellow-900/50 border-yellow-700',
       icon: '📅'
     },
     delegate: {
       label: 'Urgent but Not Important',
       explanation:
         'This means the task needs to be done soon but does not necessarily require your direct involvement. Consider delegating it to someone else.',
-      color: 'bg-yellow-900/50 border-yellow-700',
       icon: '👥'
     },
     eliminate: {
       label: 'Not Urgent and Not Important',
       explanation:
         'This means the task does not contribute to your goals and is not time-sensitive. You should consider eliminating it to focus on more meaningful activities.',
-      color: 'bg-yellow-900/50 border-yellow-700',
       icon: '❌'
     },
   };
@@ -87,7 +83,7 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask })
           className="bg-[#1f1f1f] text-gray-300 rounded-lg w-3/4 lg:w-1/2 p-6 shadow-lg flex flex-col"
         >
           <div className="flex justify-between items-center mb-4">
-            <h2 className="lg:text-text-xl 2xl:text-2xl font-black">{title}</h2>
+            <h2 className="lg:text-xl 2xl:text-2xl font-black">{title}</h2>
             <button
               onClick={closeModal}
               className="text-gray-400 hover:text-gray-300 focus:outline-none"
@@ -96,7 +92,7 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask })
             </button>
           </div>
           <div className="flex flex-row space-x-4 flex-grow">
-            <div className="w-5/6 flex flex-col space-y-4">
+            <div className="lg:w-3/4 2xl:w-5/6 flex flex-col space-y-4">
                 <p className="lg:text-base 2xl:text-xl font-semibold text-gray-200">
                   {matrixType.label}
                 </p>
@@ -120,6 +116,7 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask })
                     </button>
                   )}
                 </div>
+                
                 {!isEditing ? (
                   <p className="text-sm text-gray-400 flex-grow overflow-auto">{description}</p>
                 ) : (
@@ -140,7 +137,7 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask })
                   </p>
                 </div>
                 <div className="mb-4">
-                  <p className="text-sm text-gray-400">
+                  <p className="lg:text-xs 2xl:text-sm text-gray-400">
                     <span className="font-semibold">Updated At: </span>
                     {new Date(updatedAt).toLocaleString()}
                   </p>
@@ -148,9 +145,9 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask })
               </div>
             </div>
             
-            <div className="w-1/6 space-y-4">
+            <div className="lg:w-1/4 2xl:w-1/6 space-y-4">
               <div
-                className={`relative ${matrixType.color} border rounded-lg p-4 mb-2 text-center`}
+                className={`relative bg-gray-900/50 border-gray-700 border rounded-lg p-4 mb-2 text-center`}
               >
                 <div className="text-3xl mb-2">{matrixType.icon}</div>
                 <p className="lg:text-xs 2xl:text-sm text-gray-200">
@@ -161,7 +158,7 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask })
                 </div>
               </div>
               
-              <button className="lg:text-xs 2xl:text-sm w-full rounded-lg bg-[#006239] border border-[#128353] flex justify-center items-center p-2 mb-2 hover:bg-[#3ecf8e80] hover:border-[#3ecf8e] transition-all duration-200">
+              <button className="lg:text-xs 2xl:text-sm w-full rounded-lg bg-[#006239] border border-[#128353] flex justify-center items-center p-2 hover:bg-[#3ecf8e80] hover:border-[#3ecf8e] transition-all duration-200">
                 <Image
                   src="/finish.svg"
                   className="mx-2"  
@@ -172,7 +169,7 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask })
                 />
                 Finish Task
               </button>
-              <button className="lg:text-xs text-white 2xl:text-sm w-full rounded-lg bg-[#6f99da] border border-[#a8caff] flex justify-center items-center p-2 mb-2 hover:bg-[#84a6d9] hover:border-[#ccced1] transition-all duration-200">
+              <button className="lg:text-xs text-white 2xl:text-sm w-full rounded-lg bg-[#6f99da] border border-[#a8caff] flex justify-center items-center p-2 hover:bg-[#84a6d9] hover:border-[#ccced1] transition-all duration-200">
                 <Image
                   src="/send.svg"
                   className="mx-2"  

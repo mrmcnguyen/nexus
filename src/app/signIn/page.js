@@ -93,13 +93,14 @@ const SignIn = () => {
               >
                 Sign In
               </button>
-              <div className="divider-wrapper relative flex items-center justify-center">
+            </>
+          )}
+        </div>
+
+        <div className="divider-wrapper relative flex items-center justify-center">
           <span className="flex-grow h-[0.5em] border-b border-[#c2c8d0]"></span>
           <span className="mx-2 text-white text-light">OR</span>
           <span className="flex-grow h-[0.5em] border-b border-[#c2c8d0]"></span>
-        </div>
-            </>
-          )}
         </div>
         {!loading && (
           <div className="p-10 pt-5 pt-0 rounded-lg text-center">

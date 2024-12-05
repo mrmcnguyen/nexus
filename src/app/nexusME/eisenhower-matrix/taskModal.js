@@ -83,7 +83,7 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask })
           className="bg-[#1f1f1f] text-gray-300 rounded-lg w-3/4 lg:w-1/2 p-6 shadow-lg flex flex-col"
         >
           <div className="flex justify-between items-center mb-4">
-            <h2 className="lg:text-xl 2xl:text-2xl font-black">{title}</h2>
+            <h2 className="lg:text-xl 2xl:text-2xl font-light">{title}</h2>
             <button
               onClick={closeModal}
               className="text-gray-400 hover:text-gray-300 focus:outline-none"

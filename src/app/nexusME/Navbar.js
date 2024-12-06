@@ -93,9 +93,20 @@ export default function Navbar({ page }) {
 
       {/* Right-side Buttons */}
       <div className="flex flex-row ml-auto pr-4 items-center space-x-4">
-        <button className="px-4 py-1 text-[#C7D2FE] transition duration-200 border border-gray-500 align-middle text-sm text-light rounded-lg hover:bg-[#2F2F2F]">
-          About
-        </button>
+      <a className="flex flex-row items-center px-4 py-1 text-gray-300 transition duration-200 border border-[#454545] align-middle text-sm text-light rounded-lg hover:bg-[#2F2F2F]"
+          href='https://github.com/mrmcnguyen/nexus'
+          target='_blank'
+        >
+        <Image
+            src="/git.svg"
+            className="mr-2 filter invert"
+            alt="GitHub"
+            width={14}
+            height={14}
+            priority
+          />
+          Docs
+        </a>
         <button className="flex flex-row px-4 py-1 align-middle border border-[#6cb4fb] items-center transition duration-200 bg-[#6f99da] text-sm text-white text-light rounded-lg hover:bg-[#3B55C2]">
           Nexus TEAMS
           <Image

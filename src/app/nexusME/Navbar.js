@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { DM_Sans } from 'next/font/google';
 import { supabase } from '../supabase/supabaseClient'
 import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
 const frameworks = [
@@ -45,8 +46,9 @@ export default function Navbar({ page }) {
   const [user, setUser] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname(); // Get the current path
 
-  console.log(page);
+  // console.log(pathname);
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -83,7 +85,7 @@ export default function Navbar({ page }) {
             key={framework.name}
             href={framework.link}
             className={`text-gray-400 text-light text-sm hover:text-[#91C8FF] ${
-              page === framework.link ? 'text-[#91C8FF]' : ''
+              pathname === framework.link ? 'text-[#91C8FF]' : ''
             }`}
           >
             {framework.name}

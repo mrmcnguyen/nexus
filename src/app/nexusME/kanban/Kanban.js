@@ -2,14 +2,14 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { addKanbanTask, getKanbanTasks } from "../../../lib/db/queries";
+import { addKanbanTask, getKanbanTasks, updateKanbanTaskState } from "../../../lib/db/queries";
 import { createClient } from "../../../../supabase/client";
 import Loading from "./loading";
+import TaskModal from "./taskModal";
 
 export default function KanbanComponent() {
-    const [isEditing, setIsEditing] = useState(false);
     const [editingColumn, setEditingColumn] = useState(null);
-    const [isHovered, setIsHovered] = useState({});
+    const [dragOverColumn, setDragOverColumn] = useState(null);
     const [tasks, setTasks] = useState({
         todo: [],
         inprogress: [],
@@ -20,10 +20,23 @@ export default function KanbanComponent() {
     const [isLoading, setIsLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
-    const [dropdownTaskId, setDropdownTaskId] = useState(null);
+    const [deletionNotification, setDeletionNotification] = useState(null);
+
+    const headerColors = {
+      'Backlog' : 'text-gray-400',
+      'To Do': 'text-yellow-200',
+      'In Progress': 'text-blue-200',
+      'Done' : 'text-emerald-200'
+    }
+
+    const borderColors = {
+      'Backlog' : 'border-gray-600',
+      'To Do': 'border-yellow-200',
+      'In Progress': 'border-blue-300',
+      'Done' : 'border-emerald-300'
+    }
 
   const supabase = createClient();
-
   const dropdownRef = useRef(null);
 
   // Fetch user ID
@@ -84,7 +97,8 @@ export default function KanbanComponent() {
       const result = await addKanbanTask(userID, newTaskTitle, status, 'kanban');
 
       if (result.success) {
-        const newTask = result.data;
+        const newTask = { status: status }
+        newTask.tasks = result.data;
         setTasks((prevTasks) => ({
           ...prevTasks,
           [status.toLowerCase().replace(" ", "")]: [
@@ -98,19 +112,31 @@ export default function KanbanComponent() {
     }
   };
 
-  const handleMoveTask = (taskId, newStatus) => {
+  const handleMoveTask = async(newStatus, task) => {
+
+    let taskId = task.task_id || task.tasks?.task_id;
+
+    let res = await updateKanbanTaskState(taskId, newStatus);
+    if (!res){
+      console.error("Error updating Kanban task state.");
+    }
+    
     setTasks((prevTasks) => {
       const updatedTasks = { ...prevTasks };
+      console.log(updatedTasks);
       let movedTask;
 
       // Find and remove the task from its current status
       for (const status in updatedTasks) {
-        const index = updatedTasks[status].findIndex((task) => task.id === taskId);
+        const index = updatedTasks[status].findIndex((task) => task.id === taskId || task.tasks?.task_id === taskId);
+        console.log(index);
         if (index > -1) {
           [movedTask] = updatedTasks[status].splice(index, 1);
           break;
         }
       }
+
+      console.log("Moved Task: ", movedTask);
 
       // Add it to the new status
       if (movedTask) {
@@ -122,6 +148,27 @@ export default function KanbanComponent() {
     });
   };
 
+  const removeTask = (task) => {
+    const taskId = task.task_id || task.tasks?.task_id;
+  
+    setTasks((prevTasks) => {
+      const updatedTasks = { ...prevTasks };
+  
+      // Find and remove the task from its current status
+      for (const status in updatedTasks) {
+        const index = updatedTasks[status].findIndex((t) => t.id === taskId || t.tasks?.task_id === taskId);
+        if (index > -1) {
+          updatedTasks[status].splice(index, 1); // Remove task
+          break;
+        }
+      }
+  
+      return updatedTasks; // Ensure tasks are updated correctly
+    });
+  
+    // No need to trigger any other state changes here if not fetching tasks again
+  };
+
   const handleKeyDown = (e, status) => {
     if (e.key === "Enter") {
       handleAddTask(e, status);
@@ -130,22 +177,16 @@ export default function KanbanComponent() {
     }
   };
 
-  const handleHover = (status, isHovering) => {
-    setIsHovered((prevState) => ({ ...prevState, [status]: isHovering }));
-  };
+  const handleDrop = (status, e) => {
+    console.log("DROPPED");
+    e.preventDefault();
+    const task = JSON.parse(e.dataTransfer.getData('task'));
+    handleMoveTask(status, task);
+  }
 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
     setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedTask(null);
-  };
-
-  const toggleDropdown = (taskId) => {
-    setDropdownTaskId(dropdownTaskId === taskId ? null : taskId);
   };
 
   useEffect(() => {
@@ -162,6 +203,19 @@ export default function KanbanComponent() {
     };
   }, [dropdownRef]);
 
+  // Function to show deletion notification
+  const showDeletionNotification = (task) => {
+    setDeletionNotification(task);
+    
+    // Clear notification after 3 seconds
+    const timer = setTimeout(() => {
+      setDeletionNotification(null);
+    }, 3000);
+
+    // Cleanup the timer if component unmounts
+    return () => clearTimeout(timer);
+  };
+
   if (isLoading || !tasks) {
     return <Loading />;
   }
@@ -170,7 +224,7 @@ export default function KanbanComponent() {
     <div className="p-8 pt-4 min-h-screen flex flex-col bg-[#171717]">
         <div className="flex flex-row justify-between items-center mb-4">
             <div className="flex flex-row items-center">
-                <h1 className="text-5xl text-gray-300 font-normal text-left lg:text-4xl md:text-3xl 2xl:text-4xl">Kanban Board</h1>
+                <h1 className="text-5xl text-gray-300 font-black text-left lg:text-4xl md:text-3xl 2xl:text-4xl">Kanban Board</h1>
                 <span className="flex flex-row items-center m-4 border border-[#2F2F2F] bg-[#2F2F2F] text-gray-400 text-xs rounded-2xl px-2">
                     <Image
                         src="/synced.svg"
@@ -211,8 +265,21 @@ export default function KanbanComponent() {
             </div>
         </div>
 
+        <TaskModal
+                isVisible={isModalOpen}
+                closeModal={() => setIsModalOpen(false)}
+                task={selectedTask}
+                onDeleteTask={(task) => {
+                  removeTask(task);
+                  showDeletionNotification(task);
+                  setIsModalOpen(false);
+                }}
+                onFinishTask={(task) => handleFinishTask(task)}
+                onMoveTask={(task, key) => handleMoveTask(task, key)}
+              />
+
         {/* Kanban Board */}
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 h-[calc(100vh-140px)]">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 h-[calc(100vh-140px)]">
         {['Backlog', 'To Do', 'In Progress', 'Done'].map((status) => (
           <div
             key={status}
@@ -228,15 +295,31 @@ export default function KanbanComponent() {
                 alt={status}
                 priority
               />
-              <h2 className="lg:text-lg 2xl:text-xl text-gray-300 font-black">{status}</h2>
+              <div className="flex flex-row w-full justify-between">
+              <h2 className={`lg:text-lg 2xl:text-xl ${headerColors[status]} font-black`}>{status}</h2>
+              <div className={`lg:text-lg 2xl:text-xl text-gray-400 font-light`}>{getTasksByStatus(status).length}</div>
+              </div>
             </div>
 
             {/* Task List */}
-            <div className="flex-grow overflow-y-auto">
+            <div className={`flex-grow rounded overflow-y-auto transition-colors ${
+                dragOverColumn === status ? 'bg-[#1f1f1f]' : ''
+            }`}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+              handleDrop(status, e);
+              setDragOverColumn(null); // Reset the drag-over state
+                }}
+              onDragEnter={() => setDragOverColumn(status)}
+              onDragLeave={() => setDragOverColumn(null)}
+            >
               {getTasksByStatus(status).map((task) => (
                 <div
                   key={task.tasks?.task_id || task.task_id || "UNKNOWN"}
-                  className="p-4 bg-[#292929] rounded-lg shadow lg:mb-2 2xl:mb-4 hover:bg-[#414141] transition duration-200 ease-in-out"
+                  className={`p-4 bg-[#292929] rounded shadow lg:mb-1 2xl:mb-2 border border-[#454545] rounded border-s-4 ${borderColors[status]} hover:opacity-80 transition duration-200 ease-in-out`}
+                  draggable="true"
+                  onDragStart={(e) => e.dataTransfer.setData('task', JSON.stringify(task))}
+                  onClick={() => handleTaskClick(task)}
                 >
                   <p className="text-gray-200">{task.tasks?.title || task.title || "UNKNOWN"}</p>
                 </div>
@@ -251,7 +334,7 @@ export default function KanbanComponent() {
                   onKeyDown={(e) => handleKeyDown(e, status)}
                   onBlur={() => setEditingColumn(null)}
                   autoFocus
-                  className="p-2 mt-2 bg-[#292929] lg:text-sm 2xl:text-base text-gray-400 w-full rounded-md focus-visible:outline-none"
+                  className="p-2 mt-2 bg-[#292929] lg:text-sm 2xl:text-base text-gray-400 w-full rounded focus-visible:outline-none"
                   placeholder="Add new task..."
                 />
               ) : (
@@ -274,25 +357,19 @@ export default function KanbanComponent() {
                 </button>
               )}
             </div>
+            {deletionNotification && (
+        <div 
+          className="fixed bottom-4 right-4 bg-[#541c15] border border-[#7f2315] text-white p-4 rounded-lg shadow-lg z-50 transition-all duration-300 ease-in-out"
+          style={{
+            animation: 'fadeInOut 3s ease-in-out'
+          }}
+        >
+          Task deleted
+        </div>
+      )}
           </div>
         ))}
       </div>
-
-        {/* Modal */}
-        {isModalOpen && selectedTask && (
-            <div className="fixed text-black inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-                <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
-                    <h2 className="text-2xl font-bold mb-4">{selectedTask.title}</h2>
-                    <p><strong>Status:</strong> {selectedTask.status}</p>
-                    <button 
-                        onClick={closeModal} 
-                        className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
-                    >
-                        Close
-                    </button>
-                </div>
-            </div>
-        )}
     </div>
 );
 }

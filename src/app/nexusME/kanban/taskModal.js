@@ -1,53 +1,50 @@
 import Image from "next/image";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { deleteEisenhowerTaskByID } from "../../../lib/db/queries";
+import { deleteKanbanTaskByID } from "../../../lib/db/queries";
 
-export default function TaskModal({ isVisible, closeModal, task, onUpdateTask, onDeleteTask, onFinishTask }) {
-   
+export default function KanbanTaskModal({ isVisible, closeModal, task, onUpdateTask, onDeleteTask, onMoveTask }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState('');
+
+  console.log(task);
 
   if (!isVisible) return null;
 
   // Determine task details
-  const title = task.tasks?.title || task.title || 'Untitled Task';
-  const taskID = task.tasks?.task_id || task.task_id || 'Unknown Task ID';
-  const description = task.tasks?.description || task.description || 'No description available';
-  const createdAt = task.tasks?.created_at || task.created_at || 'Unknown';
-  const updatedAt = task.tasks?.updated_at || task.updated_at || 'Unknown';
+  const title = task.title || task.tasks?.title || 'Untitled Task';
+  const taskID = task.task_id || task.tasks?.task_id || 'Unknown Task ID';
+  const description = task.description || task.tasks?.description || 'No description available';
+  const createdAt = task.created_at || task.tasks?.created_at || 'Unknown';
+  const updatedAt = task.updated_at || task.tasks?.updated_at || 'Unknown';
 
-  const matrixTypeDescriptions = {
-    do: {
-      label: 'Urgent and Important',
-      explanation:
-        'This means you should be putting most of your time and effort into this task because it is both time-sensitive and critical for your objectives.',
-      icon: '🔥'
+  // Kanban-specific status colors and labels
+  const statusOptions = {
+    Backlog: {
+      label: 'Backlog',
+      color: 'bg-gray-600',
+      icon: '📋'
     },
-    schedule: {
-      label: 'Not Urgent but Important',
-      explanation:
-        'This means the task is important to your goals but not time-sensitive. You should plan to work on it later or at a more suitable time.',
-      icon: '📅'
+    'To Do': {
+      label: 'To Do',
+      color: 'bg-blue-600',
+      icon: '📝'
     },
-    delegate: {
-      label: 'Urgent but Not Important',
-      explanation:
-        'This means the task needs to be done soon but does not necessarily require your direct involvement. Consider delegating it to someone else.',
-      icon: '👥'
+    'In Progress': {
+      label: 'In Progress',
+      color: 'bg-yellow-600',
+      icon: '🚧'
     },
-    eliminate: {
-      label: 'Not Urgent and Not Important',
-      explanation:
-        'This means the task does not contribute to your goals and is not time-sensitive. You should consider eliminating it to focus on more meaningful activities.',
-      icon: '❌'
-    },
+    'Done': {
+      label: 'Done',
+      color: 'bg-green-600',
+      icon: '✅'
+    }
   };
 
-  const matrixType = matrixTypeDescriptions[task.matrix_type] || {
-    label: 'Unknown Matrix Type',
-    explanation: 'No additional information is available for this type.',
-    color: 'bg-gray-900/50 border-gray-700',
+  const currentStatus = statusOptions[task.status] || {
+    label: 'Unknown Status',
+    color: 'bg-gray-900',
     icon: '❓'
   };
 
@@ -66,15 +63,15 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask, o
     setIsEditing(false);
   };
 
-  const handleDeleteTask = (quadrant, task) => {
-    let res = deleteEisenhowerTaskByID(taskID);
-    if (res){
-      onDeleteTask(quadrant, task);
+  const handleDeleteTask = () => {
+    let res = deleteKanbanTaskByID(taskID);
+    if (res) {
+      onDeleteTask(task);
       closeModal();
-    } else{
+    } else {
       console.error("Deleting Task Failed. See console error from query.js.");
     }
-  }
+  };
 
   return (
     <AnimatePresence>
@@ -104,11 +101,15 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask, o
               ✕
             </button>
           </div>
+          
           <div className="flex flex-row space-x-4 flex-grow">
             <div className="lg:w-3/4 2xl:w-5/6 flex flex-col space-y-4">
+              <div className={`flex items-center ${currentStatus.color} p-2 rounded-lg`}>
+                <span className="text-2xl mr-2">{currentStatus.icon}</span>
                 <p className="lg:text-base 2xl:text-xl font-semibold text-gray-200">
-                  {matrixType.label}
+                  {currentStatus.label}
                 </p>
+              </div>
               
               <div className="flex flex-col flex-grow">
                 <div className="flex justify-between items-center">
@@ -159,56 +160,36 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask, o
             </div>
             
             <div className="lg:w-1/4 2xl:w-1/6 space-y-4">
-              <div
-                className={`relative bg-gray-900/50 border-[#6cb4fb] border rounded-lg p-4 mb-2 text-center`}
-              >
-                <div className="text-3xl mb-2">{matrixType.icon}</div>
+              <div className="bg-gray-900/50 border-[#6cb4fb] border rounded-lg p-4 mb-2 text-center">
+                <div className="text-3xl mb-2">🔄</div>
                 <p className="lg:text-xs 2xl:text-sm text-gray-200">
-                  You classified this task as "{matrixType.label}"
+                  Move Task to:
                 </p>
-                <div className="mt-2 text-xs text-gray-300">
-                  {matrixType.explanation}
-                </div>
-              </div>
-              
-              <button className="lg:text-xs 2xl:text-sm w-full rounded-lg bg-[#006239] border border-[#128353] flex justify-center items-center p-2 hover:bg-[#3ecf8e80] hover:border-[#3ecf8e] transition-all duration-200"
+                {Object.entries(statusOptions)
+                  .filter(([key]) => key !== task.status)
+                  .map(([key, value]) => (
+                    <button
+                      key={key}
                       onClick={() => {
-                        onFinishTask(task);
+                        onMoveTask(key, task);
                         closeModal();
                       }}
-              >
-                <Image
-                  src="/finish.svg"
-                  className="mx-2"  
-                  width={14}
-                  alt="Mark Done"
-                  height={14}
-                  priority
-                />
-                Finish Task
-              </button>
-              <button className="lg:text-xs text-white 2xl:text-sm w-full rounded-lg bg-[#6f99da] border border-[#a8caff] flex justify-center items-center p-2 hover:bg-[#84a6d9] hover:border-[#ccced1] transition-all duration-200">
-                <Image
-                  src="/send.svg"
-                  className="mx-2"  
-                  width={14}
-                  alt="Mark Done"
-                  height={14}
-                  priority
-                />
-                Send to Kanban 
-              </button>
-              <button className="lg:text-xs 2xl:text-sm w-full rounded-lg bg-[#541c15] border border-[#7f2315] flex justify-center items-center p-2 hover:bg-[#e54d2e80] hover:border-[#e54d2e] transition-all duration-200"
-                onClick={() => {
-                  console.log('Task being deleted:', task);
-                  handleDeleteTask(task.matrix_type, task);
-                }}
+                      className={`w-full mt-2 p-1 rounded-lg ${value.color} text-xs hover:opacity-80 transition-all`}
+                    >
+                      {value.icon} {value.label}
+                    </button>
+                ))}
+              </div>
+              
+              <button 
+                className="lg:text-xs 2xl:text-sm w-full rounded-lg bg-[#541c15] border border-[#7f2315] flex justify-center items-center p-2 hover:bg-[#e54d2e80] hover:border-[#e54d2e] transition-all duration-200"
+                onClick={handleDeleteTask}
               >
                 <Image
                   src="/delete.svg"
                   className="mx-2"  
                   width={14}
-                  alt="Mark Done"
+                  alt="Delete Task"
                   height={14}
                   priority
                 />

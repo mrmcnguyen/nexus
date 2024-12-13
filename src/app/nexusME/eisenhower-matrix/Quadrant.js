@@ -91,7 +91,7 @@ export default function Quadrant({
           return (
             <li
               key={index}
-              className={`p-2 my-2 rounded-lg border lg:text-sm 2xl:text-base ${
+              className={`lg:p-2 2xl:p-4 my-2 rounded-lg border lg:text-sm 2xl:text-base ${
                 task.status || task.tasks?.status
                   ? 'bg-green-700 text-white border-green-500'
                   : 'bg-[#292929] text-gray-400 border-[#454545] hover:bg-[#414141]'

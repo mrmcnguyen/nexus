@@ -259,6 +259,7 @@ export async function addKanbanTask(a_user_id, a_title, a_status, a_task_type){
         }
 
         console.log('Task added successfully:', data);
+        data.status = a_status;
         return { success: true, data };
     } else {
         console.error('Error adding task:', error);
@@ -291,4 +292,33 @@ export async function getKanbanTasks(a_user_id) {
   }
   console.log(data)
   return data;
+}
+
+export async function updateKanbanTaskState(a_task_id, a_new_state){
+    console.log(a_task_id, a_new_state);
+    const supabase = createClient();
+
+    let { data, error } = await supabase
+    .rpc('updateKanbanTaskState', {
+        a_new_state, 
+        a_task_id
+    })
+    if (error) console.error(error);
+    else {console.log(data);
+        return data;
+    }
+}
+
+export async function deleteKanbanTaskByID(a_task_id){
+    
+    const supabase = createClient();
+    let { data, error } = await supabase
+    .rpc('deleteKanbanTaskByID', {
+        a_task_id
+    })
+    if (error) console.error(error)
+    else {
+        console.log(data);
+        return data;
+    }
 }

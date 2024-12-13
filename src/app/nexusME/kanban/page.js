@@ -1,8 +1,7 @@
 import Navbar from "../Navbar";
 import KanbanComponent from "./Kanban";
-import { DM_Sans } from "next/font/google";
-
-const dmSans = DM_Sans({ subsets: ["latin"] });
+import {Loading} from "./loading";
+import { Suspense } from "react";
 
 export const metadata = {
     title: "Individual Kanban Board",

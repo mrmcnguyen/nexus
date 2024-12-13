@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect, useState, Suspense } from 'react';
+import React, { useEffect, useState } from 'react';
 import Quadrant from './Quadrant';
 import { createClient } from '../../../../supabase/client';
-import { getEisenhowerTasks } from '../../../lib/db/queries';
+import { addUnallocatedEisenhowerTask, getEisenhowerTasks, getEisenhowerTaskByID, allocateEisenhowerTask, finishEisenhowerTask } from '../../../lib/db/queries';
 import HelpModal from './helpModal';
 import Image from 'next/image';
 import TaskModal from './taskModal'
@@ -17,6 +17,8 @@ export default function EisenhowerMatrixPage() {
     eliminate: [],
   });
 
+  const [unallocatedTasks, setUnallocatedTasks] = useState([]);
+
   const [allTasks, setAllTasks] = useState(null); // Initialize as null to signify loading state
   const [userID, setUserID] = useState(null);
   const [taskModalClick, setTaskModalClick] = useState(null);
@@ -25,6 +27,8 @@ export default function EisenhowerMatrixPage() {
   const [isLoading, setIsLoading] = useState(true); // Add a loading state
   const [helpClick, setHelpClick] = useState(false);
   const [deletionNotification, setDeletionNotification] = useState(null);
+  const [newTask, setNewTask] = useState('');
+
   const supabase = createClient();
 
   // Fetch user ID
@@ -63,30 +67,119 @@ export default function EisenhowerMatrixPage() {
         delegate: [],
         eliminate: [],
       };
+      const updatedUnallocatedTasks = [];
 
-      Object.values(allTasks).forEach((task) => {
+      allTasks.forEach((task) => {
         if (task.matrix_type && updatedTasks[task.matrix_type]) {
           updatedTasks[task.matrix_type].push(task);
+        } else {
+          updatedUnallocatedTasks.push(task);
         }
       });
 
       setTasks(updatedTasks);
+      setUnallocatedTasks(updatedUnallocatedTasks);
     }
   }, [allTasks]);
 
   const addTask = (quadrant, task) => {
+    setTasks((prevTasks) => {
+      const updatedTasks = {
+        ...prevTasks,
+        [quadrant]: [...prevTasks[quadrant], task],
+      };
+      return updatedTasks;
+    });
+  };
+
+  const removeTask = (quadrant, taskToRemove) => {
+    console.log(quadrant);
+    console.log(taskToRemove);
     setTasks((prevTasks) => ({
       ...prevTasks,
-      [quadrant]: [...prevTasks[quadrant], task],
+      [quadrant]: prevTasks[quadrant].filter((t) => {
+        // Compare task IDs, handling both nested and flat structures
+        const taskId = t.tasks?.task_id || t.task_id;
+        const removeTaskId = taskToRemove.tasks?.task_id || taskToRemove.task_id;
+        return taskId !== removeTaskId;
+      }),
     }));
   };
 
-  const removeTask = (quadrant, task) => {
-    setTasks((prevTasks) => ({
-      ...prevTasks,
-      [quadrant]: prevTasks[quadrant].filter((t) => t.task_id !== task.task_id),
-    }));
+  const handleDrop = async(quadrant, e) => {
+    e.preventDefault();
+    const task = JSON.parse(e.dataTransfer.getData('task'));
+
+    const res = await allocateEisenhowerTask(task.task_id || task.tasks?.task_id, quadrant);
+    if (!res) {
+      console.error('Error allocating task. Please check logs.');
+    }
+
+    let newTask = await getEisenhowerTaskByID(task.task_id || task.tasks?.task_id, userID);
+
+    // Add task to quadrant and remove from unallocated tasks
+    addTask(quadrant, newTask);
+        
+    setUnallocatedTasks((prevTasks) =>
+      prevTasks.filter((t) => {
+        const taskId = t.task_id || t.tasks?.task_id;
+        const removeTaskId = newTask.task_id || newTask.tasks?.task_id;
+        return taskId !== removeTaskId;
+      })
+    );
+  };
+
+  const handleFinishTask = async (task) => {
+    console.log(task);
+    finishEisenhowerTask(task.task_id || task.tasks?.task_id);
+  
+    const finishedTask = await getEisenhowerTaskByID(task.task_id || task.tasks?.task_id, userID);
+  
+    // Determine the current quadrant of the task
+    const currentQuadrant = Object.keys(tasks).find(quadrant => 
+      tasks[quadrant].some(t => (t.task_id || t.tasks?.task_id) === (task.task_id || task.tasks?.task_id))
+    );
+  
+    if (currentQuadrant) {
+      // Remove the task from its current quadrant
+      setTasks(prevTasks => ({
+        ...prevTasks,
+        [currentQuadrant]: prevTasks[currentQuadrant].filter(
+          t => (t.task_id || t.tasks?.task_id) !== (task.task_id || task.tasks?.task_id)
+        )
+      }));
+    }
+  
+    // Update the overall allTasks state
+    setAllTasks(prevAllTasks => 
+      prevAllTasks.map(t => 
+        (t.task_id || t.tasks?.task_id) === (finishedTask.task_id || finishedTask.tasks?.task_id) 
+          ? finishedTask 
+          : t
+      )
+    );
   }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (newTask.trim()) {
+      try {
+        const res = await addUnallocatedEisenhowerTask(userID, 'eisenhower', newTask);
+  
+        if (res.success) {
+          // Fetch the newly added task
+          const taskID = res.data.task_id;
+          const updatedTask = await getEisenhowerTaskByID(taskID, userID);
+          
+          setUnallocatedTasks((prevTasks) => [...prevTasks, updatedTask]);
+          // Clear the input
+          setNewTask('');
+        }
+      } catch (error) {
+        console.error('Error adding task:', error);
+      }
+    }
+  };
 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
@@ -148,18 +241,21 @@ export default function EisenhowerMatrixPage() {
           className='bg-[#292929] w-full lg:text-sm 2xl:text-base text-gray-400 p-2 my-2 rounded-lg px-4 focus-visible:outline-none placeholder:text-gray-500'
           placeholder='Enter everything you need done...'
           onKeyDown={handleKeyPress} // Handle Enter key press
+          value={newTask}
+          onChange={(e) => setNewTask(e.target.value)}
         />
 
-        {Object.values(allTasks || {})
-          .flat()
-          .map((task, index) => (
-            <div
-              key={index}
-              className="bg-[#292929] lg:text-sm 2xl:text-base text-gray-400 p-2 my-2 rounded-lg px-4 border border-[#454545] hover:bg-[#414141] transition duration-200 ease-in-out"
-            >
-              {task.tasks.title || 'Untitled Task'}
-            </div>
-          ))}
+        {unallocatedTasks.map((task, index) => (
+          <div
+            key={index}
+            className="bg-[#292929] lg:text-sm 2xl:text-base text-gray-400 p-2 my-2 rounded-lg px-4 border border-[#454545] hover:bg-[#414141] transition duration-200 ease-in-out"
+            draggable
+            onDragStart={(e) => e.dataTransfer.setData('task', JSON.stringify(task))}
+          >
+            {task.tasks?.title || task.title || 'Untitled Task'}
+          </div>
+        ))}
+
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 w-3/4 h-full">
@@ -172,6 +268,7 @@ export default function EisenhowerMatrixPage() {
           showDeletionNotification(task);
           setModalVisible(false);
         }}
+        onFinishTask={(task) => handleFinishTask(task)}
       />
 
       {deletionNotification && (
@@ -184,7 +281,6 @@ export default function EisenhowerMatrixPage() {
           Task deleted
         </div>
       )}
-
         <Quadrant
           title="Urgent and Important"
           tasks={tasks.do}
@@ -197,7 +293,10 @@ export default function EisenhowerMatrixPage() {
           border="border border-[#2F2F2F]"
           userID={userID}
           quadrant="do"
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => handleDrop('do', e)}
         />
+
         <Quadrant
           title="Not Urgent but Important"
           tasks={tasks.schedule}
@@ -210,6 +309,8 @@ export default function EisenhowerMatrixPage() {
           border="border-t border-r border-b border-[#2F2F2F]"
           userID={userID}
           quadrant="schedule"
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => handleDrop('schedule', e)}
         />
         <Quadrant
           title="Urgent but Not Important"
@@ -223,6 +324,8 @@ export default function EisenhowerMatrixPage() {
           border="border-b border-l border-r border-[#2F2F2F]"
           userID={userID}
           quadrant="delegate"
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => handleDrop('delegate', e)}
         />
         <Quadrant
           title="Not Urgent and Not Important"
@@ -235,6 +338,8 @@ export default function EisenhowerMatrixPage() {
           borderRoundness="border-b border-r border-[#2F2F2F] rounded-br-lg"
           userID={userID}
           quadrant="eliminate"
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => handleDrop('eliminate', e)}
         />
       </div>
     </div>

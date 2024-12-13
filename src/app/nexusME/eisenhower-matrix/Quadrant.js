@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { addEisenhowerTask, getEisenhowerTaskByID } from '../../../lib/db/queries';
-import { getEisenhowerTasks } from '../../../lib/db/queries';
 
 export default function Quadrant({
   title,
@@ -11,12 +10,12 @@ export default function Quadrant({
   description,
   onAddTask,
   onTaskClick,
-  bgColor,
-  textBoxColor,
   borderRoundness,
   border,
   userID,
   quadrant,
+  onDragOver,
+  onDrop
 }) {
   const [newTask, setNewTask] = useState('');
   const [ulHeight, setUlHeight] = useState(null); // State to hold the fixed height
@@ -69,6 +68,8 @@ export default function Quadrant({
   return (
     <div
       className={`p-4 bg-[#1f1f1f] text-white ${borderRoundness} shadow-lg flex flex-col h-full ${border}`}
+      onDragOver={onDragOver}    
+      onDrop={onDrop}     
     >
       <h2 className="text-left lg:text-base 2xl:text-2xl text-gray-300">{title}</h2>
       <p className="text-left lg:text-sm 2xl:text-lg font-extralight text-gray-400 mb-4">
@@ -90,7 +91,11 @@ export default function Quadrant({
           return (
             <li
               key={index}
-              className={`bg-[#292929] lg:text-sm 2xl:text-base text-gray-400 p-2 my-2 rounded-lg px-4 border border-[#454545] hover:bg-[#414141] transition duration-200 ease-in-out`}
+              className={`p-2 my-2 rounded-lg border lg:text-sm 2xl:text-base ${
+                task.status || task.tasks?.status
+                  ? 'bg-green-700 text-white border-green-500'
+                  : 'bg-[#292929] text-gray-400 border-[#454545] hover:bg-[#414141]'
+              } transition duration-200 ease-in-out`}
               onClick={() => onTaskClick(task)}
             >
               {/* Check if task.tasks.title exists, otherwise fallback to task.title or the whole task object */}

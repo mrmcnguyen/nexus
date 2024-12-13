@@ -2,9 +2,10 @@
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
+import Beam from '../Beam';
+import { motion } from "framer-motion";
 import { DM_Sans } from 'next/font/google';
 import { useState, useEffect } from 'react';
-//import { supabase } from '../supabase/supabaseClient';
 import { createClient } from "../../../supabase/client";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
@@ -101,8 +102,24 @@ export default function Dashboard() {
                 </div>
                 <div className="max-w-full p-10 text-center pt-0">
                     <div className="max-w-full grid grid-cols-2 gap-4">
-                        <Link className="p-6 bg-[#1f1f1f] p-4 border border-[#2F2F2F] rounded-lg transition duration-300 ease-in-out cursor-pointer hover:shadow-blue-200 transform hover:scale-105" href={'./nexusME/chooseAFramework/'}>
-                            <div className="flex flex-row mb-6">
+                    <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0 }}
+          variants={{
+            hidden: { opacity: 0, y: 0, scale: 1, rotateX: 45 },
+            visible: {
+              opacity: 1,
+              y: [0, -20, 0],
+              scale: [1, 1.2, 1],
+              rotateX: 0,
+            },
+          }}
+          className="p-6 rounded-md bg-[#1f1f1f] relative overflow-hidden flex items-center justify-center"
+        >
+            <Link href={'./nexusME/chooseAFramework/'}>
+                            <div className="flex flex-row mb-6 justify-center">
                                 <Image
                                     src="/individual.svg"
                                     className="mr-4 filter invert"
@@ -113,10 +130,42 @@ export default function Dashboard() {
                                 />
                                 <h2 className="text-2xl font-semibold text-gray-200">Nexus ME</h2>
                             </div>
-                            <p className="text-gray-200">Everything you need for your individual productivity.</p>
+                            <p className="text-gray-300">Everything you need for your individual productivity.</p>
                         </Link>
-                        <Link className="p-6 bg-[#1f1f1f] p-4 border border-[#2F2F2F] rounded-lg transition duration-300 ease-in-out cursor-pointer hover:shadow-blue-200 transform hover:scale-105" href={'./nexusME/chooseAFramework/'}>
-                            <div className="flex flex-row mb-6">
+
+          {/* Two Beams that run on top of the container */}
+          <Beam className="top-0" />
+          <Beam className="top-0" />
+
+          {/* A bottom gradient that looks cute */}
+          <div className="z-0 ">
+            <div className="absolute bottom-0 left-4 mt-[2px] flex h-8 items-end overflow-hidden">
+              <div className="flex -mb-px h-[2px] w-80 -scale-x-100">
+                <div className="w-full flex-none blur-sm [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]"></div>
+                <div className="-ml-[100%] w-full flex-none blur-[1px] [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]"></div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0 }}
+          variants={{
+            hidden: { opacity: 0, y: 0, scale: 1, rotateX: 45 },
+            visible: {
+              opacity: 1,
+              y: [0, -20, 0],
+              scale: [1, 1.2, 1],
+              rotateX: 0,
+            },
+          }}
+          className="p-6 rounded-md bg-[#1f1f1f] relative overflow-hidden flex items-center justify-center"
+        >
+            <Link href={'./nexusME/chooseAFramework/'}>
+                            <div className="flex flex-row mb-6 justify-center">
                                 <Image
                                     src="/team.svg"
                                     className="mr-4 filter invert"
@@ -127,8 +176,24 @@ export default function Dashboard() {
                                 />
                                 <h2 className="text-2xl font-semibold text-gray-200">Nexus TEAMS</h2>
                             </div>
-                            <p className="text-left text-gray-200">Meetings. Collaboration. It's all here.</p>
+                            <p className="text-gray-300">Meetings. Collaborations. It's all here.</p>
                         </Link>
+
+          {/* Two Beams that run on top of the container */}
+          <Beam className="top-0" delay={3} />
+          <Beam className="top-0" deplay={5} />
+
+          {/* A bottom gradient that looks cute */}
+          <div className="z-0 ">
+            <div className="absolute bottom-0 left-4 mt-[2px] flex h-8 items-end overflow-hidden">
+              <div className="flex -mb-px h-[2px] w-80 -scale-x-100">
+                <div className="w-full flex-none blur-sm [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]"></div>
+                <div className="-ml-[100%] w-full flex-none blur-[1px] [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]"></div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
                     </div>
                     <div className="flex flex-col">
                         <h2 className="text-left text-white text-4xl m-4 ml-0 mt-14">Quick Shortcuts</h2>

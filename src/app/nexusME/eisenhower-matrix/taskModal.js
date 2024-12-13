@@ -3,8 +3,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { deleteEisenhowerTaskByID } from "../../../lib/db/queries";
 
-export default function TaskModal({ isVisible, closeModal, task, onUpdateTask, onDeleteTask }) {
-  console.log(task)
+export default function TaskModal({ isVisible, closeModal, task, onUpdateTask, onDeleteTask, onFinishTask }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState('');
 
@@ -160,7 +159,7 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask, o
             
             <div className="lg:w-1/4 2xl:w-1/6 space-y-4">
               <div
-                className={`relative bg-gray-900/50 border-gray-700 border rounded-lg p-4 mb-2 text-center`}
+                className={`relative bg-gray-900/50 border-[#6cb4fb] border rounded-lg p-4 mb-2 text-center`}
               >
                 <div className="text-3xl mb-2">{matrixType.icon}</div>
                 <p className="lg:text-xs 2xl:text-sm text-gray-200">
@@ -171,7 +170,12 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask, o
                 </div>
               </div>
               
-              <button className="lg:text-xs 2xl:text-sm w-full rounded-lg bg-[#006239] border border-[#128353] flex justify-center items-center p-2 hover:bg-[#3ecf8e80] hover:border-[#3ecf8e] transition-all duration-200">
+              <button className="lg:text-xs 2xl:text-sm w-full rounded-lg bg-[#006239] border border-[#128353] flex justify-center items-center p-2 hover:bg-[#3ecf8e80] hover:border-[#3ecf8e] transition-all duration-200"
+                      onClick={() => {
+                        onFinishTask(task);
+                        closeModal();
+                      }}
+              >
                 <Image
                   src="/finish.svg"
                   className="mx-2"  
@@ -194,7 +198,10 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask, o
                 Send to Kanban 
               </button>
               <button className="lg:text-xs 2xl:text-sm w-full rounded-lg bg-[#541c15] border border-[#7f2315] flex justify-center items-center p-2 hover:bg-[#e54d2e80] hover:border-[#e54d2e] transition-all duration-200"
-                onClick={() => handleDeleteTask(task.matrix_type, task)}
+                onClick={() => {
+                  console.log('Task being deleted:', task);
+                  handleDeleteTask(task.matrix_type, task);
+                }}
               >
                 <Image
                   src="/delete.svg"

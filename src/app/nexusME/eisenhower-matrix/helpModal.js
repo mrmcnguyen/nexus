@@ -98,7 +98,7 @@ export default function HelpModal({ isVisible, closeModal }) {
               <p className="lg:text-sm 2xl:text-base text-gray-400 mb-2">Mind dump everything you need to do into the left panel. <b><u>Everything</u></b> you think you need to do. 
                 Then, classify each task into each of the four quadrants by dragging them in. Now that you've mapped out all your tasks, get started!
                 When you complete a task, you can mark it as done. You can also click tasks to view them, add a description/notes or rename them. You are also encouraged to delete completed
-                tasks if everything gets too messy. Boom. Easy.
+                tasks if everything gets too messy. You can also add tasks to each quadrant individually if you already know what priority they take.
             </p>
               <h2 className="lg:text-xl 2xl:text-2xl font-bold text-gray-300 mb-2">The Benefits</h2>
               <ul className="">

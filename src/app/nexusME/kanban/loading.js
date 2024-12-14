@@ -3,6 +3,8 @@ import Image from 'next/image';
 
 export default function Loading() {
 
+  const shimmer = 'before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent';
+
   const headerColors = {
     'Backlog': 'text-gray-400',
     'To Do': 'text-yellow-200',
@@ -89,7 +91,7 @@ export default function Loading() {
               {Array.from({ length: count }).map((_, index) => (
                 <div
                   key={index}
-                  className="p-4 text-[#2F2F2F] bg-[#292929] rounded lg:mb-1 2xl:mb-2 animate-pulse"
+                  className={`p-4 text-[#2F2F2F] bg-[#292929] rounded lg:mb-1 2xl:mb-2 animate-pulse`}
                 >0</div>
               ))}
             </div>

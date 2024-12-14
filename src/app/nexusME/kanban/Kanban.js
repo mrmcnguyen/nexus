@@ -31,7 +31,7 @@ export default function KanbanComponent() {
 
     const borderColors = {
       'Backlog' : 'border-gray-600',
-      'To Do': 'border-yellow-200',
+      'To Do': 'border-yellow-500',
       'In Progress': 'border-blue-300',
       'Done' : 'border-emerald-300'
     }

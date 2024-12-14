@@ -109,7 +109,9 @@ export default function Navbar({ page }) {
           />
           Docs
         </a>
-        <button className="flex flex-row px-4 py-1 align-middle border border-[#6cb4fb] items-center transition duration-200 bg-[#6f99da] text-sm text-white text-light rounded-lg hover:bg-[#3B55C2]">
+        <Link className="flex flex-row px-4 py-1 align-middle border border-[#6cb4fb] items-center transition duration-200 bg-[#6f99da] text-sm text-white text-light rounded-lg hover:bg-[#3B55C2]"
+        href="/nexusTEAMS/dashboard"
+        >
           Nexus TEAMS
           <Image
             src="/newTab.svg"
@@ -119,7 +121,7 @@ export default function Navbar({ page }) {
             height={14}
             priority
           />
-        </button>
+        </Link>
 
         {/* Account Icon */}
         <div className="relative">

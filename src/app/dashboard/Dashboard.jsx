@@ -164,7 +164,7 @@ export default function Dashboard() {
           }}
           className="p-6 rounded-md bg-[#1f1f1f] relative overflow-hidden flex items-center justify-center"
         >
-            <Link href={'./nexusME/chooseAFramework/'}>
+            <Link href={'./nexusTEAMS/dashboard'}>
                             <div className="flex flex-row mb-6 justify-center">
                                 <Image
                                     src="/team.svg"

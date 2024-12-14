@@ -3,13 +3,12 @@
 import React, { useState } from "react";
 import {
   FiBarChart,
-  FiChevronDown,
+  FiCalendar,
   FiChevronsRight,
-  FiDollarSign,
+  FiSettings,
   FiHome,
-  FiMonitor,
-  FiShoppingCart,
-  FiTag,
+  FiMap,
+  FiGrid,
   FiUsers,
 } from "react-icons/fi";
 import { motion } from "framer-motion";
@@ -23,7 +22,7 @@ export const Sidebar = ({width}) => {
   return (
     <motion.nav
       layout
-      className="sticky top-0 h-screen shrink-0 border-r border-gray-500 bg-[#171717] p-2"
+      className="sticky top-0 h-screen shrink-0 border-r border-gray-700 bg-[#171717] p-2"
       style={{
         width: open ? '225px' : "fit-content",
       }}
@@ -39,44 +38,43 @@ export const Sidebar = ({width}) => {
           open={open}
         />
         <Option
-          Icon={FiDollarSign}
-          title="Sales"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-          notifs={3}
-        />
-        <Option
-          Icon={FiMonitor}
-          title="View Site"
+          Icon={FiUsers}
+          title="Members"
           selected={selected}
           setSelected={setSelected}
           open={open}
         />
         <Option
-          Icon={FiShoppingCart}
-          title="Products"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-        />
-        <Option
-          Icon={FiTag}
-          title="Tags"
+          Icon={FiCalendar}
+          title="Meetings"
           selected={selected}
           setSelected={setSelected}
           open={open}
         />
         <Option
           Icon={FiBarChart}
-          title="Analytics"
+          title="Sectors"
           selected={selected}
           setSelected={setSelected}
           open={open}
         />
         <Option
-          Icon={FiUsers}
-          title="Members"
+          Icon={FiGrid}
+          title="Eisenhower Matrix"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+        />
+        <Option
+          Icon={FiMap}
+          title="Kanban Board"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+        />
+        <Option
+          Icon={FiSettings}
+          title="Settings"
           selected={selected}
           setSelected={setSelected}
           open={open}
@@ -84,6 +82,9 @@ export const Sidebar = ({width}) => {
       </div>
 
       {/* <ToggleClose open={open} setOpen={setOpen} /> */}
+      <a className="absolute bottom-0 left-0 m-2 p-3 rounded-lg text-gray-400 text-sm bg-[#1f1f1f] border border-[#2f2f2f] hover:bg-[#292929] transition-200 ease-in-out">
+        How to make the most out of this tool
+      </a>
     </motion.nav>
   );
 };
@@ -122,7 +123,7 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs }) => {
           }}
           style={{ y: "-50%" }}
           transition={{ delay: 0.5 }}
-          className="absolute right-2 top-1/2 size-4 rounded bg-indigo-500 text-xs text-white"
+          className="absolute right-2 top-1/2 size-4 rounded bg-[#63abf1] text-xs text-white"
         >
           {notifs}
         </motion.span>
@@ -133,7 +134,7 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs }) => {
 
 const TitleSection = ({ open }) => {
   return (
-    <div className="mb-3 border-b border-gray-500 pb-3">
+    <div className="mb-3 border-b border-gray-700 pb-3">
       <div className="flex cursor-pointer items-center justify-between rounded-md transition-colors">
         <div className="flex items-center gap-2">
           <Link href={'../dashboard'}><Logo /></Link>
@@ -144,8 +145,8 @@ const TitleSection = ({ open }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.125 }}
             >
-              <span className="block text-xs font-semibold">TomIsLoading</span>
-              <span className="block text-xs text-slate-500">Pro Plan</span>
+              <span className="block text-xs font-semibold">Kevin's Workspace</span>
+              <span className="block text-xs text-slate-500">Nexus</span>
             </motion.div>
           )}
         </div>

@@ -84,8 +84,8 @@ export default function Navbar({ page }) {
           <Link
             key={framework.name}
             href={framework.link}
-            className={`text-gray-400 text-light text-sm hover:text-[#91C8FF] ${
-              pathname === framework.link ? 'text-[#91C8FF]' : ''
+            className={`text-[#91C8FF] text-sm hover:text-[#91C8FF] ${
+              pathname === framework.link ? 'text-[#91C8FF]' : 'text-gray-400'
             }`}
           >
             {framework.name}
@@ -111,6 +111,7 @@ export default function Navbar({ page }) {
         </a>
         <Link className="flex flex-row px-4 py-1 align-middle border border-[#6cb4fb] items-center transition duration-200 bg-[#6f99da] text-sm text-white text-light rounded-lg hover:bg-[#3B55C2]"
         href="/nexusTEAMS/dashboard"
+        target='_blank?'
         >
           Nexus TEAMS
           <Image

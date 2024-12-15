@@ -4,7 +4,7 @@ export default function DashboardHeader( { organisation, manager, status } ) {
     return (
         <>
         {/* Main Header Info */}
-  <div className="w-full">
+  <div className="w-full mb-8">
     <div className="flex flex-row gap-x-8 h-auto justify-between">
       {/* Organisation Name */}
       <div className="flex flex-row gap-x-8">

@@ -2,7 +2,7 @@ export default function DashboardSector({ sectors }){
     return (
         <>
       {/* Sectors List */}
-    <div className="mt-8">
+    <div className="pl-2">
     {/* Table Headers */}
     <div className="grid grid-cols-4 gap-4 text-sm font-light text-gray-500 border-b border-gray-700 pb-2">
         <div>Sector</div>
@@ -14,7 +14,7 @@ export default function DashboardSector({ sectors }){
     {sectors.map((sector, index) => (
         <div
             key={index}
-            className="grid grid-cols-4 gap-4 items-center border-b border-gray-700 py-2"
+            className="grid grid-cols-4 gap-4 items-center py-2 rounded-lg hover:bg-[#1f1f1f]"
         >
             <div className="text-gray-300">{sector.name}</div>
             <div className="flex items-center">
@@ -27,7 +27,7 @@ export default function DashboardSector({ sectors }){
                 <span className="ml-2 text-sm text-gray-300">{sector.progress}%</span>
             </div>
             <div className="text-gray-300">{sector.manager}</div>
-            <div className="text-emerald-300">{sector.status}</div>
+            <div className="text-white">{sector.status}</div>
         </div>
     ))}
 </div>  

@@ -1,52 +1,100 @@
-export default function DashboardFooter({ members, tasks }) {
-    return (
-        <div className="grid grid-cols-2 h-full gap-4 mt-4">
-            {/* Members Section */}
-            <div className="rounded-lg bg-[#1F1F1F] shadow-sm p-4">
-                <h2 className="text-base font-semibold text-gray-400 mb-3 uppercase tracking-wider">
-                    Team Members
-                </h2>
-                <div className="grid grid-cols-4 gap-4 text-sm pl-2 font-light text-gray-500 border-b border-gray-700 py-2">
-                    <div>NAME</div>
-                    <div>SECTOR</div>
-                    <div>ROLE</div>
-                    <div>STATUS</div>
-                </div>
-                <ul className="space-y-2">
-                    {members.length > 0 ? (members.map((member, index) => (
-                        <div
-                        key={index}
-                        className="grid grid-cols-4 gap-4 items-center py-2 pl-2 rounded-lg hover:bg-[#1f1f1f]"
-                    >
-                        <div className="text-sm text-gray-300">{member.name}</div>
-                        <div className="text-sm text-gray-300">{member.sector}</div>
-                        <div className="text-sm text-gray-300">{member.role}</div>
-                        <div className="text-sm text-white">{member.status}</div>
-                    </div>
-                    ))):
-                    <div className="text-gray-500 text-center py-4">
-                    No Members
-                        </div>}
-                </ul>
-            </div>
+'use client'
+import { useEffect, useState, useRef } from "react";
 
-            {/* Tasks Section */}
-            <div className="bg-[#1F1F1F] rounded-lg shadow-sm p-4">
-                <h2 className="text-base font-semibold text-gray-400 mb-3 uppercase tracking-wider">
-                    Pending Tasks
+export default function DashboardFooter({ members, tasks }) {
+    const [height, setHeight] = useState(null);
+    const ref = useRef(); // Reference for the list element
+    const headerRef = useRef(); // Reference for the header container (Team Members header and first column header)
+    const columnHeaderRef = useRef();
+    const parentRef = useRef(); // Reference for the parent div (to set maxHeight and handle overflow)
+
+    const updateHeight = () => {
+        if (ref.current && parentRef.current && headerRef.current && columnHeaderRef.current && height === null) {
+            const totalHeight = parentRef.current.offsetHeight; // Total container height
+            const columnHeaderHeight = columnHeaderRef.current.offsetHeight;
+            const headerHeight = headerRef.current.offsetHeight; // Header height
+            const paddingTop = parseFloat(window.getComputedStyle(parentRef.current).paddingTop);
+            const paddingBottom = parseFloat(window.getComputedStyle(parentRef.current).paddingBottom);
+            
+            console.log(totalHeight, columnHeaderHeight, headerHeight);
+            // Set the remaining height for the list
+            setHeight(totalHeight - (headerHeight + columnHeaderHeight + paddingTop + paddingBottom));
+        }
+    }
+
+    useEffect(() => {
+        updateHeight(); // Initial height calculation
+        window.addEventListener('resize', updateHeight); // Recalculate on resize
+
+        return () => {
+            window.removeEventListener('resize', updateHeight); // Cleanup on unmount
+        };
+    }, [height]);
+
+    return (
+        <>
+          {/* Members List */}
+          <div ref={parentRef} className="p-4 h-full rounded-lg bg-[#1f1f1f] overflow-hidden">
+            {/* Header Section */}
+            <div ref={headerRef} className="flex flex-row w-full justify-between">
+              <div>
+                <h2 className="text-base 2xl:text-lg font-semibold text-gray-400 mb-3 uppercase tracking-wider">
+                  Team Members
                 </h2>
-                <ul className="space-y-2">
-                    {tasks.map((task, index) => (
-                        <li 
-                            key={index} 
-                            className="text-sm text-gray-400 flex items-center space-x-2"
-                        >
-                            <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                            <span>{task}</span>
-                        </li>
-                    ))}
-                </ul>
+              </div>
+              <button className="bg-[#292929] rounded-lg text-sm text-gray-400 border border-[#454545] p-1">
+                Manage
+              </button>
             </div>
-        </div>
-    );
+    
+            {/* Table Headers */}
+            <div ref={columnHeaderRef} className="grid grid-cols-4 gap-4 text-sm pl-2 font-light text-gray-500 border-b border-gray-700 py-2">
+              <div>NAME</div>
+              <div>SECTOR</div>
+              <div>ROLE</div>
+              <div>STATUS</div>
+            </div>
+    
+            {/* Scrollable List of Members */}
+            <div ref={ref} className="mt-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900"
+                    style={
+                        height !== null
+                          ? { maxHeight: `${height}px`, overflowY: 'auto' }
+                          : {}
+                    }
+                >
+            {members.length > 0 ? (
+              members.map((member, index) => (
+                  <div
+                  key={index}
+                  className="grid grid-cols-4 gap-4 items-center py-2 pl-2 rounded-lg hover:bg-[#292929]"
+                  >
+                  <div className="text-sm text-gray-300">{member.name}</div>
+                  <div className="text-sm text-gray-300">{member.sector}</div>
+                  <div className="text-sm text-gray-300">{member.role}</div>
+                  <div
+                      className={`text-xs font-semibold uppercase ${
+                      member.status === "Online"
+                          ? "text-emerald-300"
+                          : member.status === "Offline"
+                          ? "text-red-700"
+                          : "text-[#91C8FF]"
+                      }`}
+                  >
+                      {member.status}
+                  </div>
+                  </div>
+              ))
+              ) : (
+              <div className="text-gray-500 text-center py-4">
+                  This project has no members
+              </div>
+              )}
+            </div>
+          </div>
+        </>
+      );
 }
+
+
+

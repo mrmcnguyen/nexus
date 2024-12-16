@@ -2,7 +2,7 @@ export default function DashboardSector({ sectors }) {
     return (
       <>
         {/* Sectors List */}
-        <div className="p-4 h-full rounded-lg bg-[#1f1f1f]">
+        <div className="p-4 h-full rounded-lg bg-[#1f1f1f] overflow-hidden">
           {/* Header Section */}
           <div className="flex flex-row w-full justify-between">
             <div>
@@ -24,7 +24,7 @@ export default function DashboardSector({ sectors }) {
           </div>
   
           {/* Scrollable List of Sectors */}
-          <div className="mt-2 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
+          <div className="mt-2 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
           {sectors.length > 0 ? (
             sectors.map((sector, index) => (
                 <div

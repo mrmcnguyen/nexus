@@ -24,7 +24,7 @@ export default function DashboardSector({ sectors }) {
           </div>
   
           {/* Scrollable List of Sectors */}
-          <div className="mt-2 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
+          <div className="mt-2 h-full overflow-y-auto scrollbar-none">
           {sectors.length > 0 ? (
             sectors.map((sector, index) => (
                 <div

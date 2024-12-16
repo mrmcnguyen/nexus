@@ -114,6 +114,12 @@ export default function KanbanComponent() {
 
   const handleMoveTask = async(newStatus, task) => {
 
+    // Check if dropped over the same column
+    let taskCol = task.status || task.tasks?.status;
+    if (taskCol === newStatus){
+      return; // End early and don't do anything if dragger over the same column
+    }
+
     let taskId = task.task_id || task.tasks?.task_id;
 
     let res = await updateKanbanTaskState(taskId, newStatus);

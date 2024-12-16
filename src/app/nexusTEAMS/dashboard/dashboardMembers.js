@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState, useRef } from "react";
 
-export default function DashboardFooter({ members, tasks }) {
+export default function DashboardMembers({ members, tasks }) {
     const [height, setHeight] = useState(null);
     const ref = useRef(); // Reference for the list element
     const headerRef = useRef(); // Reference for the header container (Team Members header and first column header)

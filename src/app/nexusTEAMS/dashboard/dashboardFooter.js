@@ -1,6 +1,6 @@
 export default function DashboardFooter({ members, tasks }) {
     return (
-        <div className="grid grid-cols-2 gap-4 mt-4">
+        <div className="grid grid-cols-2 h-full gap-4 mt-4">
             {/* Members Section */}
             <div className="rounded-lg bg-[#1F1F1F] shadow-sm p-4">
                 <h2 className="text-base font-semibold text-gray-400 mb-3 uppercase tracking-wider">

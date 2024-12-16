@@ -8,7 +8,6 @@ export const metadata = {
 };
 
 export default function Page() {
-
   const sectors = [
     { name: "Marketing", progress: "63", manager: "John Doe", status: "UP TO DATE" },
     { name: "Software Development", progress: "24", manager: "Pablo Cortez", status: "UP TO DATE" },
@@ -32,24 +31,24 @@ export default function Page() {
   ];
 
   return (
-    <main className="flex flex-col min-h-screen">
-      {/* Header */}
+    <main className="flex flex-col h-full pb-4">
       <DashboardHeader
         organisation={"ReInspire Education"}
         manager={"Kevin Lee"}
         status={"Active"}
       />
 
-      {/* Sectors Section */}
-      <div className="max-h-64 overflow-y-auto">
-        <DashboardSector sectors={[]} />
+      <div className="flex flex-col flex-1">
+        <div className="h-[50%] overflow-auto">
+          <DashboardSector sectors={sectors} />
+        </div>
+        <div className="h-[50%]">
+          <DashboardFooter
+            members={members}      
+            tasks={tasks}
+          />
+        </div>
       </div>
-
-      {/* Members and Tasks Section */}
-      <DashboardFooter
-        members={[]}      
-        tasks={tasks}
-      />
     </main>
   );
 }

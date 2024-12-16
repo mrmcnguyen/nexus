@@ -84,7 +84,7 @@ export default function Navbar({ page }) {
           <Link
             key={framework.name}
             href={framework.link}
-            className={`text-[#91C8FF] text-sm hover:text-[#91C8FF] ${
+            className={`text-[#91C8FF] text-sm font-medium hover:text-[#91C8FF] ${
               pathname === framework.link ? 'text-[#91C8FF]' : 'text-gray-400'
             }`}
           >

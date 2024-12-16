@@ -2,16 +2,16 @@ export default function DashboardSector({ sectors }) {
     return (
       <>
         {/* Sectors List */}
-        <div className="p-4 h-64 bg-[#1f1f1f]">
+        <div className="p-4 h-full rounded-lg bg-[#1f1f1f]">
           {/* Header Section */}
           <div className="flex flex-row w-full justify-between">
             <div>
-              <h2 className="text-base font-semibold text-gray-400 mb-3 uppercase tracking-wider">
+              <h2 className="text-base 2xl:text-lg font-semibold text-gray-400 mb-3 uppercase tracking-wider">
                 Project Sectors
               </h2>
             </div>
             <button className="bg-[#292929] rounded-lg text-sm text-gray-400 border border-[#454545] p-1">
-              View All
+              Manage
             </button>
           </div>
   
@@ -38,8 +38,6 @@ export default function DashboardSector({ sectors }) {
                         className={`bg-[#6cb4fc] h-0.5 rounded-full ${
                         sector.progress === "100"
                             ? "bg-emerald-500"
-                            : sector.progress < "20"
-                            ? "bg-red-700"
                             : "bg-[#91C8FF]"
                         }`}
                         style={{ width: `${sector.progress}%` }}

@@ -1,15 +1,16 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { createClient } from '../../../supabase/client'
+import { createClient } from '../../../supabase/client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { addUser } from '../../lib/db/queries'
 
 //!!!!!!!! REMEMBER TO VALIDATE INPUTS !!!!!!!!!
 
 const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,9 +20,16 @@ const SignUp = () => {
   const handleSignUp = async () => {
     try {
       setLoading(true);
+      console.log(email, password, firstName, lastName);
       const { error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+        data: {
+          first_name: firstName,
+          last_name: lastName,
+        },
+      },
       });
 
       if (error) {
@@ -30,6 +38,8 @@ const SignUp = () => {
       } else {
         setEmail('');
         setPassword('');
+        setFirstName('');
+        setLastName('');
         sessionStorage.setItem('user', true);
         router.push('/signIn'); // Redirect after successful sign-up
       }
@@ -58,20 +68,33 @@ const SignUp = () => {
   };
 
   return (
-      <div className="min-h-screen flex flex-col items-center justify-center">
-        <Image alt="nexus Logo" src="/nexusLogo.png" width={400} height={24} priority />
-        <div>
-        {loading ? ( // Show loading spinner when loading is true
+    <div className="min-h-screen flex flex-col items-center justify-center">
+      <Image alt="nexus Logo" src="/nexusLogo.png" width={400} height={24} priority />
+      <div>
+        {loading ? (
           <div className="flex flex-col items-center justify-center h-screen">
             <h1 className='text-gray-400'>Signing you up...</h1>
             <div className="loader my-6 border-t-4 border-blue-500 border-solid rounded-full w-16 h-16 animate-spin"></div>
             <h1 className='text-gray-400'>Please confirm your email address before signing in.</h1>
           </div>
-          
         ) : (
           <div>
             <div className="p-10 pb-5 pt-0 rounded-lg">
               <h1 className="text-[#7098DA] font-normal text-2xl mb-5 text-center">Sign Up</h1>
+              <input
+                type="text"
+                placeholder="First Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full p-3 mb-4 bg-[#292929] focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded border-solid border border-gray-700 outline-none text-white placeholder-gray-500"
+              />
+              <input
+                type="text"
+                placeholder="Last Name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full p-3 mb-4 bg-[#292929] focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded border-solid border border-gray-700 outline-none text-white placeholder-gray-500"
+              />
               <input
                 type="email"
                 placeholder="Email"
@@ -141,9 +164,9 @@ const SignUp = () => {
             </div>
           </div>
         )}
-        </div>
-        <footer className="text-gray-500">Nexus 2024 © </footer>
       </div>
+      <footer className="text-gray-500">Nexus 2024 © </footer>
+    </div>
   );
 };
 

@@ -31,7 +31,7 @@ export default function StageOne( {formData, setFormData, nextStage}){
           initial={{ x: 100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: -100, opacity: 0 }}
-          transition={{ delay: 0.1 }}
+          transition={{ delay: 0.05 }}
           className="text-center mb-4 md:mb-6">
               <h1 className="text-2xl md:text-4xl font-semibold mb-2">What is your project called?</h1>
               <p className="text-gray-cool text-sm">Don't worry if you don't have a formal name. Anything will do.</p>
@@ -41,7 +41,7 @@ export default function StageOne( {formData, setFormData, nextStage}){
                 initial={{ x: 100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -100, opacity: 0 }}
-                transition={{ delay: 0.15 }}
+                transition={{ delay: 0.075 }}
               className="flex items-center justify-between">
                 <label htmlFor="name" className='block font-medium'>Project Name</label>
                 {projNameError && <p className='font-semibold text-red-600'>This field is required</p>}
@@ -50,7 +50,7 @@ export default function StageOne( {formData, setFormData, nextStage}){
                 initial={{ x: 100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -100, opacity: 0 }}
-                transition={{ delay: 0.2 }}
+                transition={{ delay: 0.1 }}
                 onChange={(e) => {
                     setFormData({ ...formData, projName: e.target.value });
                     setProjNameError(false);

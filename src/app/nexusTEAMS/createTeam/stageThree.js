@@ -24,7 +24,7 @@ export default function StageThree( {formData, setFormData, nextStage}){
           initial={{ x: 100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: -100, opacity: 0 }}
-          transition={{ delay: 0.1 }}
+          transition={{ delay: 0.05 }}
           className="text-center mb-4 md:mb-6">
               <h1 className="text-2xl md:text-4xl font-semibold mb-2">What is your project about?</h1>
               <p className="text-gray-cool text-sm">Write a desciption of the project.</p>
@@ -34,7 +34,7 @@ export default function StageThree( {formData, setFormData, nextStage}){
                 initial={{ x: 100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -100, opacity: 0 }}
-                transition={{ delay: 0.15 }}
+                transition={{ delay: 0.075 }}
               className="flex items-center justify-between">
                 <label htmlFor="name" className='block font-medium'>Project Description</label>
                 {descriptionError && <p className='font-semibold text-red-600'>This field is required</p>}
@@ -43,7 +43,7 @@ export default function StageThree( {formData, setFormData, nextStage}){
                 initial={{ x: 100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -100, opacity: 0 }}
-                transition={{ delay: 0.2 }}
+                transition={{ delay: 0.1 }}
                 onChange={(e) => {
                     setFormData({ ...formData, description: e.target.value });
                     setDescriptionError(false);

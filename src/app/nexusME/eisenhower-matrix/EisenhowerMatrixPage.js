@@ -21,7 +21,7 @@ export default function EisenhowerMatrixPage() {
 
   const [allTasks, setAllTasks] = useState(null); // Initialize as null to signify loading state
   const [userID, setUserID] = useState(null);
-  const [taskModalClick, setTaskModalClick] = useState(null);
+  const [dragOverColumn, setDragOverColumn] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Add a loading state
@@ -295,6 +295,9 @@ export default function EisenhowerMatrixPage() {
           quadrant="do"
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => handleDrop('do', e)}
+          onDragEnter={() => setDragOverColumn('do')}
+          onDragLeave={() => setDragOverColumn(null)}
+          dragOverColumn={dragOverColumn}
         />
 
         <Quadrant
@@ -311,6 +314,9 @@ export default function EisenhowerMatrixPage() {
           quadrant="schedule"
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => handleDrop('schedule', e)}
+          onDragEnter={() => setDragOverColumn('schedule')}
+          onDragLeave={() => setDragOverColumn(null)}
+          dragOverColumn={dragOverColumn}
         />
         <Quadrant
           title="Urgent but Not Important"
@@ -326,6 +332,9 @@ export default function EisenhowerMatrixPage() {
           quadrant="delegate"
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => handleDrop('delegate', e)}
+          onDragEnter={() => setDragOverColumn('delegate')}
+          onDragLeave={() => setDragOverColumn(null)}
+          dragOverColumn={dragOverColumn}
         />
         <Quadrant
           title="Not Urgent and Not Important"
@@ -340,6 +349,9 @@ export default function EisenhowerMatrixPage() {
           quadrant="eliminate"
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => handleDrop('eliminate', e)}
+          onDragEnter={() => setDragOverColumn('eliminate')}
+          onDragLeave={() => setDragOverColumn(null)}
+          dragOverColumn={dragOverColumn}
         />
       </div>
     </div>

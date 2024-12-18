@@ -9,6 +9,38 @@ export async function fetchAllTasks(){
     return data;
 }
 
+export async function editTaskName(a_task_id, a_new_task_name){
+    const supabase = createClient();
+    let { data, error } = await supabase.
+    from('tasks')
+    .update({ title: a_new_task_name})
+    .eq('task_id', a_task_id)
+    .select('*')
+
+    if (error){
+        console.error(error);
+        return error;
+    }
+    console.log("Task name edited to", a_new_task_name);
+    return data;
+}
+
+export async function editTaskDescription(a_task_id, a_description){
+    const supabase = createClient();
+    let { data, error } = await supabase.
+    from('tasks')
+    .update({ description: a_description})
+    .eq('task_id', a_task_id)
+    .select('*')
+
+    if (error){
+        console.error(error);
+        return error;
+    }
+    console.log("Description name edited to", a_description);
+    return data;
+}
+
 // EISENHOWER QUERIES
 
 export async function addUnallocatedEisenhowerTask(a_user_id, a_task_type, a_title){

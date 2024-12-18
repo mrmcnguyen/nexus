@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { addKanbanTask, getKanbanTasks, updateKanbanTaskState } from "../../../lib/db/queries";
+import { addKanbanTask, editTaskDescription, editTaskName, getKanbanTasks, updateKanbanTaskState } from "../../../lib/db/queries";
 import { createClient } from "../../../../supabase/client";
 import Loading from "./loading";
 import TaskModal from "./taskModal";
@@ -175,6 +175,73 @@ export default function KanbanComponent() {
     // No need to trigger any other state changes here if not fetching tasks again
   };
 
+  const updateTaskDescription = async (task, description) => {
+    const taskId = task.task_id || task.tasks?.task_id;
+
+    const res = await editTaskDescription(taskId, description);
+    if (res[0]) {
+        setTasks((prevTasks) => {
+            const updatedTasks = { ...prevTasks };
+            
+            // Find the task in the current state and update its description
+            for (const status in updatedTasks) {
+                const index = updatedTasks[status].findIndex(
+                    (t) => t.task_id === taskId || t.tasks?.task_id === taskId
+                );
+                
+                if (index > -1) {
+                    // Get task status
+                    let state = updatedTasks[status][index].status;
+
+                    // Update the task entry with the new updated returned row
+                    updatedTasks[status][index] = res[0];
+
+                    // Add status to task object, since tasks table does not return status attribute
+                    updatedTasks[status][index].status= state;
+                    break;
+                }
+            }
+            console.log(updatedTasks);
+            return updatedTasks;
+        });
+    }
+};
+
+const updateTaskTitle = async (task, title) => {
+
+  console.log(task, title);
+  const taskId = task.task_id || task.tasks?.task_id;
+
+  const res = await editTaskName(taskId, title);
+  if (res[0]) {
+      setTasks((prevTasks) => {
+          const updatedTasks = { ...prevTasks };
+          
+          // Find the task in the current state and update its description
+          for (const status in updatedTasks) {
+              const index = updatedTasks[status].findIndex(
+                  (t) => t.task_id === taskId || t.tasks?.task_id === taskId
+              );
+              
+              if (index > -1) {
+                // Get task status
+                let state = updatedTasks[status][index].status;
+
+                // Update the task entry with the new updated returned row
+                updatedTasks[status][index] = res[0];
+
+                // Add status to task object, since tasks table does not return status attribute
+                updatedTasks[status][index].status= state;
+                break;
+              }
+          }
+          
+          console.log(updatedTasks);
+          return updatedTasks;
+      });
+  }
+};
+
   const handleKeyDown = (e, status) => {
     if (e.key === "Enter") {
       handleAddTask(e, status);
@@ -271,7 +338,7 @@ export default function KanbanComponent() {
             </div>
         </div>
 
-        <TaskModal
+        {isModalOpen && (<TaskModal
                 isVisible={isModalOpen}
                 closeModal={() => setIsModalOpen(false)}
                 task={selectedTask}
@@ -280,9 +347,11 @@ export default function KanbanComponent() {
                   showDeletionNotification(task);
                   setIsModalOpen(false);
                 }}
+                onDescriptionUpdate={(task, description) => updateTaskDescription(task, description)}
+                onTitleUpdate={(task, title) => updateTaskTitle(task, title)}
                 onFinishTask={(task) => handleFinishTask(task)}
                 onMoveTask={(task, key) => handleMoveTask(task, key)}
-              />
+              />)}
 
         {/* Kanban Board */}
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 h-[calc(100vh-140px)]">

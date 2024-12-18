@@ -7,12 +7,12 @@ import { motion } from "framer-motion";
 import { DM_Sans } from 'next/font/google';
 import { useState, useEffect } from 'react';
 import { createClient } from "../../../supabase/client";
-
-const dmSans = DM_Sans({ subsets: ["latin"] });
+import { getUserFullName } from "../../lib/db/userQueries"
 
 export default function Dashboard() {
 
     const [user, setUser] = useState(null);
+    const [userName, setUserName] = useState('');
     const [loading, setLoading] = useState(true);
     const router = useRouter();
     const [currentTime, setCurrentTime] = useState('');
@@ -28,6 +28,12 @@ export default function Dashboard() {
     
             if (data?.user) {
                 setUser(data.user); // Set the user data if available
+                console.log(data.user);
+                const res = await getUserFullName(data.user.id);
+                console.log(res[0]);
+                if (res){
+                    setUserName(res[0].first_name);
+                } 
             } else {
                 console.error("User not found:", error);
                 setUser(null); // Ensure user state is explicitly null if not found
@@ -97,8 +103,9 @@ export default function Dashboard() {
             />
             <div className="flex flex-col items-center justify-center">
                 <div className="w-full p-10 text-center h-full pt-5">
-                    <h1 className="lg:text-7xl md:text-6xl 2xl:text-8xl fond-bold text-white mb-4">{currentTime}</h1>
-                    <h2 className="lg:text-3xl md:text-2xl 2xl:text-4xl text-white">{formatDate()}</h2>
+                    <h1 className="lg:text-7xl md:text-6xl 2xl:text-8xl fond-semibold text-gray-400 mb-4">{currentTime}</h1>
+                    <h2 className="w-full text-center text-gray-400 text-2xl md:text-4xl font-light mb-2">Welcome, {userName}</h2>
+                    <h2 className="w-full text-center text-gray-400 text-2xl md:text-4xl font-semibold mb-2">{formatDate()}</h2>
                 </div>
                 <div className="max-w-full p-10 text-center pt-0">
                     <div className="max-w-full grid grid-cols-2 gap-4">

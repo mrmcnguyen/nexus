@@ -82,8 +82,8 @@ export const Sidebar = ({width}) => {
       </div>
 
       {/* <ToggleClose open={open} setOpen={setOpen} /> */}
-      <a className="absolute bottom-0 left-0 m-2 p-3 rounded-lg text-gray-400 text-sm bg-[#1f1f1f] border border-[#2f2f2f] hover:bg-[#292929] transition-200 ease-in-out">
-        How to make the most out of this tool
+      <a className="absolute w-full bottom-0 left-0 p-3 text-gray-600 text-center">
+      Nexus 2024 © 
       </a>
     </motion.nav>
   );

@@ -1,24 +1,29 @@
+'use client';
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { deleteKanbanTaskByID } from "../../../lib/db/queries";
+import debounce from 'lodash/debounce'; // Recommended for performance
 
-export default function KanbanTaskModal({ isVisible, closeModal, task, onUpdateTask, onDeleteTask, onMoveTask }) {
+export default function KanbanTaskModal({ isVisible, closeModal, task, onDescriptionUpdate, onTitleUpdate, onDeleteTask, onMoveTask }) {
+  
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedDescription, setEditedDescription] = useState('');
+  const descriptionRef = useRef(null);
+  const titleRef = useRef(null);
 
-  console.log(task);
+   // Determine task details
+   const title = task.title || task.tasks?.title || 'Untitled Task';
+   const taskID = task.task_id || task.tasks?.task_id || 'Unknown Task ID';
+   const description = task.description || task.tasks?.description || 'No description available';
+   const createdAt = task.created_at || task.tasks?.created_at || 'Unknown';
+   const updatedAt = task.updated_at || task.tasks?.updated_at || 'Unknown';
 
-  if (!isVisible) return null;
+   const [editedTitle, setEditedTitle] = useState('');
+   const [editedDescription, setEditedDescription] = useState('');
 
-  // Determine task details
-  const title = task.title || task.tasks?.title || 'Untitled Task';
-  const taskID = task.task_id || task.tasks?.task_id || 'Unknown Task ID';
-  const description = task.description || task.tasks?.description || 'No description available';
-  const createdAt = task.created_at || task.tasks?.created_at || 'Unknown';
-  const updatedAt = task.updated_at || task.tasks?.updated_at || 'Unknown';
-
-  // Kanban-specific status colors and labels
+    // Kanban-specific status colors and labels
   const statusOptions = {
     Backlog: {
       label: 'Backlog',
@@ -40,27 +45,119 @@ export default function KanbanTaskModal({ isVisible, closeModal, task, onUpdateT
       color: 'bg-green-600',
       icon: '✅'
     }
-  };
+  }
 
-  const currentStatus = statusOptions[task.status] || {
+   const currentStatus = statusOptions[task.status] || {
     label: 'Unknown Status',
     color: 'bg-gray-900',
     icon: '❓'
   };
 
-  const handleDescriptionEdit = () => {
-    setIsEditing(true);
-    setEditedDescription(description);
+  // Debounced save function for description
+  const debouncedDescriptionSave = useCallback(
+    debounce((task, description) => {
+      if (onDescriptionUpdate) {
+        onDescriptionUpdate(task, description);
+      }
+    }, 500), // 500ms delay before saving
+    [onDescriptionUpdate]
+  );
+
+  useEffect(() => {
+    if (isVisible) {
+      // Instead of always resetting to the original values,
+      // only reset if no edits have been made or if a new task is loaded
+      if (title !== editedTitle || task !== editedTitle) {
+        setEditedDescription(description);
+        setEditedTitle(title);
+      }
+      setIsEditing(true);
+      setIsEditingTitle(false);
+    }
+  }, [isVisible, task, title, description]);
+
+   // Debounced save function for title
+   const debouncedTitleSave = useCallback(
+    debounce((task, title) => {
+      if (onTitleUpdate) {
+        onTitleUpdate(task, title);
+      }
+    }, 500), // 500ms delay before saving
+    [onTitleUpdate]
+  );
+
+  // Autosave effect for description
+  useEffect(() => {
+    // Only trigger autosave if description has actually changed
+    if (isEditingDescription && editedDescription !== description) {
+      debouncedDescriptionSave(task, editedDescription);
+    }
+  }, [editedDescription, isEditingDescription, description, task, debouncedDescriptionSave]);
+
+   // Autosave effect for title
+   useEffect(() => {
+    // Only trigger autosave if title has actually changed
+    if (isEditingTitle && editedTitle !== title) {
+      debouncedTitleSave(task, editedTitle);
+    }
+  }, [editedTitle, isEditingTitle, title, task, debouncedTitleSave]);
+
+  // Existing click outside logic
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        descriptionRef.current && 
+        !descriptionRef.current.contains(event.target) && 
+        isEditingDescription
+      ) {
+        setIsEditingDescription(false);
+      }
+    };
+
+    if (isEditingDescription) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isEditingDescription]);
+
+  // Click outside logic for title
+  useEffect(() => {
+    const handleTitleClickOutside = (event) => {
+      if (
+        titleRef.current && 
+        !titleRef.current.contains(event.target) && 
+        isEditingTitle
+      ) {
+        setIsEditingTitle(false);
+      }
+    };
+
+    if (isEditingTitle) {
+      document.addEventListener('mousedown', handleTitleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleTitleClickOutside);
+    };
+  }, [isEditingTitle]);
+
+  const handleTitleSave = () => {
+    // Immediate save if needed
+    if (onTitleUpdate) {
+      onTitleUpdate(task, editedTitle);
+    }
+    setIsEditingTitle(false);
   };
 
   const handleDescriptionSave = () => {
-    if (onUpdateTask) {
-      onUpdateTask({
-        ...task,
-        description: editedDescription
-      });
+    // Immediate save if needed
+    if (onDescriptionUpdate) {
+      onDescriptionUpdate(task, editedDescription);
     }
-    setIsEditing(false);
+    setIsEditingDescription(false);
   };
 
   const handleDeleteTask = () => {
@@ -92,14 +189,35 @@ export default function KanbanTaskModal({ isVisible, closeModal, task, onUpdateT
           }}
           className="bg-[#1f1f1f] text-gray-300 rounded-lg w-3/4 lg:w-1/2 p-6 shadow-lg flex flex-col"
         >
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="lg:text-xl 2xl:text-2xl font-light">{title}</h2>
-            <button
-              onClick={closeModal}
-              className="text-gray-400 hover:text-gray-300 focus:outline-none"
-            >
-              ✕
-            </button>
+           <div className="flex justify-between items-center mb-4">
+            {!isEditingTitle ? (
+              <h2 
+                className="lg:text-xl 2xl:text-2xl font-light flex-grow"
+                onClick={() => setIsEditingTitle(true)}
+              >
+                {editedTitle}
+              </h2>
+            ) : (
+              <input
+                ref={titleRef}
+                type="text"
+                value={editedTitle}
+                onChange={(e) => {
+                  setEditedTitle(e.target.value);
+                  setIsEditingTitle(true);
+                }}
+                onBlur={handleTitleSave}
+                className="w-full bg-[#1f1f1f] text-gray-300 focus:outline-none focus:border-[#6db6fe] focus:ring-none border-b-2  lg:text-xl 2xl:text-2xl font-light"
+              />
+            )}
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={closeModal}
+                className="text-gray-400 hover:text-gray-300 focus:outline-none"
+              >
+                ✕
+              </button>
+            </div>
           </div>
           
           <div className="flex flex-row space-x-4 flex-grow">
@@ -111,34 +229,24 @@ export default function KanbanTaskModal({ isVisible, closeModal, task, onUpdateT
                 </p>
               </div>
               
-              <div className="flex flex-col flex-grow">
-                <div className="flex justify-between items-center">
-                  <p className="text-sm text-gray-400 font-semibold">Description:</p>
-                  {!isEditing ? (
-                    <button 
-                      onClick={handleDescriptionEdit}
-                      className="text-xs text-blue-400 hover:text-blue-300"
-                    >
-                      Edit
-                    </button>
-                  ) : (
-                    <button 
-                      onClick={handleDescriptionSave}
-                      className="text-xs text-green-400 hover:text-green-300"
-                    >
-                      Save
-                    </button>
-                  )}
-                </div>
+              <div 
+                ref={descriptionRef}
+                onClick={() => setIsEditingDescription(true)}
+                className="flex flex-col flex-grow cursor-text"
+              >
+                <p className="text-sm text-gray-400 font-semibold mb-2">Description:</p>
                 
-                {!isEditing ? (
-                  <p className="text-sm text-gray-400 flex-grow overflow-auto">{description}</p>
+                {!isEditingDescription ? (
+                  <p className="text-sm text-gray-400 flex-grow overflow-auto">
+                    {editedDescription || 'Click to add a description'}
+                  </p>
                 ) : (
                   <textarea
                     value={editedDescription}
                     onChange={(e) => setEditedDescription(e.target.value)}
-                    className="w-full bg-[#292929] text-gray-300 rounded-lg p-2 mt-2 text-sm flex-grow resize-none"
+                    className="w-full bg-[#1f1f1f] focus:outline-none focus:ring-none text-gray-400 rounded-lg text-sm flex-grow resize-none"
                     rows={4}
+                    onBlur={handleDescriptionSave}
                   />
                 )}
               </div>

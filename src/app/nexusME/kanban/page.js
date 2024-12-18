@@ -1,6 +1,6 @@
 import Navbar from "../Navbar";
 import KanbanComponent from "./Kanban";
-import {Loading} from "./loading";
+import Loading from "./loading";
 import { Suspense } from "react";
 
 export const metadata = {
@@ -12,7 +12,9 @@ export const metadata = {
       <>
         <Navbar page={'/nexusME/kanban'} />
         <div style={{ paddingTop: '50px' }}> 
+          <Suspense fallback={<Loading />}>
           <KanbanComponent />
+          </Suspense>
         </div>
         </>
     );

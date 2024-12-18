@@ -30,7 +30,7 @@ export default function StageTwo( {formData, setFormData, nextStage}){
           initial={{ x: 100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: -100, opacity: 0 }}
-          transition={{ delay: 0.1 }}
+          transition={{ delay: 0.05 }}
           className="text-center mb-4 md:mb-6">
               <h1 className="text-2xl md:text-4xl font-semibold mb-2">What is your organisation called?</h1>
               <p className="text-gray-cool text-sm">Again, if you don't have a formal organisation name, anything will do.</p>
@@ -40,7 +40,7 @@ export default function StageTwo( {formData, setFormData, nextStage}){
                 initial={{ x: 100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -100, opacity: 0 }}
-                transition={{ delay: 0.15 }}
+                transition={{ delay: 0.075 }}
               className="flex items-center justify-between">
                 <label htmlFor="name" className='block font-medium'>Organisation Name</label>
                 {orgNameError && <p className='font-semibold text-red-600'>This field is required</p>}
@@ -49,13 +49,13 @@ export default function StageTwo( {formData, setFormData, nextStage}){
                 initial={{ x: 100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -100, opacity: 0 }}
-                transition={{ delay: 0.2 }}
+                transition={{ delay: 0.1 }}
                 onChange={(e) => {
                     setFormData({ ...formData, orgName: e.target.value });
                     setOrgNameError(false);
                   }}
                 value={formData.orgName}
-                type="text" id='name' placeholder='e.g. Nexus' className={`p-2.5 rounded-lg border-2 w-full mt-1 mb-3 md:mb-6 bg-inherit ${orgNameError && 'border-red-600 bg-red-100 animate-bergetar'}`} />
+                type="text" id='name' placeholder='e.g. Nexus' className={`p-2.5 rounded-lg bg-[#1f1f1f] focus:outline-none focus:border-[#6db6fe] focus:ring-1 focus:ring-[#6db6fe] border-2 border-[#454545] w-full mt-1 mb-3 md:mb-6  ${orgNameError && 'border-red-600 bg-red-100 animate-bergetar'}`} />
             
           </form>
         </div>

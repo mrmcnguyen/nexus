@@ -15,7 +15,10 @@ export default function Quadrant({
   userID,
   quadrant,
   onDragOver,
-  onDrop
+  onDrop,
+  onDragEnter,
+  onDragLeave,
+  dragOverColumn
 }) {
   const [newTask, setNewTask] = useState('');
   const [ulHeight, setUlHeight] = useState(null); // State to hold the fixed height
@@ -69,7 +72,7 @@ export default function Quadrant({
     <div
       className={`p-4 bg-[#1f1f1f] text-white ${borderRoundness} shadow-lg flex flex-col h-full ${border}`}
       onDragOver={onDragOver}    
-      onDrop={onDrop}     
+      onDrop={onDrop}
     >
       <h2 className="text-left lg:text-base 2xl:text-2xl text-gray-300">{title}</h2>
       <p className="text-left lg:text-sm 2xl:text-lg font-extralight text-gray-400 mb-4">
@@ -83,9 +86,11 @@ export default function Quadrant({
             ? { height: `${ulHeight}px`, overflowY: 'auto' }
             : { display: 'flex', flexGrow: 1 }
         }
-        className="p-2"
+        className={`p-2 rounded-lg ${dragOverColumn === quadrant ? 'bg-[#393939] transition duration-200 ease-in-out' : ''}`}
         onMouseEnter={() => setIsHovered(true)} // Show "Add Task" when hovered
         onMouseLeave={() => setIsHovered(false)} // Hide "Add Task" when not hovered
+        onDragEnter={onDragEnter}
+        onDragLeave={onDragLeave}
       >
         {tasks.map((task, index) => {
           return (

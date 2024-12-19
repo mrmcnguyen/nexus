@@ -137,7 +137,7 @@ const TitleSection = ({ open }) => {
     <div className="mb-3 border-b border-gray-700 pb-3">
       <div className="flex cursor-pointer items-center justify-between rounded-md transition-colors">
         <div className="flex items-center gap-2">
-          <Link href={'../dashboard'}><Logo /></Link>
+          <Link href={'../../dashboard'}><Logo /></Link>
           {open && (
             <motion.div
               layout

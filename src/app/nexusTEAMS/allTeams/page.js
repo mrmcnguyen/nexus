@@ -1,7 +1,9 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link';
-import AllTeams from './allTeams';
+import ProjectsDashboard from './projectsDashboard';
+import { Suspense } from 'react';
+import Loading from './Loading';
 
 export default function CreateTeamPage() {
   
@@ -18,7 +20,9 @@ export default function CreateTeamPage() {
             />
         </div>
     <div className='flex flex-col w-full h-full items-center justify-center'>
-    <AllTeams/>
+     <Suspense fallback={<Loading />}>
+      <ProjectsDashboard/>
+      </Suspense>
     </div>  
     </main>
   )

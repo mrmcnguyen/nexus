@@ -110,7 +110,7 @@ export default function Navbar({ page }) {
           Docs
         </a>
         <Link className="flex flex-row px-4 py-1 align-middle border border-[#6cb4fb] items-center transition duration-200 bg-[#6f99da] text-sm text-white text-light rounded-lg hover:bg-[#3B55C2]"
-        href="/nexusTEAMS/dashboard"
+        href="/nexusTEAMS/allTeams"
         target='_blank?'
         >
           Nexus TEAMS

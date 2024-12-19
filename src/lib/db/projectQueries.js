@@ -1,4 +1,3 @@
-import { Erica_One } from "next/font/google";
 import { createClient } from "../../../supabase/client";
 
 const supabase = createClient();
@@ -35,4 +34,62 @@ export async function getAllProjects(a_user_id){
         return data;
     }
 
+}
+
+export async function getProjectByID(a_project_id){ // Needs to use server client since it is being called from the server
+
+    const {data, error} = await supabase
+    .from('projects')
+    .select('*')
+    .eq('project_id', a_project_id)
+
+    if (error){
+        console.error(error); 
+    } 
+    console.log(data);
+    return data;
+}
+
+export async function getSectors(a_project_id){
+
+    const { data, error } = await supabase
+    .from('sectors')
+    .select('*')
+    .eq('project_id', a_project_id)
+
+    if (error){
+        console.error(error);
+    } 
+    console.log(data);
+    return data;
+}
+
+export async function getMembers(a_project_id){
+
+    const { data, error } = await supabase
+    .from('teamMembership')
+    .select('profiles(*)')
+    .eq('project_id', a_project_id)
+
+    if (error){
+        console.error(error);
+    }
+    console.log(data);
+    return data;
+}
+
+export async function getProjectManager(a_user_id){
+
+    console.log("Manager", a_user_id);
+
+    const { data, error } = await supabase
+    .from('profiles')
+    .select('first_name, last_name')
+    .eq('user_id', a_user_id)
+
+    if (error){
+        console.error(error);
+    }
+    console.log(data);
+    return data;
 }

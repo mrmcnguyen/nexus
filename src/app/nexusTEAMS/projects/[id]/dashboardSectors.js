@@ -1,4 +1,43 @@
-export default function DashboardSector({ sectors }) {
+'use client';
+import { useEffect, useState } from "react";
+import { getProjectByID, getSectors } from "../../../../lib/db/projectQueries";
+
+export default function DashboardSector({ id }) {
+
+  const [project, setProject] = useState(null);
+  const [sectors, setSectors] = useState([]);
+  
+  useEffect(() => {
+      const getProject = async () => {
+          try {
+              const res = await getProjectByID(id); // Await the response
+              if (res) {
+                  setProject(res);
+              }
+          } catch (error) {
+              console.error("Failed to fetch project:", error);
+          }
+      };
+  
+      getProject();
+  }, [id]); // Include `id` as a dependency
+
+  useEffect(() => {
+    const getProjectSectors = async () => {
+        try {
+            const res = await getSectors(id); // Await the response
+            if (res) {
+                setSectors(res);
+            }
+        } catch (error) {
+            console.error("Failed to fetch sectors:", error);
+        }
+    };
+
+    getProjectSectors();
+}, [project]); // Include `id` as a dependency
+
+
     return (
       <>
         {/* Sectors List */}

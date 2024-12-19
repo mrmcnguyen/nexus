@@ -1,5 +1,5 @@
 'use server'
-import { createClient } from '@supabase/auth-helpers-nextjs';
+import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 
 export async function createClient() {

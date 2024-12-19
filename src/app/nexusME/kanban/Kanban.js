@@ -6,6 +6,7 @@ import { addKanbanTask, editTaskDescription, editTaskName, getKanbanTasks, updat
 import { createClient } from "../../../../supabase/client";
 import Loading from "./loading";
 import TaskModal from "./taskModal";
+import { getProjectByID } from "../../../lib/db/projectQueries";
 
 export default function KanbanComponent() {
     const [editingColumn, setEditingColumn] = useState(null);
@@ -43,6 +44,8 @@ export default function KanbanComponent() {
   useEffect(() => {
     const fetchUser = async () => {
       const { data: user, error } = await supabase.auth.getUser();
+      const res = await getProjectByID('0080d2ed-4bde-41f2-a819-ee5ce7fd456e');
+      console.log(res);
       if (user) {
         setUserID(user.user.id);
       } else {

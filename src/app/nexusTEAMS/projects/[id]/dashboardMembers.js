@@ -1,8 +1,11 @@
 'use client'
 import { useEffect, useState, useRef } from "react";
+import { getProjectByID, getMembers } from "../../../../lib/db/projectQueries";
 
-export default function DashboardMembers({ members, tasks }) {
+export default function DashboardMembers({ id }) {
     const [height, setHeight] = useState(null);
+    const [project, setProject] = useState(null);
+    const [members, setMembers] = useState([]);
     const ref = useRef(); // Reference for the list element
     const headerRef = useRef(); // Reference for the header container (Team Members header and first column header)
     const columnHeaderRef = useRef();
@@ -21,6 +24,36 @@ export default function DashboardMembers({ members, tasks }) {
             setHeight(totalHeight - (headerHeight + columnHeaderHeight + paddingTop + paddingBottom));
         }
     }
+
+    useEffect(() => {
+          const getProject = async () => {
+              try {
+                  const res = await getProjectByID(id); // Await the response
+                  if (res) {
+                      setProject(res);
+                  }
+              } catch (error) {
+                  console.error("Failed to fetch project:", error);
+              }
+          };
+      
+          getProject();
+      }, [id]); // Include `id` as a dependency
+    
+      useEffect(() => {
+        const getProjectMembers = async () => {
+            try {
+                const res = await getMembers(id); // Await the response
+                if (res) {
+                    setMembers(res);
+                }
+            } catch (error) {
+                console.error("Failed to fetch members:", error);
+            }
+        };
+    
+        getProjectMembers();
+    }, [project]); // Include `id` as a dependency
 
     useEffect(() => {
         updateHeight(); // Initial height calculation

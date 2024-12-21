@@ -121,7 +121,7 @@ export default function ProjectsDashboard() {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-white">{project.project_name}</h2>
         <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full text-xs">
-          Active
+          {project.status}
         </span>
       </div>
       <p className="text-gray-400 mb-4">{project.organisation_name}</p>

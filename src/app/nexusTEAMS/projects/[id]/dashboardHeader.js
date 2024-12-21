@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function DashboardHeader({ id }) {
+
+    console.log(id);
     const [project, setProject] = useState(null);
     const [manager, setManager] = useState(null);
     const [loading, setLoading] = useState(true); // Track loading state
@@ -49,6 +51,13 @@ export default function DashboardHeader({ id }) {
             <div className="flex items-center justify-between">
                 {/* Organisation, Manager, and Status Info */}
                 <div className="flex space-x-6">
+
+                    {/* Project Name */}
+                    <div>
+                        <div className="text-xs text-gray-500">Project</div>
+                        <h1 className="text-lg">{project[0].project_name || "N/A"}</h1>
+                    </div>
+
                     {/* Organisation */}
                     <div>
                         <div className="text-xs text-gray-500">Organisation</div>

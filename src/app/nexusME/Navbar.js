@@ -62,13 +62,13 @@ export default function Navbar({ page }) {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-40 flex flex-row items-center border-b border-gray-500 bg-white ${dmSans.className} ${
+      className={`fixed top-0 left-0 right-0 z-40 flex flex-row items-center border-b border-[#2e2e2e] bg-white ${dmSans.className} ${
         page === '/nexusME/pomodoro' ? 'bg-red-100' : ''
       }`}
       style={{ height: '50px', backgroundColor: '#171717' }} // Set height for the navbar
     >
       {/* Logo */}
-      <Link href="/dashboard" className='px-4'>
+      <Link href="/dashboard" className='h-full flex flex-row items-center bg-gradient-to-tl from-[#2f2f2f] border-r border-r-[#2e2e2e]'>
         <Image
           src="/nexusLogo.png"
           alt="Logo"
@@ -79,7 +79,7 @@ export default function Navbar({ page }) {
       </Link>
 
       {/* Navigation Links */}
-      <div className="p-2 flex-grow flex items-center text-light justify-left space-x-4">
+      <div className="ml-2 p-2 flex-grow flex items-center text-light justify-left space-x-4">
         {frameworks.map((framework) => (
           <Link
             key={framework.name}

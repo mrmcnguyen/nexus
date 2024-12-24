@@ -54,7 +54,7 @@ export const Sidebar = ({width}) => {
   return (
     <motion.nav
       layout
-      className="sticky top-0 h-screen shrink-0 border-r border-gray-700 bg-[#171717] p-2"
+      className="sticky top-0 h-screen shrink-0 border-r border-[#2e2e2e] bg-[#171717] p-2"
       style={{
         width: open ? '225px' : "fit-content",
       }}
@@ -62,75 +62,105 @@ export const Sidebar = ({width}) => {
       <TitleSection open={open} />
 
       <div className="space-y-1">
-        <Option
-          Icon={FiHome}
-          title="Dashboard"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-          id={id}
-          page=""
-        />
-        <Option
-          Icon={FiUsers}
-          title="Members"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-          id={id}
-          page="members"
-        />
-        <Option
-          Icon={FiCalendar}
-          title="Meetings"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-          id={id}
-          page="meetings"
-        />
-        <Option
-          Icon={FiBarChart}
-          title="Sectors"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-          id={id}
-          page="sectors"
-        />
-        <Option
-          Icon={FiGrid}
-          title="Eisenhower Matrix"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-          id={id}
-          page="eMatrix"
-        />
-        <Option
-          Icon={FiMap}
-          title="Kanban Board"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-          id={id}
-          page="kanban"
-        />
-        <Option
-          Icon={FiSettings}
-          title="Settings"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-          id={id}
-          page="settings"
-        />
-      </div>
 
-      {/* <ToggleClose open={open} setOpen={setOpen} /> */}
-      <a className="absolute w-full bottom-0 left-0 p-3 text-gray-600 text-center">
-      Nexus 2024 © 
-      </a>
+          
+  {/* Horizontal line */}
+  <div>
+    <hr className="border-[#2E2E2E] my-2" />
+  </div>
+  {/* Dashboard */}
+  <Option
+    Icon={FiHome}
+    title="Dashboard"
+    selected={selected}
+    setSelected={setSelected}
+    open={open}
+    id={id}
+    page=""
+  />
+  
+  {/* Horizontal line */}
+  <div>
+    <hr className="border-[#2E2E2E] my-2" />
+  </div>
+
+  {/* Members */}
+  <Option
+    Icon={FiUsers}
+    title="Members"
+    selected={selected}
+    setSelected={setSelected}
+    open={open}
+    id={id}
+    page="members"
+  />
+  
+  {/* Meetings */}
+  <Option
+    Icon={FiCalendar}
+    title="Meetings"
+    selected={selected}
+    setSelected={setSelected}
+    open={open}
+    id={id}
+    page="meetings"
+  />
+  
+  {/* Sectors */}
+  <Option
+    Icon={FiBarChart}
+    title="Sectors"
+    selected={selected}
+    setSelected={setSelected}
+    open={open}
+    id={id}
+    page="sectors"
+  />
+  
+  {/* Horizontal line */}
+  <div>
+    <hr className="border-[#2E2E2E] my-2" />
+  </div>
+
+  {/* Eisenhower Matrix */}
+  <Option
+    Icon={FiGrid}
+    title="Eisenhower Matrix"
+    selected={selected}
+    setSelected={setSelected}
+    open={open}
+    id={id}
+    page="eMatrix"
+  />
+  
+  {/* Kanban Board */}
+  <Option
+    Icon={FiMap}
+    title="Kanban Board"
+    selected={selected}
+    setSelected={setSelected}
+    open={open}
+    id={id}
+    page="kanban"
+  />
+  
+  {/* Horizontal line */}
+  <div>
+    <hr className="border-[#2E2E2E] my-2" />
+  </div>
+
+  {/* Settings */}
+  <Option
+    Icon={FiSettings}
+    title="Settings"
+    selected={selected}
+    setSelected={setSelected}
+    open={open}
+    id={id}
+    page="settings"
+  />
+</div>
+      <ToggleClose open={open} setOpen={setOpen}/>
     </motion.nav>
   );
 };
@@ -148,13 +178,13 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs, id, page }) 
       <motion.button
         layout
         onClick={() => setSelected(title)}
-        className={`relative flex h-10 md:h-12 w-full mb-2 items-center rounded-md transition-colors ${
-          selected === title ? "bg-gray-600 text-[#91C8FF]" : "text-gray-400 hover:bg-gray-600"
+        className={`relative flex h-10 xl:h-12 w-full items-center rounded-md transition-colors ${
+          selected === title ? "bg-gray-800 text-[#91C8FF]" : "text-gray-400 hover:bg-[#454545]"
         }`}
       >
         <motion.div
           layout
-          className="grid h-full w-10 md:w-12 place-content-center text-lg md:text-xl"
+          className="grid h-full w-10 xl:w-12 place-content-center text-lg xl:text-xl"
         >
           <Icon />
         </motion.div>
@@ -190,11 +220,12 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs, id, page }) 
 };
 
 const TitleSection = ({ open }) => {
+
   return (
-    <div className="mb-3 border-b border-gray-700 pb-3">
+    <div>
       <div className="flex cursor-pointer items-center justify-between rounded-md transition-colors">
         <div className="flex items-center gap-2">
-          <Link href={'../../dashboard'}><Logo /></Link>
+          <Link href={'../allTeams'}><Logo /></Link>
           {open && (
             <motion.div
               layout
@@ -207,7 +238,6 @@ const TitleSection = ({ open }) => {
             </motion.div>
           )}
         </div>
-        {/* {open && <FiChevronDown className="mr-2" />} */}
       </div>
     </div>
   );
@@ -236,7 +266,7 @@ const ToggleClose = ({ open, setOpen }) => {
     <motion.button
       layout
       onClick={() => setOpen((pv) => !pv)}
-      className="absolute bottom-0 left-0 right-0 border-t border-gray-500 transition-colors hover:bg-gray-700"
+      className="absolute bottom-0 left-0 right-0 border-t border-[#2E2E2E] transition-colors hover:bg-[#454545]"
     >
       <div className="flex items-center p-2">
         <motion.div
@@ -253,7 +283,7 @@ const ToggleClose = ({ open, setOpen }) => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.125 }}
-            className="text-xs font-medium"
+            className="text-xs font-medium text-gray-400"
           >
             Hide
           </motion.span>

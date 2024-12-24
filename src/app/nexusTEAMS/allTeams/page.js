@@ -1,9 +1,13 @@
-'use client'
 import Image from 'next/image'
 import Link from 'next/link';
 import ProjectsDashboard from './projectsDashboard';
 import { Suspense } from 'react';
 import Loading from './Loading';
+
+export const metadata = {
+  title: "Nexus | All Teams",
+};
+
 
 export default function CreateTeamPage() {
   
@@ -11,6 +15,7 @@ export default function CreateTeamPage() {
     <main className="flex h-full flex-col">
         {/* Logo */}
       <div className='flex flex-row w-full justify-center'>
+      <Link href={'../../dashboard'}>
       <Image
                 src="/nexusLogo.png"
                 width={200}
@@ -18,6 +23,7 @@ export default function CreateTeamPage() {
                 alt="Nexus Logo"
                 priority
             />
+      </Link>
         </div>
     <div className='flex flex-col w-full h-full items-center justify-center'>
      <Suspense fallback={<Loading />}>

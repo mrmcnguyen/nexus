@@ -1,9 +1,10 @@
 'use client'
 import { useEffect, useState, useRef } from "react";
-import { getProjectByID, getMembers } from "../../../../lib/db/projectQueries";
-import { FiPlus } from "react-icons/fi";
+import { getProjectByID, getMembers } from "../../../../../lib/db/projectQueries";
+import { FiPlus, FiSearch } from "react-icons/fi";
+import AddMemberDropdown from './addMemberModal';
 
-export default function DashboardMembers({ id }) {
+export default function Members({ id, userID }) {
     const [height, setHeight] = useState(null);
     const [project, setProject] = useState(null);
     const [members, setMembers] = useState([]);
@@ -11,6 +12,10 @@ export default function DashboardMembers({ id }) {
     const headerRef = useRef(); // Reference for the header container (Team Members header and first column header)
     const columnHeaderRef = useRef();
     const parentRef = useRef(); // Reference for the parent div (to set maxHeight and handle overflow)
+    // In your Members component, add this state
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const addButtonRef = useRef(null);
 
     const updateHeight = () => {
         if (ref.current && parentRef.current && headerRef.current && columnHeaderRef.current && height === null) {
@@ -68,17 +73,44 @@ export default function DashboardMembers({ id }) {
     return (
         <>
           {/* Members List */}
-          <div ref={parentRef} className="p-4 h-full rounded-lg bg-[#1f1f1f] overflow-hidden">
+          <div ref={parentRef} className="h-full mt-1 rounded-lg">
             {/* Header Section */}
             <div ref={headerRef} className="flex flex-row w-full justify-between">
               <div>
-                <h2 className="text-base 2xl:text-lg font-semibold text-gray-400 mb-3 uppercase tracking-wider">
+                <h2 className="text-xl 2xl:text-2xl font-semibold text-gray-400 mb-3 uppercase tracking-wider">
                   Team Members
                 </h2>
               </div>
-              <button className="flex flex-row bg-[#292929] items-center rounded-lg text-sm text-gray-400 border border-[#454545] p-1">
-                Add Members
-              </button>
+              <div className="flex flex-row items-center space-x-2">
+                {/* Search Bar */}
+                <div className="relative">
+                    <input
+                    type="text"
+                    placeholder="Search members..."
+                    className="w-64 p-2 rounded-lg bg-[#1F1F1F] text-white text-sm placeholder-gray-400 border border-[#2E2E2E] focus:outline-none focus:ring-1 focus:ring-[#91C8FF] h-10" // Ensure consistent height
+                    />
+                    <span className="absolute top-2 right-3 text-gray-400">
+                    <FiSearch />
+                    </span>
+                </div>
+
+                <div className="relative"> {/* Add this wrapper div */}
+                    <button 
+                        ref={addButtonRef}
+                        onClick={() => setIsDropdownOpen(true)}
+                        className="flex flex-row items-center bg-[#6f99d8] hover:bg-[#91C8FF] rounded-lg text-sm text-white p-2 px-4 h-10"
+                    >
+                        <FiPlus /> Add Members
+                    </button>
+                    <AddMemberDropdown
+                        isOpen={isDropdownOpen}
+                        onClose={() => setIsDropdownOpen(false)}
+                        projectId={id}
+                        buttonRef={addButtonRef}
+                        userID={userID}
+                    />
+                    </div>
+                </div>
             </div>
     
             {/* Table Headers */}

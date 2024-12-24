@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useState } from "react";
 import { createClient } from "../../../../supabase/client";
 import { getAllProjects } from "../../../lib/db/projectQueries";
@@ -69,17 +70,17 @@ export default function ProjectsDashboard() {
     isLoading ? (
       <Loading />
     ) : (
-      <div className="min-h-screen p-8 text-white">
+      <div className="min-h-screen p-8 w-full text-white">
         <div className="container mx-auto max-w-6xl">
           {/* Header Section */}
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-white flex items-center">
               <FiFolder className="mr-4 text-[#91C8FF]" size={40} />
-              Your Projects
+              All Projects
             </h1>
             <Link
               href="./createTeam"
-              className="bg-[#6f99d8] hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center transition"
+              className="bg-[#6f99d8] hover:bg-[#91C8FF] text-white px-4 py-2 rounded-lg flex items-center transition"
             >
               <FiPlus className="mr-2" size={20} />
               New Project
@@ -104,38 +105,27 @@ export default function ProjectsDashboard() {
             </button>
           </div>
 
-          {/* Projects Grid */}
-          {filteredProjects.length === 0 ? (
-            <div className="text-center text-gray-500 py-12">
-              <h2 className="text-2xl mb-4">No Projects Found</h2>
-              <p>Create a new project to get started!</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-  {filteredProjects.map((project, index) => (
-    <div
-      key={index}
-      className="bg-[#1f1f1f] border border-[#333] rounded-xl p-6 hover:border-blue-500 transition duration-300 transform hover:scale-105 hover:shadow-lg cursor-pointer w-full max-w-[320px] mx-auto"
-      onClick={() => handleProjectClick(project.project_id)}
-    >
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-white">{project.project_name}</h2>
-        <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full text-xs">
-          {project.status}
-        </span>
-      </div>
-      <p className="text-gray-400 mb-4">{project.organisation_name}</p>
-      <div className="flex justify-between items-center">
-        <span className="text-sm text-gray-500">Team Members: 4</span>
-        <button className="text-blue-500 hover:text-blue-600 transition">
-          View Details
-        </button>
-      </div>
-    </div>
-  ))}
-</div>
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredProjects.map((project, index) => (
+              <div
+                key={index}
+                className="bg-[#1f1f1f] border border-[#333] rounded-xl p-6 hover:border-[#91C8FF] transition duration-300 transform hover:scale-105 hover:shadow-lg cursor-pointer"
+                onClick={() => handleProjectClick(project.project_id)}
+              >
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-semibold text-white">{project.project_name}</h2>
+                  <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full text-xs">
+                    {project.status}
+                  </span>
+                </div>
+                <p className="text-gray-400 mb-4">{project.organisation_name}</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-500">Team Members: 4</span>
+                </div>
+              </div>
+            ))}
+          </div>
 
-          )}
         </div>
       </div>
     )

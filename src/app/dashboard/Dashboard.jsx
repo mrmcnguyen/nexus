@@ -1,257 +1,304 @@
-'use client'
+'use client';
+
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
 import Beam from '../Beam';
 import { motion } from "framer-motion";
-import { DM_Sans } from 'next/font/google';
 import { useState, useEffect } from 'react';
 import { createClient } from "../../../supabase/client";
-import { getUserFullName } from "../../lib/db/userQueries"
+import { getUserFullName } from "../../lib/db/userQueries";
+import { FiArrowRight, FiHelpCircle } from "react-icons/fi";
 
 export default function Dashboard() {
-
     const [user, setUser] = useState(null);
     const [userName, setUserName] = useState('');
     const [loading, setLoading] = useState(true);
-    const router = useRouter();
+    const [notifs, setNotifs] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentTime, setCurrentTime] = useState('');
+    const router = useRouter();
 
     const supabase = createClient();
 
+    const buttonVariants = {
+        initial: { scale: 1 },
+        hover: { 
+            scale: 1.05,
+            transition: { duration: 0.2 }
+        }
+    };
+
+    const [tasks, setTasks] = useState({
+        personal: [
+            { id: 1, title: 'Review PR #123', status: 'pending', due: '2024-12-25' },
+            { id: 2, title: 'Update documentation', status: 'in-progress', due: '2024-12-26' }
+        ],
+        team: [
+            { id: 1, title: 'Sprint Planning', team: 'Frontend', status: 'upcoming', due: '2024-12-27' },
+            { id: 2, title: 'Code Review', team: 'Backend', status: 'pending', due: '2024-12-28' }
+        ]
+    });
+
     useEffect(() => {
         const fetchUser = async () => {
-            setLoading(true); // Start loading
-            console.log(supabase);
+            setLoading(true);
             const { data, error } = await supabase.auth.getUser();
-            console.log("Fetched data:", data);
-    
             if (data?.user) {
-                setUser(data.user); // Set the user data if available
-                console.log(data.user);
+                setUser(data.user);
                 const res = await getUserFullName(data.user.id);
-                console.log(res[0]);
-                if (res){
-                    setUserName(res[0].first_name);
-                } 
+                if (res) setUserName(res[0].first_name);
             } else {
                 console.error("User not found:", error);
-                setUser(null); // Ensure user state is explicitly null if not found
-                router.push('/signIn'); // Redirect to sign-in page
+                setUser(null);
+                router.push('/signIn');
             }
-    
-            setLoading(false); // Stop loading
+            setLoading(false);
         };
-    
+
         fetchUser();
-    }, [router]); // Add router as a dependency
+    }, [router]);
+
+    useEffect(() => {
+        if (!user) return;
+
+        const subscription = supabase
+            .channel('invitations')
+            .on('postgres_changes', {
+                event: 'INSERT',
+                schema: 'public',
+                table: 'invitations',
+                filter: `recipient_id=eq.${user.id}`
+            }, (payload) => {
+                displayNotification(payload.new);
+            })
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(subscription);
+        };
+    }, [user]);
+
+    const displayNotification = (invitation) => {
+        setNotifs((prev) => [...prev, invitation]);
+        alert(`New invitation received: ${invitation}`);
+    };
 
     useEffect(() => {
         const updateTime = () => {
             const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             setCurrentTime(time);
         };
-        updateTime(); // Set initial time
-        const interval = setInterval(updateTime, 60000); // Update every minute
-        return () => clearInterval(interval); // Clean up interval on component unmount
+
+        updateTime();
+        const interval = setInterval(updateTime, 60000);
+        return () => clearInterval(interval);
     }, []);
 
-    // Function to format the date
     const formatDate = () => {
         const date = new Date();
-        const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
         const day = date.toLocaleDateString('en-US', { day: 'numeric' });
         const suffix = (day % 10 === 1 && day !== '11') ? 'st' :
                        (day % 10 === 2 && day !== '12') ? 'nd' :
                        (day % 10 === 3 && day !== '13') ? 'rd' : 'th';
-        return date.toLocaleDateString('en-US', options).replace(day, `${day}${suffix}`);
+        return date.toLocaleDateString('en-US', {
+            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        }).replace(day, `${day}${suffix}`);
     };
 
     const handleLogout = async () => {
         const { error } = await supabase.auth.signOut();
-        if (error) {
-            console.error("Logout error:", error);
-        } else {
+        if (!error) {
             setUser(null);
-            router.push('/signIn'); // Redirect to the sign-in page
+            router.push('/signIn');
+        } else {
+            console.error("Logout error:", error);
         }
     };
 
     if (loading) {
-        return <div className="flex flex-col min-h-screen items-center justify-center p-5 bg-fixed bg-cover bg-center overflow-hidden"
-        >Loading...</div>;  // Show loading state until user data is fetched
+        return (
+            <div className="flex flex-col min-h-screen items-center justify-center p-5 bg-fixed bg-cover bg-center overflow-hidden">
+                Loading...
+            </div>
+        );
     }
 
     return (
-        <main
-            className="flex flex-col min-h-screen items-center justify-center p-5 bg-fixed bg-cover bg-center overflow-hidden"
-        >
-            {/* Logout Button */}
-            <button
-                className="absolute top-5 right-5 px-4 py-2 text-white rounded-lg shadow transition"
-                onClick={handleLogout}
-            >
-                Log Out
-            </button>
-
-            <Image
-                src="/nexusLogo.png"
-                width={200}
-                height={20}
-                alt="Nexus Logo"
-                priority
-            />
-            <div className="flex flex-col items-center justify-center">
-                <div className="w-full p-10 text-center h-full pt-5">
-                    <h1 className="lg:text-7xl md:text-6xl 2xl:text-8xl fond-semibold text-gray-400 mb-4">{currentTime}</h1>
-                    <h2 className="w-full text-center text-gray-400 text-2xl md:text-4xl font-light mb-2">Welcome, {userName}</h2>
-                    <h2 className="w-full text-center text-gray-400 text-2xl md:text-4xl font-semibold mb-2">{formatDate()}</h2>
+        <main className="flex flex-col min-h-screen p-5 bg-fixed bg-cover bg-center overflow-hidden">
+            <header className="w-full flex justify-between items-center pt-5">
+                <Image src="/nexusNoBorder.png" width={160} height={40} alt="Nexus Logo" className="pl-10"/>
+                <div className="flex flex-row space-x-2 mr-10">
+                {/* <div className="flex flex-row items-center bg-[#1f1f1f] px-4 text-sm text-gray-400 rounded-2xl">Help <FiHelpCircle className="ml-1"/></div> */}
+                <motion.button
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    className="px-4 py-2 text-gray-400 hover:text-white border border-gray-700 
+                             rounded-lg transition-all duration-200 flex items-center space-x-2 
+                             hover:border-gray-500 bg-[#1f1f1f]"
+                    onClick={() => setIsModalOpen(true)}
+                >
+                    Account
+                </motion.button>
+                <motion.a
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    className="px-4 py-2 text-gray-800 border border-gray-700 
+                             rounded-lg transition-all duration-200 flex items-center space-x-2 
+                             bg-[#91C8FF]"
+                    href='https://github.com/mrmcnguyen/nexus'
+                    target='_blank'
+                >
+                    <Image
+                        src="/git.svg"
+                        className="mr-2"
+                        alt="GitHub"
+                        width={14}
+                        height={14}
+                        priority
+                              /> Docs
+                </motion.a>
                 </div>
-                <div className="max-w-full p-10 text-center pt-0">
-                    <div className="max-w-full grid grid-cols-2 gap-4">
-                    <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0 }}
-          variants={{
-            hidden: { opacity: 0, y: 0, scale: 1, rotateX: 45 },
-            visible: {
-              opacity: 1,
-              y: [0, -20, 0],
-              scale: [1, 1.2, 1],
-              rotateX: 0,
-            },
-          }}
-          className="p-6 rounded-md bg-[#1f1f1f] relative overflow-hidden flex items-center justify-center"
-        >
-            <Link href={'./nexusME/chooseAFramework/'}>
-                            <div className="flex flex-row mb-6 justify-center">
-                                <Image
-                                    src="/individual.svg"
-                                    className="mr-4 filter invert"
-                                    width={24}
-                                    alt="t"
-                                    height={24}
-                                    priority
-                                />
-                                <h2 className="text-2xl font-semibold text-gray-200">Nexus ME</h2>
-                            </div>
-                            <p className="text-gray-300">Everything you need for your individual productivity.</p>
-                        </Link>
+            </header>
 
-          {/* Two Beams that run on top of the container */}
-          <Beam className="top-0" />
-          <Beam className="top-0" />
-
-          {/* A bottom gradient that looks cute */}
-          <div className="z-0 ">
-            <div className="absolute bottom-0 left-4 mt-[2px] flex h-8 items-end overflow-hidden">
-              <div className="flex -mb-px h-[2px] w-80 -scale-x-100">
-                <div className="w-full flex-none blur-sm [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]"></div>
-                <div className="-ml-[100%] w-full flex-none blur-[1px] [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]"></div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0 }}
-          variants={{
-            hidden: { opacity: 0, y: 0, scale: 1, rotateX: 45 },
-            visible: {
-              opacity: 1,
-              y: [0, -20, 0],
-              scale: [1, 1.2, 1],
-              rotateX: 0,
-            },
-          }}
-          className="p-6 rounded-md bg-[#1f1f1f] relative overflow-hidden flex items-center justify-center"
-        >
-            <Link href={'./nexusTEAMS/allTeams'}>
-                            <div className="flex flex-row mb-6 justify-center">
-                                <Image
-                                    src="/team.svg"
-                                    className="mr-4 filter invert"
-                                    width={24}
-                                    alt="t"
-                                    height={24}
-                                    priority
-                                />
-                                <h2 className="text-2xl font-semibold text-gray-200">Nexus TEAMS</h2>
-                            </div>
-                            <p className="text-gray-300">Meetings. Collaborations. It's all here.</p>
-                        </Link>
-
-          {/* Two Beams that run on top of the container */}
-          <Beam className="top-0" delay={3} />
-          <Beam className="top-0" deplay={5} />
-
-          {/* A bottom gradient that looks cute */}
-          <div className="z-0 ">
-            <div className="absolute bottom-0 left-4 mt-[2px] flex h-8 items-end overflow-hidden">
-              <div className="flex -mb-px h-[2px] w-80 -scale-x-100">
-                <div className="w-full flex-none blur-sm [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]"></div>
-                <div className="-ml-[100%] w-full flex-none blur-[1px] [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]"></div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-                    </div>
+            <div className="flex flex-col items-center justify-center">
+                <div className="flex flex-row w-full p-10 text-left justify-between h-full pt-5">
                     <div className="flex flex-col">
-                        <h2 className="text-left text-white text-4xl m-4 ml-0 mt-14">Quick Shortcuts</h2>
-                        <div className="grid grid-cols-2 gap-4">
-                            <Link href={'./nexusME/pomodoro'} className="p-8 text-white transition duration-200 bg-[#1e293b] flex flex-row rounded-xl hover:shadow-lg hover:shadow-red-300">
-                                <Image
-                                    src="/tomato-svgrepo-com.svg"
-                                    className="mr-4"
-                                    width={24}
-                                    height={24}
-                                    alt="t"
-                                    priority
-                                />
-                                Pomodoro Timer
-                            </Link>
-                            <button className="p-8 text-white bg-[#1e293b] transition duration-200 flex flex-row rounded-xl hover:shadow-2xl hover:shadow-emerald-300">
-                                <Image
-                                    src="/idea.svg"
-                                    className="mr-4"
-                                    width={24}
-                                    height={24}
-                                    alt="t"
-                                    priority
-                                />
-                                Map your thoughts
-                            </button>
-                            <button className="p-8 bg-[#1e293b] text-white transition duration-200  flex flex-row rounded-xl hover:shadow-2xl hover:shadow-[#ffb098]">
-                                <Image
-                                    src="/plan-svgrepo-com.svg"
-                                    className="mr-4"
-                                    width={24}
-                                    height={24}
-                                    alt="t"
-                                    priority
-                                />
-                                Plan out a project
-                            </button>
-                            <button className="p-8 flex flex-row bg-[#1e293b] transition duration-200 text-white rounded-xl hover:shadow-2xl hover:shadow-sky-400">
-                                <Image
-                                    src="/meeting-meet-svgrepo-com.svg"
-                                    className="mr-4"
-                                    width={24}
-                                    height={24}
-                                    alt="t"
-                                    priority
-                                />
-                                Plan a meeting
-                            </button>
+                        <h1 className="lg:text-7xl md:text-6xl 2xl:text-8xl font-semibold text-gray-400 mb-4">{currentTime}</h1>
+                        <h2 className="text-gray-400 text-2xl md:text-4xl font-light mb-2">Welcome, {userName}</h2>
+                        <h2 className="text-gray-400 text-2xl md:text-4xl font-semibold mb-2">{formatDate()}</h2>
+                    </div>
+
+                    <div className="flex flex-col space-y-4">
+                        <div className="max-w-full flex flex-col space-y-4">
+                            {/* Nexus ME */}
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                whileInView="visible"
+                                whileHover={{ scale: 1.02 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.3 }}
+                                className="p-6 rounded-xl bg-gradient-to-br from-[#1f1f1f] relative overflow-hidden
+                                          hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-800
+                                          hover:border-blue-500/30"
+                            >
+                                <Link href="./nexusME/chooseAFramework/">
+                                    <div className="flex flex-row items-center justify-between">
+                                        <div className="flex items-center">
+                                            <Image src="/individual.svg" className="mr-4 filter invert" width={24} height={24} alt="Individual" priority />
+                                            <h2 className="text-xl font-semibold text-gray-200">Nexus ME</h2>
+                                        </div>
+                                        <FiArrowRight className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />
+                                    </div>
+                                </Link>
+                                <Beam className="top-0" />
+                            </motion.div>
+
+                            {/* Nexus TEAMS */}
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                whileInView="visible"
+                                whileHover={{ scale: 1.02 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.3 }}
+                                className="p-6 rounded-xl bg-gradient-to-br from-[#1f1f1f] relative overflow-hidden
+                                          hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-800
+                                          hover:border-blue-500/30"
+                            >
+                                <Link href="./nexusTEAMS/allTeams">
+                                    <div className="flex flex-row items-center justify-between">
+                                        <div className="flex items-center">
+                                            <Image src="/team.svg" className="mr-4 filter invert" width={24} height={24} alt="Team" priority />
+                                            <h2 className="text-xl font-semibold text-gray-200">Nexus TEAMS</h2>
+                                        </div>
+                                        <FiArrowRight className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />
+                                    </div>
+                                </Link>
+                                <Beam className="top-0" />
+                            </motion.div>
                         </div>
                     </div>
                 </div>
+                <div className="grid grid-cols-2 gap-6 w-full px-10">
+                            {/* Notifications Section */}
+                            <motion.div 
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="bg-[#1f1f1f] bg-gradient-to-br from-[#1f1f1f] rounded-xl p-6 border border-[#2e2e2e]"
+                            >
+                                <h3 className="text-gray-200 text-lg font-semibold mb-4">Notifications</h3>
+                                <div className="space-y-3">
+                                    {notifs.length === 0 ? (
+                                        <p className="text-gray-400 text-sm">No new notifications</p>
+                                    ) : (
+                                        notifs.map((notif, index) => (
+                                            <div key={index} className="flex items-center space-x-2 text-gray-300 text-sm">
+                                                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                                <span>{notif}</span>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </motion.div>
+
+                            {/* Personal Tasks */}
+                            <motion.div 
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="bg-[#1f1f1f] rounded-xl p-6 border border-[#2e2e2e]"
+                            >
+                                <h3 className="text-gray-200 text-lg font-semibold mb-4">Personal Tasks</h3>
+                                <div className="space-y-3">
+                                    {tasks.personal.map(task => (
+                                        <div key={task.id} className="flex items-center justify-between p-2 bg-gray-800/50 rounded-lg">
+                                            <div className="flex items-center space-x-3">
+                                                <div className={`w-2 h-2 rounded-full ${
+                                                    task.status === 'pending' ? 'bg-yellow-500' :
+                                                    task.status === 'in-progress' ? 'bg-blue-500' : 'bg-green-500'
+                                                }`}></div>
+                                                <span className="text-gray-300 text-sm">{task.title}</span>
+                                            </div>
+                                            <span className="text-gray-400 text-xs">{new Date(task.due).toLocaleDateString()}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </motion.div>
+
+                            {/* Team Tasks */}
+                            <motion.div 
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="bg-[#1f1f1f] rounded-xl p-6 border border-[#2e2e2e] col-span-2"
+                            >
+                                <h3 className="text-gray-200 text-lg font-semibold mb-4">Team Tasks</h3>
+                                <div className="grid grid-cols-2 gap-4">
+                                    {tasks.team.map(task => (
+                                        <div key={task.id} className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
+                                            <div className="flex flex-col space-y-1">
+                                                <span className="text-gray-300 text-sm">{task.title}</span>
+                                                <span className="text-gray-400 text-xs">{task.team}</span>
+                                            </div>
+                                            <div className="flex items-center space-x-3">
+                                                <div className={`px-2 py-1 rounded-full text-xs ${
+                                                    task.status === 'pending' ? 'bg-yellow-500/20 text-yellow-300' :
+                                                    task.status === 'upcoming' ? 'bg-blue-500/20 text-blue-300' : 
+                                                    'bg-green-500/20 text-green-300'
+                                                }`}>
+                                                    {task.status}
+                                                </div>
+                                                <span className="text-gray-400 text-xs">{new Date(task.due).toLocaleDateString()}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        </div>
             </div>
         </main>
     );

@@ -2,6 +2,7 @@
 import { getProjectByID, getProjectManager } from "../../../../lib/db/projectQueries";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { createClient } from "../../../../../supabase/client";
 
 export default function DashboardHeader({ id }) {
 
@@ -9,6 +10,23 @@ export default function DashboardHeader({ id }) {
     const [project, setProject] = useState(null);
     const [manager, setManager] = useState(null);
     const [loading, setLoading] = useState(true); // Track loading state
+    const [userID, setUserID] = useState(null);
+    const [notifs, setNotifs] = useState([]); // Store notifications
+    const supabase = createClient();
+
+    // Fetch user ID
+    useEffect(() => {
+        const fetchUser = async () => {
+          const { data: user, error } = await supabase.auth.getUser();
+          if (user) {
+            setUserID(user.user.id);
+          } else {
+            console.error("Error while fetching user ID: ", error);
+          }
+        };
+  
+        fetchUser();
+      }, []);
 
     useEffect(() => {
         const fetchProjectData = async () => {
@@ -30,6 +48,35 @@ export default function DashboardHeader({ id }) {
 
         if (id) fetchProjectData();
     }, [id]);
+
+    useEffect(() => {
+        if (!userID) return; // If there's no user, do not subscribe
+
+        const subscription = supabase
+            .channel('invitations')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'invitations' }, payload => {
+                // Check if the new invitation is for the current user
+                if (payload.new.recipient_id === userID) {
+                    console.log('New invitation received:', payload.new);
+                    // Display the notification
+                    displayNotification(payload.new);
+                }
+            })
+            .subscribe();
+
+        // Cleanup subscription on component unmount
+        return () => {
+            supabase.removeChannel(subscription);
+        };
+    }, [userID]); // Re-run effect if user changes
+
+    const displayNotification = (invitation) => {
+        // Update the state to show the new notification
+        setNotifs((prev) => [...prev, invitation]);
+
+        // Optional: Display a toast or an alert (you can use a library like react-toastify)
+        alert(`New invitation received: ${invitation.project_name}`);
+    };
 
     useEffect(() => {
         console.log(project);
@@ -103,10 +150,10 @@ export default function DashboardHeader({ id }) {
                                 className="text-gray-600"
                             />
                         </button>
-                        <span className="absolute top-0 right-0 flex h-3 w-3">
+                        {notifs.length > 0 && (<span className="absolute top-0 right-0 flex h-3 w-3">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
-                        </span>
+                        </span>)}
                     </div>
 
                     {/* Account Button */}

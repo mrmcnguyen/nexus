@@ -27,7 +27,7 @@ export default function Loading() {
         <div className="flex flex-row justify-between items-center mb-4">
           <div className="flex flex-row items-center">
             <h1 className="text-5xl text-gray-300 font-black text-left lg:text-4xl md:text-3xl 2xl:text-4xl">Personal Kanban Board</h1>
-            <span className="flex flex-row items-center m-4 border border-[#2F2F2F] bg-[#2F2F2F] text-gray-400 text-xs rounded-2xl px-2">
+            <span className="flex flex-row items-center m-4 border border-[#2F2F2F] bg-gradient-to-br from-[#1f1f1f] text-gray-400 text-xs rounded-2xl px-2">
               <Image
                 src="/syncing.svg"
                 width={14}

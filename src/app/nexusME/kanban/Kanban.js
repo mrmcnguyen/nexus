@@ -44,8 +44,6 @@ export default function KanbanComponent() {
   useEffect(() => {
     const fetchUser = async () => {
       const { data: user, error } = await supabase.auth.getUser();
-      const res = await getProjectByID('0080d2ed-4bde-41f2-a819-ee5ce7fd456e');
-      console.log(res);
       if (user) {
         setUserID(user.user.id);
       } else {
@@ -301,7 +299,7 @@ const updateTaskTitle = async (task, title) => {
         <div className="flex flex-row justify-between items-center mb-4">
             <div className="flex flex-row items-center">
                 <h1 className="text-5xl text-gray-300 font-black text-left lg:text-4xl md:text-3xl 2xl:text-4xl">Personal Kanban Board</h1>
-                <span className="flex flex-row items-center m-4 border border-[#2F2F2F] bg-[#2F2F2F] text-gray-400 text-xs rounded-2xl px-2">
+                <span className="flex flex-row items-center m-4 border border-[#2F2F2F] bg-gradient-to-br from-[#1f1f1f] text-gray-400 text-xs rounded-2xl px-2">
                     <Image
                         src="/synced.svg"
                         width={14}
@@ -357,84 +355,91 @@ const updateTaskTitle = async (task, title) => {
               />)}
 
         {/* Kanban Board */}
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 h-[calc(100vh-140px)]">
-        {['Backlog', 'To Do', 'In Progress', 'Done'].map((status) => (
+        <div className="grid grid-cols-1 sm:grid-cols-4 border border-[#2E2E2E] rounded-md gap-2 h-[calc(100vh-140px)]">
+  {['Backlog', 'To Do', 'In Progress', 'Done'].map((status, index) => (
+    <div
+      key={status}
+      className={`p-4 flex flex-col overflow-y-auto ${
+        index !== 0 ? 'border-l border-[#2E2E2E]' : '' // Add left border for all but the first column
+      }`}
+    >
+      {/* Column Header */}
+      <div className="flex flex-row items-center mb-4">
+        <Image
+          src={`/${status.toLowerCase().replace(' ', '')}.svg`}
+          className="mr-2"
+          width={14}
+          height={14}
+          alt={status}
+          priority
+        />
+        <div className="flex flex-row w-full justify-between">
+          <h2 className={`lg:text-lg 2xl:text-xl ${headerColors[status]} font-black`}>
+            {status}
+          </h2>
+          <div className={`lg:text-lg 2xl:text-xl text-gray-400 font-light`}>
+            {getTasksByStatus(status).length}
+          </div>
+        </div>
+      </div>
+
+      {/* Task List */}
+      <div
+        className={`flex-grow rounded overflow-y-auto transition-colors ${
+          dragOverColumn === status ? 'bg-[#1f1f1f]' : ''
+        }`}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => {
+          handleDrop(status, e);
+          setDragOverColumn(null); // Reset the drag-over state
+        }}
+        onDragEnter={() => setDragOverColumn(status)}
+        onDragLeave={() => setDragOverColumn(null)}
+      >
+        {getTasksByStatus(status).map((task) => (
           <div
-            key={status}
-            className="p-4 rounded-lg flex flex-col overflow-y-auto"
+            key={task.tasks?.task_id || task.task_id || 'UNKNOWN'}
+            className={`p-4  bg-gradient-to-br from-[#1f1f1f] rounded shadow lg:mb-1 2xl:mb-2 border border-[#454545] rounded border-s-4 ${borderColors[status]} hover:opacity-80 transition duration-200 ease-in-out`}
+            draggable="true"
+            onDragStart={(e) => e.dataTransfer.setData('task', JSON.stringify(task))}
+            onClick={() => handleTaskClick(task)}
           >
-            {/* Column Header */}
-            <div className="flex flex-row items-center mb-4">
-              <Image
-                src={`/${status.toLowerCase().replace(' ', '')}.svg`}
-                className="mr-2"
-                width={14}
-                height={14}
-                alt={status}
-                priority
-              />
-              <div className="flex flex-row w-full justify-between">
-              <h2 className={`lg:text-lg 2xl:text-xl ${headerColors[status]} font-black`}>{status}</h2>
-              <div className={`lg:text-lg 2xl:text-xl text-gray-400 font-light`}>{getTasksByStatus(status).length}</div>
-              </div>
-            </div>
+            <p className="text-gray-200">{task.tasks?.title || task.title || 'UNKNOWN'}</p>
+          </div>
+        ))}
 
-            {/* Task List */}
-            <div className={`flex-grow rounded overflow-y-auto transition-colors ${
-                dragOverColumn === status ? 'bg-[#1f1f1f]' : ''
-            }`}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={(e) => {
-              handleDrop(status, e);
-              setDragOverColumn(null); // Reset the drag-over state
-                }}
-              onDragEnter={() => setDragOverColumn(status)}
-              onDragLeave={() => setDragOverColumn(null)}
-            >
-              {getTasksByStatus(status).map((task) => (
-                <div
-                  key={task.tasks?.task_id || task.task_id || "UNKNOWN"}
-                  className={`p-4 bg-[#292929] rounded shadow lg:mb-1 2xl:mb-2 border border-[#454545] rounded border-s-4 ${borderColors[status]} hover:opacity-80 transition duration-200 ease-in-out`}
-                  draggable="true"
-                  onDragStart={(e) => e.dataTransfer.setData('task', JSON.stringify(task))}
-                  onClick={() => handleTaskClick(task)}
-                >
-                  <p className="text-gray-200">{task.tasks?.title || task.title || "UNKNOWN"}</p>
-                </div>
-              ))}
-
-              {/* Add Task Section */}
-              {editingColumn === status ? (
-                <input
-                  type="text"
-                  value={newTaskTitle}
-                  onChange={(e) => setNewTaskTitle(e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(e, status)}
-                  onBlur={() => setEditingColumn(null)}
-                  autoFocus
-                  className="p-2 mt-2 bg-[#292929] lg:text-sm 2xl:text-base text-gray-400 w-full rounded focus-visible:outline-none"
-                  placeholder="Add new task..."
-                />
-              ) : (
-                <button
-                  className="flex w-full lg:text-sm 2xl:text-base rounded-lg items-center text-gray-400 p-2 mt-2 hover:bg-[#292929] transition duration-200 ease-in-out"
-                  onClick={() => {
-                    setEditingColumn(status);
-                    setNewTaskTitle(""); // Reset input when opening
-                  }}
-                >
-                  Add Task
-                  <Image
-                    src="/plus.svg"
-                    className="ml-2"
-                    width={14}
-                    height={14}
-                    alt="Add Task"
-                    priority
-                  />
-                </button>
-              )}
-            </div>
+        {/* Add Task Section */}
+        {editingColumn === status ? (
+          <input
+            type="text"
+            value={newTaskTitle}
+            onChange={(e) => setNewTaskTitle(e.target.value)}
+            onKeyDown={(e) => handleKeyDown(e, status)}
+            onBlur={() => setEditingColumn(null)}
+            autoFocus
+            className="p-2 mt-2 bg-[#292929] lg:text-sm 2xl:text-base text-gray-400 w-full rounded focus-visible:outline-none"
+            placeholder="Add new task..."
+          />
+        ) : (
+          <button
+            className="flex w-full lg:text-sm 2xl:text-base rounded-lg items-center text-gray-400 p-2 mt-2 hover:bg-[#292929] transition duration-200 ease-in-out"
+            onClick={() => {
+              setEditingColumn(status);
+              setNewTaskTitle(''); // Reset input when opening
+            }}
+          >
+            Add Task
+            <Image
+              src="/plus.svg"
+              className="ml-2"
+              width={14}
+              height={14}
+              alt="Add Task"
+              priority
+            />
+          </button>
+        )}
+      </div>
             {deletionNotification && (
         <div 
           className="fixed bottom-4 right-4 bg-[#541c15] border border-[#7f2315] text-white p-4 rounded-lg shadow-lg z-50 transition-all duration-300 ease-in-out"

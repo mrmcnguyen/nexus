@@ -93,3 +93,18 @@ export async function getProjectManager(a_user_id){
     console.log(data);
     return data;
 }
+
+export async function getNameFromEmail(a_email){
+
+    console.log(a_email);
+
+    let { data, error } = await supabase
+    .rpc('search_profiles', {
+    email_input: a_email
+    })
+
+    if (error) console.error(error)
+
+    console.log(data);
+    return data;
+}

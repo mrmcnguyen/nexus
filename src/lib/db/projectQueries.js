@@ -36,7 +36,7 @@ export async function getAllProjects(a_user_id){
 
 }
 
-export async function getProjectByID(a_project_id){ // Needs to use server client since it is being called from the server
+export async function getProjectByID(a_project_id){ 
 
     const {data, error} = await supabase
     .from('projects')
@@ -67,7 +67,7 @@ export async function getSectors(a_project_id){
 export async function getMembers(a_project_id){
 
     const { data, error } = await supabase
-    .from('teamMembership')
+    .from('projectMembers')
     .select('profiles(*)')
     .eq('project_id', a_project_id)
 
@@ -107,4 +107,52 @@ export async function getNameFromEmail(a_email){
 
     console.log(data);
     return data;
+}
+
+export async function getNameFromID(a_user_id){
+
+    console.log(a_user_id);
+
+    let { data, error } = await supabase
+    .rpc('getNameFromID', {
+    a_user_id
+    })
+    
+    if (error) console.error(error)
+
+    console.log(data);
+    return data;
+}
+
+export async function addMembertoProject(a_invitation_id, a_recipient_id, a_sender_id, a_project_id) {
+    // Check if entry with given invitation id has a field where recipient_id is equal to GIVEN recipient_id
+    const { data: invitationData, error: invitationError } = await supabase
+        .from('invitations')
+        .select('*')
+        .eq('id', a_invitation_id) // Ensure you are checking the correct invitation
+        .eq('recipient_id', a_recipient_id);
+
+    // Check for errors in the invitation query
+    if (invitationError) {
+        console.error('Error fetching invitation:', invitationError);
+        return false;
+    }
+
+    // Check if the invitation exists
+    if (invitationData.length > 0) {
+        // Add member to project
+        const { data: memberData, error: memberError } = await supabase
+            .from('projectMembers')
+            .insert({ project_id: a_project_id, user_id: a_recipient_id, role: 'MEMBER', sender_id: a_sender_id });
+
+        // Check for errors in the member insertion
+        if (memberError) {
+            console.error('Error adding member to project:', memberError);
+            return false;
+        }
+        return true; // Successfully added member
+    } else {
+        console.error('No matching invitation found for recipient:', a_recipient_id);
+        return false; // No matching invitation
+    }
 }

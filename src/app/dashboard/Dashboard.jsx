@@ -9,6 +9,9 @@ import { useState, useEffect } from 'react';
 import { createClient } from "../../../supabase/client";
 import { getUserFullName } from "../../lib/db/userQueries";
 import { FiArrowRight, FiHelpCircle } from "react-icons/fi";
+import { formatDistanceToNow } from 'date-fns';
+import { useNotifications } from "../../../contexts/NotificationContext";
+import { getProjectByID } from "../../lib/db/projectQueries";
 
 export default function Dashboard() {
     const [user, setUser] = useState(null);
@@ -18,6 +21,9 @@ export default function Dashboard() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentTime, setCurrentTime] = useState('');
     const router = useRouter();
+    const { dashboardNotifs, removeDashboardNotification, markAsRead, showNotificationModal } = useNotifications();
+
+    console.log(dashboardNotifs);
 
     const supabase = createClient();
 
@@ -32,13 +38,37 @@ export default function Dashboard() {
     const [tasks, setTasks] = useState({
         personal: [
             { id: 1, title: 'Review PR #123', status: 'pending', due: '2024-12-25' },
-            { id: 2, title: 'Update documentation', status: 'in-progress', due: '2024-12-26' }
+            { id: 2, title: 'Update documentation', status: 'in-progress', due: '2024-12-26' },
+            { id: 3, title: 'Review PR #123', status: 'pending', due: '2024-12-25' },
+            { id: 4, title: 'Update documentation', status: 'in-progress', due: '2024-12-26' },
+            { id: 5, title: 'Review PR #123', status: 'pending', due: '2024-12-25' },
+            { id: 6, title: 'Update documentation', status: 'in-progress', due: '2024-12-26' },
+            { id: 7, title: 'Update documentation', status: 'in-progress', due: '2024-12-26' },
+            { id: 8, title: 'Review PR #123', status: 'pending', due: '2024-12-25' },
+            { id: 9, title: 'Update documentation', status: 'in-progress', due: '2024-12-26' }
         ],
         team: [
             { id: 1, title: 'Sprint Planning', team: 'Frontend', status: 'upcoming', due: '2024-12-27' },
-            { id: 2, title: 'Code Review', team: 'Backend', status: 'pending', due: '2024-12-28' }
+            { id: 2, title: 'Code Review', team: 'Backend', status: 'pending', due: '2024-12-28' },
+            { id: 3, title: 'Sprint Planning', team: 'Frontend', status: 'upcoming', due: '2024-12-27' },
+            { id: 4, title: 'Code Review', team: 'Backend', status: 'pending', due: '2024-12-28' },
+            { id: 5, title: 'Sprint Planning', team: 'Frontend', status: 'upcoming', due: '2024-12-27' },
+            { id: 6, title: 'Code Review', team: 'Backend', status: 'pending', due: '2024-12-28' },
+            { id: 7, title: 'Sprint Planning', team: 'Frontend', status: 'upcoming', due: '2024-12-27' },
+            { id: 8, title: 'Code Review', team: 'Backend', status: 'pending', due: '2024-12-28' },
+            { id: 9, title: 'Sprint Planning', team: 'Frontend', status: 'upcoming', due: '2024-12-27' },
+            { id: 10, title: 'Code Review', team: 'Backend', status: 'pending', due: '2024-12-28' },
+            { id: 11, title: 'Sprint Planning', team: 'Frontend', status: 'upcoming', due: '2024-12-27' },
+            { id: 12, title: 'Code Review', team: 'Backend', status: 'pending', due: '2024-12-28' }
         ]
     });
+
+
+    const handleNotificationClick = (notification) => {
+        markAsRead(notification.id);
+        console.log(notification);
+        showNotificationModal(notification);
+    };
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -60,31 +90,6 @@ export default function Dashboard() {
     }, [router]);
 
     useEffect(() => {
-        if (!user) return;
-
-        const subscription = supabase
-            .channel('invitations')
-            .on('postgres_changes', {
-                event: 'INSERT',
-                schema: 'public',
-                table: 'invitations',
-                filter: `recipient_id=eq.${user.id}`
-            }, (payload) => {
-                displayNotification(payload.new);
-            })
-            .subscribe();
-
-        return () => {
-            supabase.removeChannel(subscription);
-        };
-    }, [user]);
-
-    const displayNotification = (invitation) => {
-        setNotifs((prev) => [...prev, invitation]);
-        alert(`New invitation received: ${invitation}`);
-    };
-
-    useEffect(() => {
         const updateTime = () => {
             const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             setCurrentTime(time);
@@ -94,6 +99,23 @@ export default function Dashboard() {
         const interval = setInterval(updateTime, 60000);
         return () => clearInterval(interval);
     }, []);
+
+    const fetchProjectData = async (project_id) => {
+        try {
+            // Fetch project data
+            const projectData = await getProjectByID(project_id);
+            setProject(projectData);
+
+            // Fetch manager data
+            const managerData = await getProjectManager(projectData[0].project_manager);
+            console.log(managerData);
+            setManager(managerData);
+        } catch (error) {
+            console.error("Failed to fetch project or manager data:", error);
+        } finally {
+            setLoading(false); // Stop the loading state
+        }
+    };
 
     const formatDate = () => {
         const date = new Date();
@@ -228,24 +250,46 @@ export default function Dashboard() {
                 <div className="grid grid-cols-2 gap-6 w-full px-10">
                             {/* Notifications Section */}
                             <motion.div 
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                className="bg-[#1f1f1f] bg-gradient-to-br from-[#1f1f1f] rounded-xl p-6 border border-[#2e2e2e]"
-                            >
-                                <h3 className="text-gray-200 text-lg font-semibold mb-4">Notifications</h3>
-                                <div className="space-y-3">
-                                    {notifs.length === 0 ? (
-                                        <p className="text-gray-400 text-sm">No new notifications</p>
-                                    ) : (
-                                        notifs.map((notif, index) => (
-                                            <div key={index} className="flex items-center space-x-2 text-gray-300 text-sm">
-                                                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                                                <span>{notif}</span>
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="bg-[#1f1f1f] bg-[#1f1f1f] rounded-xl p-6 border border-[#2e2e2e]"
+                        >
+                            <h3 className="text-gray-200 text-lg font-semibold mb-4">Notifications</h3>
+                            <div className="space-y-3">
+                                {dashboardNotifs.length === 0 ? (
+                                    <p className="text-gray-400 text-sm">No new notifications</p>
+                                ) : (
+                                    dashboardNotifs.map((notif) => (
+                                        <div 
+                                            key={notif.id} 
+                                            className="flex items-center justify-between text-gray-300 text-sm hover:bg-gray-800/30 p-2 rounded-lg cursor-pointer transition-colors"
+                                            onClick={() => handleNotificationClick(notif)}
+                                        >
+                                            <div className="flex items-center space-x-2">
+                                                <div className={`w-2 h-2 rounded-full ${notif.read ? 'bg-gray-500' : 'bg-blue-500'}`}></div>
+                                                <span className={notif.read ? 'text-gray-400' : 'text-gray-300'}>
+                                                    {notif.message} from {notif.sender_name}
+                                                </span>
                                             </div>
-                                        ))
-                                    )}
-                                </div>
-                            </motion.div>
+                                            <div className="flex items-center space-x-3">
+                                                <span className="text-gray-400 text-xs">
+                                                    {formatDistanceToNow(new Date(notif.timestamp), { addSuffix: true })}
+                                                </span>
+                                                <button 
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        removeDashboardNotification(notif.id);
+                                                    }}
+                                                    className="text-gray-500 hover:text-gray-300"
+                                                >
+                                                    ×
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </motion.div>
 
                             {/* Personal Tasks */}
                             <motion.div 

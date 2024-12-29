@@ -356,13 +356,13 @@ const updateTaskTitle = async (task, title) => {
 
         {/* Kanban Board */}
         <div className="grid grid-cols-1 sm:grid-cols-4 border border-[#2E2E2E] rounded-md gap-2 h-[calc(100vh-140px)]">
-  {['Backlog', 'To Do', 'In Progress', 'Done'].map((status, index) => (
-    <div
-      key={status}
-      className={`p-4 flex flex-col overflow-y-auto ${
-        index !== 0 ? 'border-l border-[#2E2E2E]' : '' // Add left border for all but the first column
-      }`}
-    >
+      {['Backlog', 'To Do', 'In Progress', 'Done'].map((status, index) => (
+        <div
+          key={status}
+          className={`p-4 flex flex-col overflow-y-auto ${
+            index !== 0 ? 'border-l border-[#2E2E2E]' : '' // Add left border for all but the first column
+          }`}
+        >
       {/* Column Header */}
       <div className="flex flex-row items-center mb-4">
         <Image

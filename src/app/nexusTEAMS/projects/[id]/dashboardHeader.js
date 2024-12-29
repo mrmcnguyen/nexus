@@ -49,27 +49,6 @@ export default function DashboardHeader({ id }) {
         if (id) fetchProjectData();
     }, [id]);
 
-    useEffect(() => {
-        if (!userID) return; // If there's no user, do not subscribe
-
-        const subscription = supabase
-            .channel('invitations')
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'invitations' }, payload => {
-                // Check if the new invitation is for the current user
-                if (payload.new.recipient_id === userID) {
-                    console.log('New invitation received:', payload.new);
-                    // Display the notification
-                    displayNotification(payload.new);
-                }
-            })
-            .subscribe();
-
-        // Cleanup subscription on component unmount
-        return () => {
-            supabase.removeChannel(subscription);
-        };
-    }, [userID]); // Re-run effect if user changes
-
     const displayNotification = (invitation) => {
         // Update the state to show the new notification
         setNotifs((prev) => [...prev, invitation]);

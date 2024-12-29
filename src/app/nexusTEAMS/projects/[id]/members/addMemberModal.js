@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FiMail, FiLoader, FiAlertCircle, FiInfo, FiX, FiUserPlus } from 'react-icons/fi';
 import debounce from 'lodash/debounce';
-import { getNameFromEmail } from '../../../../../lib/db/projectQueries';
+import { getNameFromEmail, getNameFromID, getProjectByID } from '../../../../../lib/db/projectQueries';
 import { sendInvite } from '../../../../../lib/db//commQueries';
 
 const LoadingSpinner = () => (
@@ -30,6 +30,8 @@ const AddMemberDropdown = ({ isOpen, onClose, projectId, buttonRef, userID }) =>
   const [isRootUser, setIsRootUser] = useState(false);
   const [checkingEmail, setCheckingEmail] = useState(false);
   const [invitedUser, setInvitedUser] = useState(null);
+  const [userName, setUserName] = useState(null);
+  const [projectData, setProjectData] = useState(null);
   const [emailExists, setEmailExists] = useState(false);
   const [error, setError] = useState('');
   const [role, setRole] = useState('member');
@@ -57,6 +59,36 @@ const AddMemberDropdown = ({ isOpen, onClose, projectId, buttonRef, userID }) =>
       handleClose();
     }
   };
+
+  useEffect(() => {
+    const getUserName = async() => {
+      const res = await getNameFromID(userID);
+      console.log(res);
+      if (res) setUserName(`${res.first_name} ${res.last_name}`)
+    }
+
+      getUserName();
+  }, [userID]);
+  
+    useEffect(() => {
+      const fetchProjectData = async () => {
+        if (projectId) {
+          setLoading(true);
+          try {
+            const project = await getProjectByID(projectId);
+            console.log(project);
+            setProjectData(project[0]);
+          } catch (err) {
+            console.error('Error fetching project');
+            setError('Failed to load project details');
+          } finally {
+            setLoading(false);
+          }
+        }
+      };
+  
+      fetchProjectData();
+    }, [projectId]);
 
   useEffect(() => {
     const handleEscape = (e) => {
@@ -125,7 +157,8 @@ const AddMemberDropdown = ({ isOpen, onClose, projectId, buttonRef, userID }) =>
     setLoading(true);
 
     try {
-        const res = await sendInvite(userID, customMessage, email, projectId, invitedUser.user_id);
+      console.log("Sending with organisation name: ", projectData.organisation_name);
+        const res = await sendInvite(userID, customMessage, email, projectId, projectData.project_name, projectData.organisation_name, invitedUser.user_id, userName);
         if (res){
             console.log("Invite sent");
         }

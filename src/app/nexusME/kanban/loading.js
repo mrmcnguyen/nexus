@@ -69,12 +69,14 @@ export default function Loading() {
         </div>
 
         {/* Kanban Board */}
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 h-[calc(100vh-140px)]">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 rounded-lg border border-[#2e2e2e] h-[calc(100vh-140px)]">
           {Object.entries(loadingTaskCounts).map(([status, count]) => (
             <div
-              key={status}
-              className="p-4 rounded-lg flex flex-col overflow-y-auto"
-            >
+            key={status}
+            className={`p-4 flex flex-col overflow-y-auto ${
+              count !== 0 ? 'border-l border-[#2E2E2E]' : '' // Add left border for all but the first column
+            }`}
+          >
               {/* Column Header */}
               <div className="flex flex-row items-center mb-4">
                 <Image

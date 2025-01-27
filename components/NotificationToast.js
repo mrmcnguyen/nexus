@@ -38,7 +38,7 @@ export function NotificationToast({ notification, onClose }) {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className={`flex items-center p-4 rounded-lg shadow-lg bg-[#1f1f1f] ${getStatusColor(notification.type)} text-white`}
+      className={`flex items-center p-4 rounded-lg shadow-lg bg-[#1f1f1f] ${getStatusColor(notification.type)} text-white mb-2`}
     >
       <div className="mr-4">
         {getIcon(notification.type)}

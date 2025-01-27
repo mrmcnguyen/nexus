@@ -223,7 +223,7 @@ export default function EisenhowerMatrixPage() {
 
       <div className="w-1/4 bg-[#1f1f1f] border border-[#2F2F2F] shadow-lg rounded-lg p-4 h-full">
         <div className='flex flex-row justify-between align-center'>
-        <h2 className="lg:text-lg 2xl:text-2xl text-gray-300 font-light">Enter your tasks</h2>
+        <h2 className="lg:text-lg 2xl:text-2xl text-gray-300 font-light">Backlog</h2>
         <button className='flex flex-row items-center text-[#505050] lg:text-xs 2xl:text-sm user-select: none;' onClick={() => setHelpClick(true)}>
           Help
         <Image

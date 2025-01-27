@@ -14,7 +14,9 @@ import {
 } from "react-icons/fi";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { createClient } from "../../../../../supabase/client";
 import Link from "next/link";
+import { getUserFullName } from "../../../../lib/db/userQueries";
 import { usePathname } from 'next/navigation';
 
 export const Sidebar = ({width}) => {
@@ -22,6 +24,8 @@ export const Sidebar = ({width}) => {
   const pathname = usePathname();
   console.log("ID SIDEBAR IS ", id);
   const [open, setOpen] = useState(true);
+  const supabase = createClient();
+  const [userName, setUserName] = useState('');
   
   // Get the current page from the pathname
   const getCurrentPage = (pathname) => {
@@ -44,6 +48,20 @@ export const Sidebar = ({width}) => {
     return pageTitle;
   };
 
+  useEffect(() => {
+          const fetchUser = async () => {
+              const { data, error } = await supabase.auth.getUser();
+              if (data?.user) {
+                  const res = await getUserFullName(data.user.id);
+                  if (res) setUserName(res[0].first_name);
+              } else {
+                  console.error("User not found:", error);
+              }
+          };
+  
+          fetchUser();
+      }, []);
+
   const [selected, setSelected] = useState(getCurrentPage(pathname));
 
   // Update selected when pathname changes
@@ -59,7 +77,7 @@ export const Sidebar = ({width}) => {
         width: open ? '225px' : "fit-content",
       }}
     >
-      <TitleSection open={open} />
+      <TitleSection open={open} userName={userName} />
 
       <div className="space-y-1">
 
@@ -219,7 +237,7 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs, id, page }) 
   );
 };
 
-const TitleSection = ({ open }) => {
+const TitleSection = ({ open, userName }) => {
 
   return (
     <div>
@@ -233,8 +251,8 @@ const TitleSection = ({ open }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.125 }}
             >
-              <span className="block text-xs font-semibold">Kevin's Workspace</span>
-              <span className="block text-xs text-slate-500">Nexus</span>
+              <span className="block text-xs font-semibold">{userName}'s Workspace</span>
+              <span className="block text-xs text-slate-500">Nexus TEAMS</span>
             </motion.div>
           )}
         </div>

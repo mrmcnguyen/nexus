@@ -157,9 +157,9 @@ export default function Dashboard() {
                     animate={{ opacity: 1 }}
                     variants={buttonVariants}
                     whileHover="hover"
-                    className="px-4 py-2 text-gray-400 hover:text-white border border-gray-700 
+                    className="px-4 py-2 bg-gradient-to-br from-[#2f2f2f] text-gray-400 hover:text-white border border-gray-700 
                              rounded-lg transition-all duration-200 flex items-center space-x-2 
-                             hover:border-gray-500 bg-[#1f1f1f]"
+                             hover:border-gray-500 "
                     onClick={() => setIsModalOpen(true)}
                 >
                     Account
@@ -198,6 +198,7 @@ export default function Dashboard() {
                     <div className="flex flex-col space-y-4">
                         <div className="max-w-full flex flex-col space-y-4">
                             {/* Nexus ME */}
+                            <Link href="./nexusME/chooseAFramework/">
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
@@ -209,7 +210,6 @@ export default function Dashboard() {
                                           hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-800
                                           hover:border-blue-500/30"
                             >
-                                <Link href="./nexusME/chooseAFramework/">
                                     <div className="flex flex-row items-center justify-between">
                                         <div className="flex items-center">
                                             <Image src="/individual.svg" className="mr-4 filter invert" width={24} height={24} alt="Individual" priority />
@@ -217,11 +217,12 @@ export default function Dashboard() {
                                         </div>
                                         <FiArrowRight className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />
                                     </div>
-                                </Link>
                                 <Beam className="top-0" />
                             </motion.div>
+                            </Link>
 
                             {/* Nexus TEAMS */}
+                            <Link href="./nexusTEAMS/allTeams">
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
@@ -233,7 +234,6 @@ export default function Dashboard() {
                                           hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-800
                                           hover:border-blue-500/30"
                             >
-                                <Link href="./nexusTEAMS/allTeams">
                                     <div className="flex flex-row items-center justify-between">
                                         <div className="flex items-center">
                                             <Image src="/team.svg" className="mr-4 filter invert" width={24} height={24} alt="Team" priority />
@@ -241,9 +241,9 @@ export default function Dashboard() {
                                         </div>
                                         <FiArrowRight className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />
                                     </div>
-                                </Link>
                                 <Beam className="top-0" />
                             </motion.div>
+                            </Link>
                         </div>
                     </div>
                 </div>

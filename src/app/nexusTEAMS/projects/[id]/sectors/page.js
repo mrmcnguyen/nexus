@@ -1,6 +1,6 @@
 'use client';
 import DashboardHeader from "../dashboardHeader";
-import DashboardSector from "../dashboardSectors";
+import Sectors from "./sectors";
 import { useParams } from "next/navigation";
 
 export default function Page() {
@@ -18,7 +18,7 @@ export default function Page() {
 
   <div className="flex flex-col flex-1 overflow-hidden">
     <div className="h-full overflow-y-auto">
-      <DashboardSector id={params.id} />
+      <Sectors id={params.id} />
     </div>
   </div>
 </main>

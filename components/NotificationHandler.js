@@ -80,6 +80,9 @@ export function NotificationHandler() {
         console.log("INVITATION: ", invitation);
         addNotification({
             project_id: `${invitation.project_id}`,
+            invitation_id: `${invitation.invitation_id}`,
+            recipient_id: `${invitation.recipient_id}`,
+            sender_id: `${invitation.sender_id}`,
             project_name: `${invitation.project_name}`,
             organisation_name: `${invitation.organisation_name}`,
             custom_message: `${invitation.custom_message}`,

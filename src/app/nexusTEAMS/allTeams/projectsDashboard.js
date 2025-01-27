@@ -120,7 +120,7 @@ export default function ProjectsDashboard() {
                 </div>
                 <p className="text-gray-400 mb-4">{project.organisation_name}</p>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">Team Members: 4</span>
+                  <span className="text-sm text-gray-500">Project Manager: {project.profiles.first_name || "Unknown"} {project.profiles.last_name || "Unknown"}</span>
                 </div>
               </div>
             ))}

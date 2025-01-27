@@ -313,7 +313,8 @@ export async function getKanbanTasks(a_user_id) {
         title,
         description,
         created_at,
-        updated_at
+        updated_at,
+        priority
       )
     `)
     .eq('user_id', a_user_id); // Filters for the specific user ID

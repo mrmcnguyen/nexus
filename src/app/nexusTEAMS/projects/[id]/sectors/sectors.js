@@ -1,9 +1,9 @@
 'use client'
 import { useEffect, useState, useRef } from "react";
-import { getProjectByID, getMembers } from "../../../../lib/db/projectQueries";
-import { FiPlus, FiStar } from "react-icons/fi";
+import { getProjectByID, getMembers } from "../../../../../lib/db/projectQueries";
+import { FiPlus, FiSearch } from "react-icons/fi";
 
-export default function DashboardMembers({ id }) {
+export default function Sectors({ id, userID }) {
     const [height, setHeight] = useState(null);
     const [project, setProject] = useState(null);
     const [members, setMembers] = useState([]);
@@ -11,6 +11,10 @@ export default function DashboardMembers({ id }) {
     const headerRef = useRef(); // Reference for the header container (Team Members header and first column header)
     const columnHeaderRef = useRef();
     const parentRef = useRef(); // Reference for the parent div (to set maxHeight and handle overflow)
+    // In your Members component, add this state
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const addButtonRef = useRef(null);
 
     const updateHeight = () => {
         if (ref.current && parentRef.current && headerRef.current && columnHeaderRef.current && height === null) {
@@ -41,21 +45,6 @@ export default function DashboardMembers({ id }) {
           getProject();
       }, [id]); // Include `id` as a dependency
     
-      useEffect(() => {
-        const getProjectMembers = async () => {
-            try {
-                const res = await getMembers(id); // Await the response
-                if (res) {
-                    setMembers(res);
-                }
-            } catch (error) {
-                console.error("Failed to fetch members:", error);
-            }
-        };
-    
-        getProjectMembers();
-    }, [project]); // Include `id` as a dependency
-
     useEffect(() => {
         updateHeight(); // Initial height calculation
         window.addEventListener('resize', updateHeight); // Recalculate on resize
@@ -68,21 +57,41 @@ export default function DashboardMembers({ id }) {
     return (
         <>
           {/* Members List */}
-          <div ref={parentRef} className="p-4 h-full rounded-lg bg-[#1f1f1f] overflow-hidden">
+          <div ref={parentRef} className="h-full mt-1 rounded-lg">
             {/* Header Section */}
             <div ref={headerRef} className="flex flex-row w-full justify-between">
               <div>
-                <h2 className="text-base 2xl:text-lg font-semibold text-gray-400 mb-3 uppercase tracking-wider">
-                  Team Members
+                <h2 className="text-xl 2xl:text-2xl font-semibold text-gray-400 mb-3 uppercase tracking-wider">
+                  Project Sectors
                 </h2>
               </div>
-              <button className="flex flex-row bg-[#292929] items-center rounded-lg text-sm text-gray-400 border border-[#454545] p-1">
-                Add Members
-              </button>
+              <div className="flex flex-row items-center space-x-2">
+                {/* Search Bar */}
+                <div className="relative">
+                    <input
+                    type="text"
+                    placeholder="Search sectors..."
+                    className="w-64 p-2 rounded-lg bg-[#1F1F1F] text-white text-sm placeholder-gray-400 border border-[#2E2E2E] focus:outline-none focus:ring-1 focus:ring-[#91C8FF] h-10" // Ensure consistent height
+                    />
+                    <span className="absolute top-2 right-3 text-gray-400">
+                    <FiSearch />
+                    </span>
+                </div>
+
+                <div className="relative"> {/* Add this wrapper div */}
+                    <button 
+                        ref={addButtonRef}
+                        onClick={() => setIsDropdownOpen(true)}
+                        className="flex flex-row items-center bg-[#6f99d8] hover:bg-[#91C8FF] rounded-lg text-sm text-white p-2 px-4 h-10"
+                    >
+                        <FiPlus /> Create Sector
+                    </button>
+                    </div>
+                </div>
             </div>
     
             {/* Table Headers */}
-            <div ref={columnHeaderRef} className="grid grid-cols-4 gap-4 text-sm pl-2 font-light text-gray-500 border-b border-[#2f2f2f] py-2">
+            <div ref={columnHeaderRef} className="grid grid-cols-4 gap-4 text-sm pl-2 font-light text-gray-500 border-b border-gray-700 py-2">
               <div>NAME</div>
               <div>SECTOR</div>
               <div>ROLE</div>
@@ -97,46 +106,8 @@ export default function DashboardMembers({ id }) {
                           : {}
                     }
                 >
-            {members.length > 0 ? (
-  members.map((member, index) => (
-    <div
-      key={index}
-      className="grid grid-cols-4 gap-4 items-center py-2 pl-2 rounded-lg hover:bg-[#292929]"
-    >
-      <div className="text-sm text-gray-300 flex items-center">
-        {member.first_name} {member.last_name}
-        {member.role === "MANAGER" && (
-          <span className="ml-2 text-yellow-300">
-            <FiStar></FiStar>
-          </span>
-        )}
-      </div>
-      <div className="text-sm text-gray-300">{member.sector || "Not allocated"}</div>
-      <div className="text-sm text-gray-300">{member.role}</div>
-      <div
-        className={`text-xs font-semibold uppercase ${
-          member.status === "Online"
-            ? "text-emerald-300"
-            : member.status === "Offline"
-            ? "text-red-700"
-            : "text-[#91C8FF]"
-        }`}
-      >
-        {member.status}
-      </div>
-    </div>
-  ))
-) : (
-  <div className="text-gray-500 text-center py-4">
-    This project has no members
-  </div>
-)}
-
             </div>
           </div>
         </>
       );
 }
-
-
-

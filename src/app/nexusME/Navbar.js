@@ -68,7 +68,7 @@ export default function Navbar({ page }) {
       style={{ height: '50px', backgroundColor: '#171717' }} // Set height for the navbar
     >
       {/* Logo */}
-      <Link href="/dashboard" className='h-full flex flex-row items-center bg-gradient-to-tl from-[#2f2f2f] border-r border-r-[#2e2e2e]'>
+      <Link href="/dashboard" className='h-full flex flex-row items-center bg-gradient-to-br from-[#1f1f1f] border-r border-r-[#2e2e2e]'>
         <Image
           src="/nexusLogo.png"
           alt="Logo"
@@ -95,7 +95,7 @@ export default function Navbar({ page }) {
 
       {/* Right-side Buttons */}
       <div className="flex flex-row ml-auto pr-4 items-center space-x-4">
-      <a className="flex flex-row items-center px-4 py-1 text-gray-300 transition duration-200 border border-[#454545] align-middle text-sm text-light rounded-lg hover:bg-[#2F2F2F]"
+      <a className="flex flex-row bg-gradient-to-br from-[#2f2f2f] items-center px-4 py-1 text-gray-300 transition duration-200 border border-[#454545] align-middle text-sm text-light rounded-lg hover:bg-[#2F2F2F]"
           href='https://github.com/mrmcnguyen/nexus'
           target='_blank'
         >
@@ -109,7 +109,7 @@ export default function Navbar({ page }) {
           />
           Docs
         </a>
-        <Link className="flex flex-row px-4 py-1 align-middle border border-[#6cb4fb] items-center transition duration-200 bg-[#6f99da] text-sm text-white text-light rounded-lg hover:bg-[#3B55C2]"
+        <Link className="flex flex-row px-4 py-1 align-middle items-center transition duration-200 bg-[#6f99da] text-sm text-white text-light rounded-lg hover:bg-[#91c8ff]"
         href="/nexusTEAMS/allTeams"
         target='_blank?'
         >

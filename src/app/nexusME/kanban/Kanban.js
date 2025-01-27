@@ -37,6 +37,22 @@ export default function KanbanComponent() {
       'Done' : 'border-emerald-300'
     }
 
+    const priorityColors = {
+      Critical: 'bg-gradient-to-br from-red-500',
+      High: ' bg-gradient-to-br from-orange-500',
+      Medium: 'bg-gradient-to-br from-yellow-500',
+      Low: 'bg-gradient-to-br from-blue-500',
+      'No Priority': 'bg-gradient-to-br from-gray-400'  // Fallback color
+    };
+
+    const priorityLabels = {
+      Critical: 'text-red-500',
+      High: 'text-orange-500',
+      Medium: 'text-yellow-500',
+      Low: 'text-blue-500',
+      'No Priority': 'text-gray-400'  // Fallback text color
+    };
+
   const supabase = createClient();
   const dropdownRef = useRef(null);
 
@@ -326,7 +342,7 @@ const updateTaskTitle = async (task, title) => {
                 </button>
                 <button className="flex flex-row border border-[#2F2F2F] lg:text-sm 2xl:text-base bg-[#1f1f1f] items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-lg hover:bg-[#707070]">
                     <Image
-                        src="/team.svg" 
+                        src="/epic.svg" 
                         style={{ filter: 'invert(1)' }}
                         className="mr-2"  
                         width={14}
@@ -334,7 +350,7 @@ const updateTaskTitle = async (task, title) => {
                         height={14}
                         priority
                     />
-                    View Team Kanban Board
+                    Manage Epics
                 </button>
             </div>
         </div>
@@ -399,12 +415,23 @@ const updateTaskTitle = async (task, title) => {
         {getTasksByStatus(status).map((task) => (
           <div
             key={task.tasks?.task_id || task.task_id || 'UNKNOWN'}
-            className={`p-4  bg-gradient-to-br from-[#1f1f1f] rounded shadow lg:mb-1 2xl:mb-2 border border-[#454545] rounded border-s-4 ${borderColors[status]} hover:opacity-80 transition duration-200 ease-in-out`}
+            className={`p-4  bg-[#1f1f1f] rounded shadow lg:mb-1 2xl:mb-2 border-[#454545] rounded border-s-4 ${borderColors[status]} hover:opacity-80 transition duration-200 ease-in-out`}
             draggable="true"
             onDragStart={(e) => e.dataTransfer.setData('task', JSON.stringify(task))}
             onClick={() => handleTaskClick(task)}
           >
-            <p className="text-gray-200">{task.tasks?.title || task.title || 'UNKNOWN'}</p>
+            <div className="flex flex-col space-y-2">
+      <p className="text-gray-200">
+        {task.tasks?.title || task.title || 'UNKNOWN'}
+      </p>
+      <div className="flex items-center space-x-1">
+        <div className={`flex flex-row rounded-full items-center px-2 ${priorityColors[task.tasks?.priority || task.priority || 'No Priority']}`}>
+        <span className={`text-xs`}>
+          {task.tasks?.priority || task.priority || 'No Priority'}
+        </span>
+        </div>
+      </div>
+    </div>
           </div>
         ))}
 

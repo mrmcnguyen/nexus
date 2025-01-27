@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiCheck, FiInfo, FiCalendar, FiBook, FiMail, FiLoader } from "react-icons/fi";
-import { getProjectByID } from '../src/lib/db/projectQueries';
+import { addMembertoProject, getProjectByID } from '../src/lib/db/projectQueries';
 
 const NotificationContext = createContext();
 
@@ -222,17 +222,47 @@ export const useNotifications = () => {
 
 const NotificationModalContainer = () => {
   const { 
+    addNotification,
     modalNotification, 
     hideNotificationModal,
     removeDashboardNotification 
   } = useNotifications();
 
+  console.log(modalNotification);
+
   const handleAccept = async () => {
-    if (modalNotification.onAccept) {
-      await modalNotification.onAccept();
+    try {
+      if (modalNotification.type === 'invitation') {
+        // Add your invitation acceptance logic here
+        // For example:
+        const res = addMembertoProject(modalNotification.invitation_id, modalNotification.recipient_id, modalNotification.sender_id, modalNotification.project_id)
+        if (!res){
+          console.error(res);
+          return "ERROR";
+        }
+        // You can also show a success notification
+        addNotification({
+          message: `Joined ${modalNotification.organisation_name} working on ${modalNotification.project_name}`,
+          type: 'success',
+          duration: 5000
+        });
+      }
+      
+      // Call the original onAccept if it exists
+      if (modalNotification.onAccept) {
+        await modalNotification.onAccept();
+      }
+      
+      removeDashboardNotification(modalNotification.id);
+      hideNotificationModal();
+    } catch (error) {
+      // Handle any errors
+      addNotification({
+        message: `Failed to accept invitation: ${error.message}`,
+        type: 'error',
+        duration: 5000
+      });
     }
-    removeDashboardNotification(modalNotification.id);
-    hideNotificationModal();
   };
 
   const handleDecline = async () => {

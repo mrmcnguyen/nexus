@@ -93,7 +93,7 @@ export default function DashboardHeader({ id }) {
                     {/* Project Manager */}
                     <div>
                         <div className="text-xs text-gray-500">Project Manager</div>
-                        <h1 className="text-lg">{manager[0].first_name|| "N/A"} {manager[0].last_name || "N/A"}</h1>
+                        <h1 className="text-lg">{manager.first_name || manager[0].first_name|| "N/A"} {manager.last_name || manager[0].last_name || "N/A"}</h1>
                         {/* <h1 className="text-lg">{manager}</h1> */}
                     </div>
 
@@ -120,7 +120,7 @@ export default function DashboardHeader({ id }) {
                 <div className="flex items-center space-x-4">
                     {/* Notification Button */}
                     <div className="relative">
-                        <button className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
+                        <button className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-700 transition">
                             <Image
                                 src={"/notification.svg"}
                                 alt="Notification Bell Icon"
@@ -136,7 +136,7 @@ export default function DashboardHeader({ id }) {
                     </div>
 
                     {/* Account Button */}
-                    <button className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
+                    <button className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-700 transition">
                         <Image
                             src={"/accountBlue.svg"}
                             alt="Account Icon"

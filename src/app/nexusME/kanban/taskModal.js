@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { deleteKanbanTaskByID } from "../../../lib/db/queries";
-import debounce from 'lodash/debounce'; // Recommended for performance
+import debounce from 'lodash/debounce'; // Debounce functions recommended for performance
 
 export default function KanbanTaskModal({ isVisible, closeModal, task, onDescriptionUpdate, onTitleUpdate, onDeleteTask, onMoveTask }) {
   

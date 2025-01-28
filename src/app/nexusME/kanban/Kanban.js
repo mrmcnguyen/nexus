@@ -6,7 +6,6 @@ import { addKanbanTask, editTaskDescription, editTaskName, getKanbanTasks, updat
 import { createClient } from "../../../../supabase/client";
 import Loading from "./loading";
 import TaskModal from "./taskModal";
-import { getProjectByID } from "../../../lib/db/projectQueries";
 
 export default function KanbanComponent() {
     const [editingColumn, setEditingColumn] = useState(null);

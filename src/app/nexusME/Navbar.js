@@ -58,7 +58,7 @@ export default function Navbar({ page }) {
         setUser(null);
         router.push('/signIn'); // Redirect to the sign-in page
     }
-};
+  };
 
   return (
     <nav
@@ -78,14 +78,16 @@ export default function Navbar({ page }) {
         />
       </Link>
 
-      {/* Navigation Links */}
-      <div className="ml-2 p-2 flex-grow flex items-center text-light justify-left space-x-4">
+      {/* Navigation Links - Container with full height */}
+      <div className="ml-2 px-2 flex-grow flex items-center text-light justify-left space-x-4 h-full">
         {frameworks.map((framework) => (
           <Link
             key={framework.name}
             href={framework.link}
-            className={`text-[#91C8FF] text-sm font-medium hover:text-[#91C8FF] ${
-              pathname === framework.link ? 'text-[#91C8FF]' : 'text-gray-400'
+            className={`text-sm font-medium relative h-full flex items-center hover:text-[#91C8FF] ${
+              pathname === framework.link 
+                ? 'text-[#91C8FF] border-b-2 border-[#91C8FF]' 
+                : 'text-gray-400'
             }`}
           >
             {framework.name}
@@ -95,11 +97,11 @@ export default function Navbar({ page }) {
 
       {/* Right-side Buttons */}
       <div className="flex flex-row ml-auto pr-4 items-center space-x-4">
-      <a className="flex flex-row bg-gradient-to-br from-[#2f2f2f] items-center px-4 py-1 text-gray-300 transition duration-200 border border-[#454545] align-middle text-sm text-light rounded-lg hover:bg-[#2F2F2F]"
+        <a className="flex flex-row bg-gradient-to-br from-[#2f2f2f] items-center px-4 py-1 text-gray-300 transition duration-200 border border-[#454545] align-middle text-sm text-light rounded-lg hover:bg-[#2F2F2F]"
           href='https://github.com/mrmcnguyen/nexus'
           target='_blank'
         >
-        <Image
+          <Image
             src="/git.svg"
             className="mr-2 filter invert"
             alt="GitHub"
@@ -110,8 +112,8 @@ export default function Navbar({ page }) {
           Docs
         </a>
         <Link className="flex flex-row px-4 py-1 align-middle items-center transition duration-200 bg-[#6f99da] text-sm text-white text-light rounded-lg hover:bg-[#91c8ff]"
-        href="/nexusTEAMS/allTeams"
-        target='_blank?'
+          href="/nexusTEAMS/allTeams"
+          target='_blank?'
         >
           Nexus TEAMS
           <Image

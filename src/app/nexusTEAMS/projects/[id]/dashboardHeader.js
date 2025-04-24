@@ -9,7 +9,7 @@ export default function DashboardHeader({ id }) {
     console.log(id);
     const [project, setProject] = useState(null);
     const [manager, setManager] = useState(null);
-    const [loading, setLoading] = useState(true); // Track loading state
+    const [loading, setLoading] = useState(true);
     const [userID, setUserID] = useState(null);
     const [notifs, setNotifs] = useState([]); // Store notifications
     const supabase = createClient();

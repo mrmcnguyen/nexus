@@ -798,11 +798,11 @@ export default function KanbanComponent() {
 
       {/* Kanban Board */}
       {viewMode === 'kanban' && (
-        <div className="grid grid-cols-1 sm:grid-cols-4 border border-[#2E2E2E] rounded-md gap-2 h-[calc(100vh-140px)]">
+        <div className="grid grid-cols-1 sm:grid-cols-4 border border-[#2E2E2E] rounded-md gap-2">
           {['Backlog', 'To Do', 'In Progress', 'Done'].map((status, index) => (
             <div
               key={status}
-              className={`p-4 flex flex-col overflow-y-auto ${index !== 0 ? 'border-l border-[#2E2E2E]' : '' // Add left border for all but the first column
+              className={`p-4 flex flex-col ${index !== 0 ? 'border-l border-[#2E2E2E]' : '' // Add left border for all but the first column
                 }`}
             >
               {/* Column Header */}
@@ -827,8 +827,7 @@ export default function KanbanComponent() {
 
               {/* Task List */}
               <div
-                className={`flex-grow rounded overflow-y-auto transition-colors ${dragOverColumn === status ? 'bg-[#1f1f1f]' : ''
-                  }`}
+                className={`rounded transition-colors ${dragOverColumn === status ? 'bg-[#1f1f1f]' : ''}`}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
                   handleDrop(status, e);

@@ -43,16 +43,6 @@ export default function EpicManager() {
         'bg-violet-600 text-violet-100'
     ];
 
-    const getEpicColor = (epicId) => {
-        if (!epicId) return epicColors[0];
-        // Generate a consistent color based on epic ID
-        const hash = epicId.split('').reduce((a, b) => {
-            a = ((a << 5) - a) + b.charCodeAt(0);
-            return a & a;
-        }, 0);
-        return epicColors[Math.abs(hash) % epicColors.length];
-    };
-
     // Fetch user ID
     useEffect(() => {
         const fetchUser = async () => {
@@ -235,8 +225,7 @@ export default function EpicManager() {
                         </div>
                         <div className="flex justify-between items-start mb-3">
                             <div className="flex items-center space-x-2">
-                                <span className={`${getEpicColor(epic.epic_id)} px-2 py-1 rounded-full text-xs`}>
-
+                                <span className={`${epicColors[idx % epicColors.length]} px-2 py-1 rounded-full text-xs`}>
                                 </span>
                             </div>
                         </div>

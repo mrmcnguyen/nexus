@@ -39,7 +39,24 @@ body {
   0% {
     background-position: 100% 0;
   }
+
   100% {
     background-position: 0 0;
   }
+}
+
+@keyframes epicDropdownFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scaleY(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+.animate-epic-dropdown {
+  animation: epicDropdownFadeIn 0.18s cubic-bezier(0.4, 0, 0.2, 1);
 }

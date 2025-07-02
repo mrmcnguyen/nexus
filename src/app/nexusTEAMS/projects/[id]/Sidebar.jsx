@@ -19,22 +19,22 @@ import Link from "next/link";
 import { getUserFullName } from "../../../../lib/db/userQueries";
 import { usePathname } from 'next/navigation';
 
-export const Sidebar = ({width}) => {
+export const Sidebar = ({ width }) => {
   const id = useParams();
   const pathname = usePathname();
   console.log("ID SIDEBAR IS ", id);
   const [open, setOpen] = useState(true);
   const supabase = createClient();
   const [userName, setUserName] = useState('');
-  
+
   // Get the current page from the pathname
   const getCurrentPage = (pathname) => {
     const path = pathname.split('/');
     const lastSegment = path[path.length - 1];
-    
+
     // If we're at the root project page, return "Dashboard"
     if (lastSegment === id.id) return "Dashboard";
-    
+
     // Convert URL segment to title case for matching
     const pageTitle = {
       'sectors': 'Sectors',
@@ -49,18 +49,18 @@ export const Sidebar = ({width}) => {
   };
 
   useEffect(() => {
-          const fetchUser = async () => {
-              const { data, error } = await supabase.auth.getUser();
-              if (data?.user) {
-                  const res = await getUserFullName(data.user.id);
-                  if (res) setUserName(res[0].first_name);
-              } else {
-                  console.error("User not found:", error);
-              }
-          };
-  
-          fetchUser();
-      }, []);
+    const fetchUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (data?.user) {
+        const res = await getUserFullName(data.user.id);
+        if (res) setUserName(res[0].first_name);
+      } else {
+        console.error("User not found:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   const [selected, setSelected] = useState(getCurrentPage(pathname));
 
@@ -81,104 +81,104 @@ export const Sidebar = ({width}) => {
 
       <div className="space-y-1">
 
-          
-  {/* Horizontal line */}
-  <div>
-    <hr className="border-[#2E2E2E] my-2" />
-  </div>
-  {/* Dashboard */}
-  <Option
-    Icon={FiHome}
-    title="Dashboard"
-    selected={selected}
-    setSelected={setSelected}
-    open={open}
-    id={id}
-    page=""
-  />
-  
-  {/* Horizontal line */}
-  <div>
-    <hr className="border-[#2E2E2E] my-2" />
-  </div>
 
-  {/* Members */}
-  <Option
-    Icon={FiUsers}
-    title="Members"
-    selected={selected}
-    setSelected={setSelected}
-    open={open}
-    id={id}
-    page="members"
-  />
-  
-  {/* Meetings */}
-  <Option
-    Icon={FiCalendar}
-    title="Meetings"
-    selected={selected}
-    setSelected={setSelected}
-    open={open}
-    id={id}
-    page="meetings"
-  />
-  
-  {/* Sectors */}
-  <Option
-    Icon={FiBarChart}
-    title="Sectors"
-    selected={selected}
-    setSelected={setSelected}
-    open={open}
-    id={id}
-    page="sectors"
-  />
-  
-  {/* Horizontal line */}
-  <div>
-    <hr className="border-[#2E2E2E] my-2" />
-  </div>
+        {/* Horizontal line */}
+        <div>
+          <hr className="border-[#2E2E2E] my-2" />
+        </div>
+        {/* Dashboard */}
+        <Option
+          Icon={FiHome}
+          title="Dashboard"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+          id={id}
+          page=""
+        />
 
-  {/* Eisenhower Matrix */}
-  <Option
-    Icon={FiGrid}
-    title="Eisenhower Matrix"
-    selected={selected}
-    setSelected={setSelected}
-    open={open}
-    id={id}
-    page="eMatrix"
-  />
-  
-  {/* Kanban Board */}
-  <Option
-    Icon={FiMap}
-    title="Kanban Board"
-    selected={selected}
-    setSelected={setSelected}
-    open={open}
-    id={id}
-    page="kanban"
-  />
-  
-  {/* Horizontal line */}
-  <div>
-    <hr className="border-[#2E2E2E] my-2" />
-  </div>
+        {/* Horizontal line */}
+        <div>
+          <hr className="border-[#2E2E2E] my-2" />
+        </div>
 
-  {/* Settings */}
-  <Option
-    Icon={FiSettings}
-    title="Settings"
-    selected={selected}
-    setSelected={setSelected}
-    open={open}
-    id={id}
-    page="settings"
-  />
-</div>
-      <ToggleClose open={open} setOpen={setOpen}/>
+        {/* Members */}
+        <Option
+          Icon={FiUsers}
+          title="Members"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+          id={id}
+          page="members"
+        />
+
+        {/* Meetings */}
+        <Option
+          Icon={FiCalendar}
+          title="Meetings"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+          id={id}
+          page="meetings"
+        />
+
+        {/* Sectors */}
+        <Option
+          Icon={FiBarChart}
+          title="Sectors"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+          id={id}
+          page="sectors"
+        />
+
+        {/* Horizontal line */}
+        <div>
+          <hr className="border-[#2E2E2E] my-2" />
+        </div>
+
+        {/* Eisenhower Matrix */}
+        <Option
+          Icon={FiGrid}
+          title="Eisenhower Matrix"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+          id={id}
+          page="eMatrix"
+        />
+
+        {/* Kanban Board */}
+        <Option
+          Icon={FiMap}
+          title="Kanban Board"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+          id={id}
+          page="kanban"
+        />
+
+        {/* Horizontal line */}
+        <div>
+          <hr className="border-[#2E2E2E] my-2" />
+        </div>
+
+        {/* Settings */}
+        <Option
+          Icon={FiSettings}
+          title="Settings"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+          id={id}
+          page="settings"
+        />
+      </div>
+      <ToggleClose open={open} setOpen={setOpen} />
     </motion.nav>
   );
 };
@@ -187,7 +187,7 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs, id, page }) 
 
   let fullPath = page === "" ? `../${id.id}` : `../projects/${id.id}/${page}`;
 
-  if (selected !== "Dashboard"){
+  if (selected !== "Dashboard") {
     fullPath = `../${id.id}/${page}`;
   }
 
@@ -196,9 +196,8 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs, id, page }) 
       <motion.button
         layout
         onClick={() => setSelected(title)}
-        className={`relative flex h-10 xl:h-12 w-full items-center rounded-md transition-colors ${
-          selected === title ? "bg-gray-800 text-[#91C8FF]" : "text-gray-400 hover:bg-[#454545]"
-        }`}
+        className={`relative flex h-10 xl:h-12 w-full items-center rounded-md transition-colors ${selected === title ? "bg-gray-800 text-[#91C8FF]" : "text-gray-400 hover:bg-[#454545]"
+          }`}
       >
         <motion.div
           layout
@@ -233,7 +232,7 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs, id, page }) 
           </motion.span>
         )}
       </motion.button>
-      </Link>
+    </Link>
   );
 };
 
@@ -268,10 +267,10 @@ const Logo = () => {
       className="grid size-10 shrink-0 place-content-center rounded-md"
     >
       <Image
-      src={'/nexusN.png'}
-      alt={'Nexus Logo'}
-      width={30}
-      height={30}
+        src={'/nexusN.png'}
+        alt={'Nexus Logo'}
+        width={30}
+        height={30}
       >
 
       </Image>

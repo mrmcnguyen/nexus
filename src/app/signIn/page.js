@@ -22,6 +22,8 @@ const SignIn = () => {
   const handleSignIn = async () => {
     try {
       setLoading(true); // Start loading
+      console.log('🔍 Attempting sign in with email:', email);
+
       let { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -29,13 +31,16 @@ const SignIn = () => {
 
       if (error) throw error;
 
-      console.log('Signed in:', data);
+      console.log('✅ Signed in successfully:', data);
       sessionStorage.setItem('user', true);
       setEmail('');
       setPassword('');
+      setLoading(false);
+
+      console.log('🔍 Redirecting to dashboard...');
       router.push('/dashboard'); // Redirect to dashboard
     } catch (e) {
-      console.error(e);
+      console.error('❌ Sign in error:', e);
       setErrorMessage(e.message || 'An error occurred while signing in.');
       setLoading(false); // Stop loading if error occurs
     }
@@ -45,7 +50,12 @@ const SignIn = () => {
     try {
       console.log(provider);
       setLoading(true); // Start loading
-      const { error } = await supabase.auth.signInWithOAuth({ provider });
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      });
 
       if (error) throw error;
     } catch (e) {
@@ -56,9 +66,9 @@ const SignIn = () => {
   };
 
   return (
-      <div className="min-h-screen flex flex-col items-center justify-center">
-        <Image alt="logo" src="/nexusLogo.png" width={400} height={24} priority/>
-        <div>
+    <div className="min-h-screen flex flex-col items-center justify-center">
+      <Image alt="logo" src="/nexusLogo.png" width={400} height={24} priority />
+      <div>
         <div className="p-10 pb-5 pt-0 rounded-lg">
           <h1 className="text-[#7098DA] font-normal text-2xl mb-5 text-center">
             Welcome back
@@ -138,9 +148,9 @@ const SignIn = () => {
             </Link>
           </div>
         )}
-        </div>
-        <footer className="text-gray-500">Nexus 2024 © </footer>
       </div>
+      <footer className="text-gray-500">Nexus 2024 © </footer>
+    </div>
   );
 };
 

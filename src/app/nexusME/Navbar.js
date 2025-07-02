@@ -21,11 +21,6 @@ const frameworks = [
     link: '/nexusME/pomodoro',
   },
   {
-    name: '1-3-5 Method',
-    description: 'Focus on 1 big task, 3 medium tasks, and 5 small tasks each day.',
-    link: '/nexusME/1-3-5',
-  },
-  {
     name: 'Kanban',
     description: 'Visualize tasks using a board and limit work in progress.',
     link: '/nexusME/kanban',
@@ -53,18 +48,17 @@ export default function Navbar({ page }) {
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
-        console.error("Logout error:", error);
+      console.error("Logout error:", error);
     } else {
-        setUser(null);
-        router.push('/signIn'); // Redirect to the sign-in page
+      setUser(null);
+      router.push('/signIn'); // Redirect to the sign-in page
     }
   };
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-40 flex flex-row items-center border-b border-[#2e2e2e] bg-white ${dmSans.className} ${
-        page === '/nexusME/pomodoro' ? 'bg-red-100' : ''
-      }`}
+      className={`fixed top-0 left-0 right-0 z-40 flex flex-row items-center border-b border-[#2e2e2e] bg-white ${dmSans.className} ${page === '/nexusME/pomodoro' ? 'bg-red-100' : ''
+        }`}
       style={{ height: '50px', backgroundColor: '#171717' }} // Set height for the navbar
     >
       {/* Logo */}
@@ -84,11 +78,10 @@ export default function Navbar({ page }) {
           <Link
             key={framework.name}
             href={framework.link}
-            className={`text-sm font-medium relative h-full flex items-center hover:text-[#91C8FF] ${
-              pathname === framework.link 
-                ? 'text-[#91C8FF] border-b-2 border-[#91C8FF]' 
+            className={`text-sm font-medium relative h-full flex items-center hover:text-[#91C8FF] ${pathname === framework.link
+                ? 'text-[#91C8FF] border-b-2 border-[#91C8FF]'
                 : 'text-gray-400'
-            }`}
+              }`}
           >
             {framework.name}
           </Link>
@@ -133,7 +126,7 @@ export default function Navbar({ page }) {
             className="flex items-center justify-center w-7 h-7 rounded-full bg-gray-300 hover:bg-gray-400 focus:outline-none"
           >
             <Image
-              src="/account.svg" 
+              src="/account.svg"
               alt="Account"
               width={100}
               height={100}

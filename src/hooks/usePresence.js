@@ -5,7 +5,7 @@ import { createClient } from '../../supabase/client';
 export const usePresence = () => {
   const [onlineUsers, setOnlineUsers] = useState(new Set());
   const supabase = createClient();
-  
+
   useEffect(() => {
     // Create a presence channel
     const channel = supabase.channel('online_users', {

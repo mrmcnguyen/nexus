@@ -4,7 +4,7 @@ import { createClient } from "../../../../supabase/client";
 import { getAllProjects } from "../../../lib/db/projectQueries";
 import { FiFolder, FiPlus, FiSearch, FiFilter } from "react-icons/fi";
 import Link from "next/link";
-import Loading from "./Loading"; 
+import Loading from "./Loading";
 import { useRouter } from "next/navigation";
 
 export default function ProjectsDashboard() {
@@ -65,7 +65,7 @@ export default function ProjectsDashboard() {
   const handleProjectClick = (id) => {
     router.push(`/nexusTEAMS/projects/${id}`);
   };
-  
+
   return (
     isLoading ? (
       <Loading />

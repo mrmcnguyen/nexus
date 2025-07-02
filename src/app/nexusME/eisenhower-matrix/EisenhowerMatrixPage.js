@@ -106,7 +106,7 @@ export default function EisenhowerMatrixPage() {
     }));
   };
 
-  const handleDrop = async(quadrant, e) => {
+  const handleDrop = async (quadrant, e) => {
     e.preventDefault();
     const task = JSON.parse(e.dataTransfer.getData('task'));
 
@@ -119,7 +119,7 @@ export default function EisenhowerMatrixPage() {
 
     // Add task to quadrant and remove from unallocated tasks
     addTask(quadrant, newTask);
-        
+
     setUnallocatedTasks((prevTasks) =>
       prevTasks.filter((t) => {
         const taskId = t.task_id || t.tasks?.task_id;
@@ -132,14 +132,14 @@ export default function EisenhowerMatrixPage() {
   const handleFinishTask = async (task) => {
     console.log(task);
     finishEisenhowerTask(task.task_id || task.tasks?.task_id);
-  
+
     const finishedTask = await getEisenhowerTaskByID(task.task_id || task.tasks?.task_id, userID);
-  
+
     // Determine the current quadrant of the task
-    const currentQuadrant = Object.keys(tasks).find(quadrant => 
+    const currentQuadrant = Object.keys(tasks).find(quadrant =>
       tasks[quadrant].some(t => (t.task_id || t.tasks?.task_id) === (task.task_id || task.tasks?.task_id))
     );
-  
+
     if (currentQuadrant) {
       // Remove the task from its current quadrant
       setTasks(prevTasks => ({
@@ -149,12 +149,12 @@ export default function EisenhowerMatrixPage() {
         )
       }));
     }
-  
+
     // Update the overall allTasks state
-    setAllTasks(prevAllTasks => 
-      prevAllTasks.map(t => 
-        (t.task_id || t.tasks?.task_id) === (finishedTask.task_id || finishedTask.tasks?.task_id) 
-          ? finishedTask 
+    setAllTasks(prevAllTasks =>
+      prevAllTasks.map(t =>
+        (t.task_id || t.tasks?.task_id) === (finishedTask.task_id || finishedTask.tasks?.task_id)
+          ? finishedTask
           : t
       )
     );
@@ -165,12 +165,12 @@ export default function EisenhowerMatrixPage() {
     if (newTask.trim()) {
       try {
         const res = await addUnallocatedEisenhowerTask(userID, 'eisenhower', newTask);
-  
+
         if (res.success) {
           // Fetch the newly added task
           const taskID = res.data.task_id;
           const updatedTask = await getEisenhowerTaskByID(taskID, userID);
-          
+
           setUnallocatedTasks((prevTasks) => [...prevTasks, updatedTask]);
           // Clear the input
           setNewTask('');
@@ -195,7 +195,7 @@ export default function EisenhowerMatrixPage() {
   // Function to show deletion notification
   const showDeletionNotification = (task) => {
     setDeletionNotification(task);
-    
+
     // Clear notification after 3 seconds
     const timer = setTimeout(() => {
       setDeletionNotification(null);
@@ -221,66 +221,67 @@ export default function EisenhowerMatrixPage() {
         }
       `}</style>
 
-      <div className="w-1/4 bg-[#1f1f1f] border border-[#2F2F2F] shadow-lg rounded-lg p-4 h-full">
-        <div className='flex flex-row justify-between align-center'>
-        <h2 className="lg:text-lg 2xl:text-2xl text-gray-300 font-light">Backlog</h2>
-        <button className='flex flex-row items-center text-[#505050] lg:text-xs 2xl:text-sm user-select: none;' onClick={() => setHelpClick(true)}>
-          Help
-        <Image
-          src="/help.svg"
-          className="mx-2"  
-          width={14}
-          alt="Help"
-          height={14}
-          priority
-      />
-        </button>
-      <HelpModal isVisible={helpClick} closeModal={() => setHelpClick(false)} />
+      <div className="w-1/4 bg-[#1a1a1a] border border-[#333] shadow-2xl rounded-xl p-6 h-full flex flex-col">
+        <div className='flex flex-row justify-between items-center mb-4'>
+          <h2 className="text-lg font-medium text-gray-100">Backlog</h2>
+          <button className='flex flex-row items-center text-gray-400 hover:text-gray-200 transition-colors px-3 py-1 rounded-lg hover:bg-[#333]' onClick={() => setHelpClick(true)}>
+            Help
+            <Image
+              src="/help.svg"
+              className="mx-2"
+              width={16}
+              alt="Help"
+              height={16}
+              priority
+            />
+          </button>
+          <HelpModal isVisible={helpClick} closeModal={() => setHelpClick(false)} />
         </div>
-        <input 
-          className='bg-[#292929] w-full lg:text-sm 2xl:text-base text-gray-400 p-2 my-2 rounded-lg px-4 focus-visible:outline-none placeholder:text-gray-500'
+        <input
+          className='bg-[#2a2a2a] border border-[#444] w-full text-sm text-gray-300 p-3 mb-4 rounded-lg focus:outline-none focus:border-blue-500 placeholder:text-gray-500 transition-colors'
           placeholder='Enter everything you need done...'
-          onKeyDown={handleKeyPress} // Handle Enter key press
+          onKeyDown={handleKeyPress}
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
         />
-
-        {unallocatedTasks.map((task, index) => (
-          <div
-            key={index}
-            className="bg-[#292929] lg:text-sm 2xl:text-base text-gray-400 p-2 my-2 rounded-lg px-4 border border-[#454545] hover:bg-[#414141] transition duration-200 ease-in-out"
-            draggable
-            onDragStart={(e) => e.dataTransfer.setData('task', JSON.stringify(task))}
-          >
-            {task.tasks?.title || task.title || 'Untitled Task'}
-          </div>
-        ))}
-
+        <div className="flex-1 overflow-y-auto space-y-2">
+          {unallocatedTasks.map((task, index) => (
+            <div
+              key={index}
+              className="bg-[#232323] border border-[#444] text-gray-300 p-3 rounded-lg shadow hover:bg-[#292929] transition-colors cursor-grab"
+              draggable
+              onDragStart={(e) => e.dataTransfer.setData('task', JSON.stringify(task))}
+              onClick={() => handleTaskClick(task)}
+            >
+              {task.tasks?.title || task.title || 'Untitled Task'}
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 w-3/4 h-full">
-      <TaskModal
-        isVisible={isModalVisible}
-        closeModal={() => setModalVisible(false)}
-        task={selectedTask}
-        onDeleteTask={(quadrant, task) => {
-          removeTask(quadrant, task);
-          showDeletionNotification(task);
-          setModalVisible(false);
-        }}
-        onFinishTask={(task) => handleFinishTask(task)}
-      />
-
-      {deletionNotification && (
-        <div 
-          className="fixed bottom-4 right-4 bg-[#541c15] border border-[#7f2315] text-white p-4 rounded-lg shadow-lg z-50 transition-all duration-300 ease-in-out"
-          style={{
-            animation: 'fadeInOut 3s ease-in-out'
+        <TaskModal
+          isVisible={isModalVisible}
+          closeModal={() => setModalVisible(false)}
+          task={selectedTask}
+          onDeleteTask={(quadrant, task) => {
+            removeTask(quadrant, task);
+            showDeletionNotification(task);
+            setModalVisible(false);
           }}
-        >
-          Task deleted
-        </div>
-      )}
+          onFinishTask={(task) => handleFinishTask(task)}
+        />
+
+        {deletionNotification && (
+          <div
+            className="fixed bottom-4 right-4 bg-[#541c15] border border-[#7f2315] text-white p-4 rounded-lg shadow-lg z-50 transition-all duration-300 ease-in-out"
+            style={{
+              animation: 'fadeInOut 3s ease-in-out'
+            }}
+          >
+            Task deleted
+          </div>
+        )}
         <Quadrant
           title="Urgent and Important"
           tasks={tasks.do}

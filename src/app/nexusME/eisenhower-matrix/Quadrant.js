@@ -50,7 +50,7 @@ export default function Quadrant({
     e.preventDefault();
     if (newTask.trim()) {
       const result = await addEisenhowerTask(userID, newTask, "eisenhower", quadrant);
-  
+
       if (result.success) {
         const taskID = result.data.task_id;
         const updatedTask = await getEisenhowerTaskByID(taskID, userID); // Query the database for updated tasks
@@ -70,14 +70,12 @@ export default function Quadrant({
 
   return (
     <div
-      className={`p-4 bg-[#1f1f1f] text-white ${borderRoundness} shadow-lg flex flex-col h-full ${border}`}
-      onDragOver={onDragOver}    
+      className={`p-6 bg-[#1a1a1a] text-white ${borderRoundness} shadow-2xl flex flex-col h-full border border-[#333] transition-colors`}
+      onDragOver={onDragOver}
       onDrop={onDrop}
     >
-      <h2 className="text-left lg:text-base 2xl:text-2xl text-gray-300">{title}</h2>
-      <p className="text-left lg:text-sm 2xl:text-lg font-extralight text-gray-400 mb-4">
-        {description}
-      </p>
+      <h2 className="text-lg font-medium text-gray-100 mb-1">{title}</h2>
+      <p className="text-sm font-light text-gray-400 mb-4">{description}</p>
       {/* Task List */}
       <ul
         ref={ulRef}
@@ -86,59 +84,53 @@ export default function Quadrant({
             ? { height: `${ulHeight}px`, overflowY: 'auto' }
             : { display: 'flex', flexGrow: 1 }
         }
-        className={`p-2 rounded-lg ${dragOverColumn === quadrant ? 'bg-[#393939] transition duration-200 ease-in-out' : ''}`}
-        onMouseEnter={() => setIsHovered(true)} // Show "Add Task" when hovered
-        onMouseLeave={() => setIsHovered(false)} // Hide "Add Task" when not hovered
+        className={`space-y-2 p-0 ${dragOverColumn === quadrant ? 'bg-[#232323] transition-colors' : ''}`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         onDragEnter={onDragEnter}
         onDragLeave={onDragLeave}
       >
-        {tasks.map((task, index) => {
-          return (
-            <li
-              key={index}
-              className={`lg:p-2 2xl:p-4 my-2 rounded-lg border lg:text-sm 2xl:text-base ${
-                task.status || task.tasks?.status
-                  ? 'bg-green-700 text-white border-green-500'
-                  : 'bg-[#292929] text-gray-400 border-[#454545] hover:bg-[#414141]'
-              } transition duration-200 ease-in-out`}
-              onClick={() => onTaskClick(task)}
-            >
-              {/* Check if task.tasks.title exists, otherwise fallback to task.title or the whole task object */}
-              {task?.tasks?.title ? (
-                task.tasks.title
-              ) : task?.title ? (
-                task.title
-              ) : (
-                JSON.stringify(task) // Display the entire task object if no title is available
-              )}
-            </li>
-          );
-        })}
-
+        {tasks.map((task, index) => (
+          <li
+            key={index}
+            className={`p-3 rounded-lg border text-sm font-normal shadow transition-colors cursor-pointer ${task.status || task.tasks?.status
+              ? 'bg-green-700 text-white border-green-500'
+              : 'bg-[#232323] text-gray-300 border-[#444] hover:bg-[#292929]'
+              }`}
+            onClick={() => onTaskClick(task)}
+          >
+            {task?.tasks?.title ? (
+              task.tasks.title
+            ) : task?.title ? (
+              task.title
+            ) : (
+              JSON.stringify(task)
+            )}
+          </li>
+        ))}
         {/* Conditionally render input box or button */}
         {isEditing ? (
           <input
             type="text"
             value={newTask}
             onChange={(e) => setNewTask(e.target.value)}
-            onKeyDown={handleKeyPress} // Handle Enter key press
-            onBlur={() => setIsEditing(false)} // Exit editing when the input loses focus
-            className="p-2 mt-2 lg:text-sm 2xl:text-base rounded-md bg-[#292929] text-gray-400 w-full focus-visible:outline-none"
+            onKeyDown={handleKeyPress}
+            onBlur={() => setIsEditing(false)}
+            className="p-3 mt-2 text-sm rounded-lg bg-[#2a2a2a] border border-[#444] text-gray-300 w-full focus:outline-none focus:border-blue-500 placeholder:text-gray-500 transition-colors"
             placeholder="Add new task..."
+            autoFocus
           />
         ) : (
           <button
-            className={`flex flex-row items-center lg:text-sm 2xl:text-base w-full text-gray-400 p-2 mt-2 transition-opacity duration-300 ease-in-out ${
-              isHovered ? 'opacity-100' : 'opacity-0'
-            }`}
-            onClick={() => setIsEditing(true)} // Switch to input box on click
+            className={`flex flex-row items-center text-sm w-full text-blue-400 p-3 mt-2 rounded-lg hover:bg-[#232323] transition-colors opacity-90 hover:opacity-100`}
+            onClick={() => setIsEditing(true)}
           >
             <Image
               src="/plus.svg"
               className="mr-2"
-              width={14}
-              alt="t"
-              height={14}
+              width={16}
+              alt="Add"
+              height={16}
               priority
             />
             Add Task

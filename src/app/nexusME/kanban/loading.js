@@ -55,7 +55,7 @@ export default function Loading() {
             </button>
             <button className="flex flex-row border border-[#2F2F2F] lg:text-sm 2xl:text-base bg-[#1f1f1f] items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-lg hover:bg-[#707070]">
               <Image
-                src="/team.svg"
+                src="/epic.svg"
                 style={{ filter: 'invert(1)' }}
                 className="mr-2"
                 width={14}
@@ -63,7 +63,7 @@ export default function Loading() {
                 height={14}
                 priority
               />
-              View Team Kanban Board
+              Manage Epics
             </button>
           </div>
         </div>
@@ -72,11 +72,10 @@ export default function Loading() {
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 rounded-lg border border-[#2e2e2e] h-[calc(100vh-140px)]">
           {Object.entries(loadingTaskCounts).map(([status, count]) => (
             <div
-            key={status}
-            className={`p-4 flex flex-col overflow-y-auto ${
-              count !== 0 ? 'border-l border-[#2E2E2E]' : '' // Add left border for all but the first column
-            }`}
-          >
+              key={status}
+              className={`p-4 flex flex-col overflow-y-auto ${count !== 0 ? 'border-l border-[#2E2E2E]' : '' // Add left border for all but the first column
+                }`}
+            >
               {/* Column Header */}
               <div className="flex flex-row items-center mb-4">
                 <Image

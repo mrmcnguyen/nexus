@@ -12,13 +12,13 @@ export function NotificationHandler() {
     // Fetch user ID
     useEffect(() => {
         const fetchUser = async () => {
-        const { data: user, error } = await supabase.auth.getUser();
-        console.log('!!!!!!!!!!!!! user', user);
-        if (user) {
-            setUser(user.user);
-        } else {
-            console.error("Error while fetching user ID: ", error);
-        }
+            const { data: user, error } = await supabase.auth.getUser();
+            console.log('!!!!!!!!!!!!! user', user);
+            if (user) {
+                setUser(user.user);
+            } else {
+                console.error("Error while fetching user ID: ", error);
+            }
         };
 
         fetchUser();
@@ -102,7 +102,7 @@ export function NotificationHandler() {
 
     const handleTeamNotification = (payload) => {
         const { eventType, new: newData, old: oldData } = payload;
-        
+
         switch (eventType) {
             case 'INSERT':
                 addNotification({

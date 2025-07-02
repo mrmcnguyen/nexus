@@ -6,13 +6,13 @@ export async function getUserFullName(a_user_id) {
     const supabase = createClient();
 
     const { data, error } = await supabase
-    .from('profiles')
-    .select('first_name, last_name')
-    .eq('user_id', a_user_id)
+        .from('profiles')
+        .select('first_name, last_name')
+        .eq('user_id', a_user_id)
 
-    if (error){
+    if (error) {
         console.error(error)
-    } else{
+    } else {
         console.log(data);
         return data;
     }

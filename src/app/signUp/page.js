@@ -25,12 +25,12 @@ const SignUp = () => {
         email,
         password,
         options: {
-        data: {
-          first_name: firstName,
-          last_name: lastName,
-          email: email
+          data: {
+            first_name: firstName,
+            last_name: lastName,
+            email: email
+          },
         },
-      },
       });
 
       if (error) {

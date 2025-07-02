@@ -23,14 +23,14 @@ export async function createProject(a_project_name, a_organisation_name, a_proje
     // Step 1: Insert the project into the projects table
 
     console.log(a_project_name, a_organisation_name, a_project_description, a_project_manager);
-    
-    const { data:projectData, error: projectError } = await supabase
-    .rpc('insert_project', {
-    a_organisation_name: a_organisation_name, 
-    a_project_description: a_project_description, 
-    a_project_manager: a_project_manager, 
-    a_project_name: a_project_name
-    })
+
+    const { data: projectData, error: projectError } = await supabase
+        .rpc('insert_project', {
+            a_organisation_name: a_organisation_name,
+            a_project_description: a_project_description,
+            a_project_manager: a_project_manager,
+            a_project_name: a_project_name
+        })
 
     // Check for errors in project insertion
     if (projectError) {
@@ -116,41 +116,41 @@ export async function getAllProjects(a_user_id) {
     return additionalProjects; // Return the combined list of projects
 }
 
-export async function getProjectByID(a_project_id){ 
-
-    const {data, error} = await supabase
-    .from('projects')
-    .select('*')
-    .eq('project_id', a_project_id)
-
-    if (error){
-        console.error(error); 
-    } 
-    console.log(data);
-    return data;
-}
-
-export async function getSectors(a_project_id){
+export async function getProjectByID(a_project_id) {
 
     const { data, error } = await supabase
-    .from('sectors')
-    .select('*')
-    .eq('project_id', a_project_id)
+        .from('projects')
+        .select('*')
+        .eq('project_id', a_project_id)
 
-    if (error){
+    if (error) {
         console.error(error);
-    } 
+    }
     console.log(data);
     return data;
 }
 
-export async function getMembers(a_project_id){
+export async function getSectors(a_project_id) {
 
     const { data, error } = await supabase
-    .rpc('getmembers', {
-    a_project_id: a_project_id
-    })
-    if (error){
+        .from('sectors')
+        .select('*')
+        .eq('project_id', a_project_id)
+
+    if (error) {
+        console.error(error);
+    }
+    console.log(data);
+    return data;
+}
+
+export async function getMembers(a_project_id) {
+
+    const { data, error } = await supabase
+        .rpc('getmembers', {
+            a_project_id: a_project_id
+        })
+    if (error) {
         console.error(error);
     } else {
         console.log(data);
@@ -158,30 +158,30 @@ export async function getMembers(a_project_id){
     }
 }
 
-export async function getProjectManager(a_user_id){
+export async function getProjectManager(a_user_id) {
 
     console.log("Manager", a_user_id);
 
     const { data, error } = await supabase
-    .rpc('getProjectManager', {
-      a_user_id
-    })
+        .rpc('getProjectManager', {
+            a_user_id
+        })
 
-    if (error){
+    if (error) {
         console.error(error);
     }
     console.log(data);
     return data;
 }
 
-export async function getNameFromEmail(a_email){
+export async function getNameFromEmail(a_email) {
 
     console.log(a_email);
 
     let { data, error } = await supabase
-    .rpc('search_profiles', {
-    email_input: a_email
-    })
+        .rpc('search_profiles', {
+            email_input: a_email
+        })
 
     if (error) console.error(error)
 
@@ -189,15 +189,15 @@ export async function getNameFromEmail(a_email){
     return data;
 }
 
-export async function getNameFromID(a_user_id){
+export async function getNameFromID(a_user_id) {
 
     console.log(a_user_id);
 
     let { data, error } = await supabase
-    .rpc('getNameFromID', {
-    a_user_id
-    })
-    
+        .rpc('getNameFromID', {
+            a_user_id
+        })
+
     if (error) console.error(error)
 
     console.log(data);

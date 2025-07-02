@@ -17,16 +17,16 @@ export default function DashboardHeader({ id }) {
     // Fetch user ID
     useEffect(() => {
         const fetchUser = async () => {
-          const { data: user, error } = await supabase.auth.getUser();
-          if (user) {
-            setUserID(user.user.id);
-          } else {
-            console.error("Error while fetching user ID: ", error);
-          }
+            const { data: user, error } = await supabase.auth.getUser();
+            if (user) {
+                setUserID(user.user.id);
+            } else {
+                console.error("Error while fetching user ID: ", error);
+            }
         };
-  
+
         fetchUser();
-      }, []);
+    }, []);
 
     useEffect(() => {
         const fetchProjectData = async () => {
@@ -93,7 +93,7 @@ export default function DashboardHeader({ id }) {
                     {/* Project Manager */}
                     <div>
                         <div className="text-xs text-gray-500">Project Manager</div>
-                        <h1 className="text-lg">{manager.first_name || manager[0].first_name|| "N/A"} {manager.last_name || manager[0].last_name || "N/A"}</h1>
+                        <h1 className="text-lg">{manager.first_name || manager[0].first_name || "N/A"} {manager.last_name || manager[0].last_name || "N/A"}</h1>
                         {/* <h1 className="text-lg">{manager}</h1> */}
                     </div>
 
@@ -101,15 +101,14 @@ export default function DashboardHeader({ id }) {
                     <div>
                         <div className="text-xs text-gray-500">Status</div>
                         <h1
-                            className={`text-lg ${
-                                project[0].status === "ACTIVE"
-                                    ? "text-emerald-300"
-                                    : project?.status === "INACTIVE"
+                            className={`text-lg ${project[0].status === "ACTIVE"
+                                ? "text-emerald-300"
+                                : project?.status === "INACTIVE"
                                     ? "text-red-500"
                                     : project?.status === "PAUSED"
-                                    ? "text-yellow-500" // Add color for PAUSED status
-                                    : "text-gray-800"
-                            }`} 
+                                        ? "text-yellow-500" // Add color for PAUSED status
+                                        : "text-gray-800"
+                                }`}
                         >
                             {project[0].status || "N/A"}
                         </h1>

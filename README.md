@@ -1,40 +1,108 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Nexus Productivity Suite
 
-## Getting Started
+A modern productivity and project management platform built with Next.js, Supabase, and Tailwind CSS. Nexus combines personal productivity tools (Eisenhower Matrix, Kanban, To-Do, Pomodoro, 1-3-5) with collaborative team/project management features.
 
-First, run the development server:
+---
 
-```bash
+## ✨ Features
+
+- **Supabase Authentication** (Email/Password, Google, Microsoft OAuth)
+- **Personal Productivity Tools:**
+  - Eisenhower Matrix (prioritize tasks by urgency/importance)
+  - Kanban Board (drag-and-drop, epics, priorities, filters)
+  - To-Do List (with timers and minimal focus mode)
+  - Pomodoro Timer (focus sessions)
+  - 1-3-5 Method (daily task planning)
+- **Team & Project Management:**
+  - Create/join teams
+  - Manage projects, members, and sectors
+  - Dashboard with personal and team tasks
+- **Modern UI:**
+  - Dark, glassy design
+  - Animated transitions
+  - Responsive and accessible
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+bash
+git clone https://github.com/yourusername/nexus.git
+cd nexus
+
+
+### 2. Install dependencies
+bash
+npm install
+# or
+yarn install
+
+
+### 3. Configure environment variables
+Create a .env.local file in the root directory with the following:
+
+env
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+
+
+You can find these in your [Supabase project settings](https://app.supabase.com/).
+
+### 4. Run the development server
+bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## 🔑 Authentication
+- Email/password sign-in and sign-up
+- Google and Microsoft OAuth (with proper redirect handling)
+- Middleware-protected routes for authenticated access
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🗂️ Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- src/app/nexusME/ — Personal productivity tools
+  - kanban/ — Kanban board, epics, tasks
+  - eisenhower-matrix/ — Eisenhower Matrix
+  - to-do-list/ — To-Do List
+  - pomodoro/ — Pomodoro Timer
+  - 1-3-5/ — 1-3-5 daily planner
+- src/app/nexusTEAMS/ — Team and project management
+  - allTeams/ — Team dashboards
+  - projects/ — Project dashboards, members, sectors
+  - createTeam/ — Multi-stage team creation
+- src/app/dashboard/ — Unified dashboard for personal and team tasks
+- src/app/signIn/ & src/app/signUp/ — Authentication pages
+- src/app/auth/callback/ — OAuth redirect handler
+- supabase/ — Supabase client and middleware
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🛠️ Tech Stack
+- [Next.js](https://nextjs.org/)
+- [Supabase](https://supabase.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Framer Motion](https://www.framer.com/motion/)
+- [React Icons](https://react-icons.github.io/react-icons/)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## 🤝 Contributing
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
-Additional Features (notes for myself):
+---
 
-- Can organise CATEGORIES of tasks (e.g School/Academic/Side Projects)
+## 📄 License
+[MIT](LICENSE)
+
+---
+
+## 📝 Notes
+- Make sure your Supabase project has authentication enabled and the correct redirect URLs set for OAuth.
+- For local development, use .env.local for your secrets.
+- For deployment, set the same environment variables in your hosting provider (e.g., Vercel).

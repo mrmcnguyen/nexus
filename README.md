@@ -1,6 +1,6 @@
 # Nexus Productivity Suite
 
-A modern productivity and project management platform built with Next.js, Supabase, and Tailwind CSS. Nexus combines personal productivity tools (Eisenhower Matrix, Kanban, To-Do, Pomodoro, 1-3-5) with collaborative team/project management features.
+A modern productivity and project management platform built with Next.js, Supabase, and Tailwind CSS. Nexus combines personal productivity tools (Eisenhower Matrix, Kanban, To-Do, Pomodoro) with collaborative team/project management features.
 
 ---
 
@@ -12,7 +12,6 @@ A modern productivity and project management platform built with Next.js, Supaba
   - Kanban Board (drag-and-drop, epics, priorities, filters)
   - To-Do List (with timers and minimal focus mode)
   - Pomodoro Timer (focus sessions)
-  - 1-3-5 Method (daily task planning)
 - **Team & Project Management:**
   - Create/join teams
   - Manage projects, members, and sectors
@@ -28,7 +27,7 @@ A modern productivity and project management platform built with Next.js, Supaba
 
 ### 1. Clone the repository
 bash
-git clone https://github.com/yourusername/nexus.git
+git clone https://github.com/mrmcnugyen/nexus.git
 cd nexus
 
 
@@ -71,7 +70,6 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
   - eisenhower-matrix/ — Eisenhower Matrix
   - to-do-list/ — To-Do List
   - pomodoro/ — Pomodoro Timer
-  - 1-3-5/ — 1-3-5 daily planner
 - src/app/nexusTEAMS/ — Team and project management
   - allTeams/ — Team dashboards
   - projects/ — Project dashboards, members, sectors

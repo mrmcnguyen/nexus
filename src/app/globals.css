@@ -60,3 +60,14 @@ body {
 .animate-epic-dropdown {
   animation: epicDropdownFadeIn 0.18s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* Custom scrollbar for all Kanban columns */
+.kanban-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+
+.kanban-scrollbar::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}

@@ -3,6 +3,7 @@ import { supabase } from "../../app/supabase/supabaseClient";
 
 export async function getUserFullName(a_user_id) {
 
+    console.log('🔍 getUserFullName: a_user_id:', a_user_id);
     const supabase = createClient();
 
     const { data, error } = await supabase

@@ -539,15 +539,21 @@ export default function KanbanTaskModal({
               </div>
 
               {/* Delete */}
-              <div className="pt-4 border-t border-[#333]">
+              <div className="pt-4 border-t space-y-2 border-[#333]">
                 <button
-                  className="w-full flex items-center justify-center space-x-2 p-3 bg-red-600/20 border border-red-600/30 rounded-lg text-red-400 hover:bg-red-600/30 transition-colors"
+                  className="w-full flex items-center justify-center space-x-1 p-2 bg-red-600/20 border border-red-600/30 rounded-lg text-red-400 hover:bg-red-600/30 transition-colors"
                   onClick={handleDeleteTask}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
                   <span>Delete Task</span>
+                </button>
+                <button
+                  className="w-full flex items-center justify-center space-x-1 p-2 bg-gray-600/20 border border-gray-600/30 rounded-lg text-gray-400 hover:bg-gray-600/30 transition-colors"
+                  onClick={closeModal}
+                >
+                  <span>Close</span>
                 </button>
               </div>
             </div>

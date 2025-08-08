@@ -48,11 +48,11 @@ export default function KanbanComponent() {
 
   // Sleek, professional priority badge styles
   const priorityColors = {
-    Critical: 'bg-red-600/20 border border-red-500/30 text-red-400',
-    High: 'bg-orange-500/20 border border-orange-500/30 text-orange-400',
-    Medium: 'bg-yellow-500/20 border border-yellow-500/30 text-yellow-400',
-    Low: 'bg-blue-500/20 border border-blue-500/30 text-blue-400',
-    'No Priority': 'bg-gray-600/20 border border-gray-500/30 text-gray-400'  // Fallback color
+    Critical: 'bg-red-600/50 border border-red-500/60 text-red-400',
+    High: 'bg-orange-500/50 border border-orange-500/60 text-orange-400',
+    Medium: 'bg-yellow-500/50 border border-yellow-500/60 text-yellow-400',
+    Low: 'bg-blue-500/50 border border-blue-500/60 text-blue-400',
+    'No Priority': 'bg-gray-600/50 border border-gray-500/60 text-gray-400'  // Fallback color
   };
 
   const priorityLabels = {
@@ -65,18 +65,18 @@ export default function KanbanComponent() {
 
   // Epic color generation
   const epicColors = [
-    'bg-purple-600 text-purple-100',
-    'bg-blue-600 text-blue-100',
-    'bg-green-600 text-green-100',
-    'bg-yellow-600 text-yellow-100',
-    'bg-red-600 text-red-100',
-    'bg-indigo-600 text-indigo-100',
-    'bg-pink-600 text-pink-100',
-    'bg-teal-600 text-teal-100',
-    'bg-orange-600 text-orange-100',
-    'bg-cyan-600 text-cyan-100',
-    'bg-emerald-600 text-emerald-100',
-    'bg-violet-600 text-violet-100'
+    'bg-purple-800 text-purple-100',
+    'bg-blue-800 text-blue-100',
+    'bg-green-800 text-green-100',
+    'bg-yellow-800 text-yellow-100',
+    'bg-red-800 text-red-100',
+    'bg-indigo-800 text-indigo-100',
+    'bg-pink-800 text-pink-100',
+    'bg-teal-800 text-teal-100',
+    'bg-orange-800 text-orange-100',
+    'bg-cyan-800 text-cyan-100',
+    'bg-emerald-800 text-emerald-100',
+    'bg-violet-800 text-violet-100'
   ];
 
   const getEpicColor = (epicId) => {
@@ -493,7 +493,7 @@ export default function KanbanComponent() {
     };
 
     return (
-      <div className="bg-[#1f1f1f] border border-[#2E2E2E] rounded-md p-6 h-[calc(100vh-140px)] overflow-y-auto">
+      <div className="bg-[#171717] border border-[#2E2E2E] rounded-md p-6 h-[calc(100vh-140px)] overflow-y-auto">
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-2xl font-bold text-gray-200">All Tasks ({allTasks.length})</h2>
@@ -521,7 +521,7 @@ export default function KanbanComponent() {
                   value={newTaskInput}
                   onChange={(e) => setNewTaskInput(e.target.value)}
                   placeholder="Enter task title..."
-                  className="flex-1 bg-[#1f1f1f] border border-[#454545] rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:border-blue-500"
+                  className="flex-1 bg-[#222222] border border-[#454545] rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:border-blue-500"
                   autoFocus
                 />
                 <button
@@ -545,7 +545,7 @@ export default function KanbanComponent() {
           )}
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-1">
           {allTasks.map((task) => {
             const taskId = task.tasks?.task_id || task.task_id;
             const title = task.tasks?.title || task.title;
@@ -556,33 +556,15 @@ export default function KanbanComponent() {
             return (
               <div
                 key={taskId}
-                className="bg-[#292929] rounded-lg p-4 hover:bg-[#353535] transition duration-200 cursor-pointer"
+                className={`bg-[#292929] rounded px-2 py-2 hover:bg-[#353535] transition duration-200 border-s-4 ${borderColors[task.status]} cursor-pointer`}
                 onClick={() => handleTaskClick(task)}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <div className="flex items-center space-x-3 mb-2">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${task.status === 'Done' ? 'bg-green-600 text-green-100' :
-                        task.status === 'In Progress' ? 'bg-blue-600 text-blue-100' :
-                          task.status === 'To Do' ? 'bg-yellow-600 text-yellow-100' :
-                            'bg-gray-600 text-gray-100'
-                        }`}>
-                        {task.status}
-                      </span>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${priorityColors[priority]}`}>
-                        {priority}
-                      </span>
-                      {task.epic && (
-                        <span className={`${getEpicColor(task.epic.epic_id)} px-2 py-1 rounded-full text-xs`}>
-                          {task.epic.name}
-                        </span>
-                      )}
-                    </div>
-
-                    <h3 className="text-gray-200 font-medium mb-1">{title}</h3>
+                    <h3 className="text-gray-200 font-bold text-sm">{title}</h3>
 
                     {description && (
-                      <p className="text-gray-400 text-sm mb-2 line-clamp-2">
+                      <p className="text-gray-400 text-sm line-clamp-2">
                         {description}
                       </p>
                     )}
@@ -646,7 +628,7 @@ export default function KanbanComponent() {
           {/* Epic Filter Dropdown */}
           <div className="relative">
             <button
-              className={`flex flex-row items-center border border-[#2F2F2F] bg-[#1f1f1f] px-4 py-2 text-gray-300 rounded-lg hover:bg-[#232323] transition duration-200 ${selectedEpicFilter ? 'text-light border-blue-500' : ''}`}
+              className={`flex flex-row items-center border border-[#2F2F2F] bg-[#222222] px-4 py-2 text-gray-300 rounded-lg hover:bg-[#232323] transition duration-200 ${selectedEpicFilter ? 'text-light border-blue-500' : ''}`}
               onClick={() => setShowEpicDropdown((v) => !v)}
               type="button"
             >
@@ -692,7 +674,7 @@ export default function KanbanComponent() {
           {/* End Epic Filter Dropdown */}
           <button
             onClick={toggleViewMode}
-            className="flex flex-row border border-[#2F2F2F] lg:text-sm 2xl:text-base bg-[#1f1f1f] items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-lg hover:bg-[#333]"
+            className="flex flex-row border border-[#2F2F2F] lg:text-sm 2xl:text-base bg-[#222222] items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-lg hover:bg-[#333]"
           >
             <Image
               src={viewMode === 'kanban' ? "/list.svg" : "/todo.svg"}
@@ -707,7 +689,7 @@ export default function KanbanComponent() {
           </button>
           <button
             onClick={navigateToEpics}
-            className="flex flex-row border border-[#2F2F2F] lg:text-sm 2xl:text-base bg-[#1f1f1f] items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-lg hover:bg-[#333]"
+            className="flex flex-row border border-[#2F2F2F] lg:text-sm 2xl:text-base bg-[#222222] items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-lg hover:bg-[#333]"
           >
             <Image
               src="/epic.svg"
@@ -745,7 +727,7 @@ export default function KanbanComponent() {
       {/* Epic Assignment Modal */}
       {isEpicModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-[#1f1f1f] border border-[#2F2F2F] rounded-lg p-6 w-full max-w-md">
+          <div className="bg-[#222222] border border-[#2F2F2F] rounded-lg p-6 w-full max-w-md">
             <h2 className="text-xl font-semibold text-gray-200 mb-4">
               Assign Epic
             </h2>
@@ -798,15 +780,15 @@ export default function KanbanComponent() {
 
       {/* Kanban Board */}
       {viewMode === 'kanban' && (
-        <div className="grid grid-cols-1 sm:grid-cols-4 border border-[#2E2E2E] rounded-md gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-4 border border-[#2E2E2E] rounded-md">
           {['Backlog', 'To Do', 'In Progress', 'Done'].map((status, index) => (
             <div
               key={status}
-              className={`p-4 flex flex-col ${index !== 0 ? 'border-l border-[#2E2E2E]' : '' // Add left border for all but the first column
+              className={`p-4 px-2 flex flex-col ${index !== 0 ? 'border-l border-[#2E2E2E]' : '' // Add left border for all but the first column
                 }`}
             >
               {/* Column Header */}
-              <div className="flex flex-row items-center mb-4">
+              <div className="flex flex-row items-center mb-4 px-2">
                 <Image
                   src={`/${status.toLowerCase().replace(' ', '')}.svg`}
                   className="mr-2"
@@ -827,7 +809,7 @@ export default function KanbanComponent() {
 
               {/* Task List */}
               <div
-                className={`rounded transition-colors ${dragOverColumn === status ? 'bg-[#1f1f1f]' : ''}`}
+                className={`rounded transition-colors ${dragOverColumn === status ? 'bg-[#222222]' : ''}`}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
                   handleDrop(status, e);
@@ -839,29 +821,30 @@ export default function KanbanComponent() {
                 {getTasksByStatus(status).map((task) => (
                   <div
                     key={task.tasks?.task_id || task.task_id || 'UNKNOWN'}
-                    className={`p-4  bg-[#1f1f1f] rounded shadow lg:mb-1 2xl:mb-2 border-[#454545] rounded border-s-4 ${borderColors[status]} hover:opacity-80 transition duration-200 ease-in-out`}
+                    className={`p-4 bg-[#222222] rounded shadow lg:mb-1 2xl:mb-2 border-[#454545] rounded border-s-4 ${borderColors[status]} hover:opacity-80 transition duration-200 ease-in-out`}
                     draggable="true"
                     onDragStart={(e) => e.dataTransfer.setData('task', JSON.stringify(task))}
                     onClick={() => handleTaskClick(task)}
                   >
                     <div className="flex flex-col space-y-2">
-                      <p className="text-gray-200">
+                      <p className="text-gray-200 text-sm">
                         {task.tasks?.title || task.title || 'UNKNOWN'}
                       </p>
 
                       {/* Epic Badge */}
+                      <div className="flex flex-row items-center justify-between">
                       {task.tasks.taskEpics?.[0]?.epics?.title && (
                         <div className="flex items-center space-x-1">
-                          <div className={`${getEpicColor(task.tasks.taskEpics[0].epics.epic_id)} px-2 py-1 rounded-full text-xs`}>
+                          <div className={`${getEpicColor(task.tasks.taskEpics[0].epics.epic_id)} px-2 rounded-full text-xs`}>
                             {task.tasks.taskEpics[0].epics.title}
                           </div>
                         </div>
                       )}
 
                       <div className="flex items-center space-x-1">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${priorityColors[task.tasks?.priority || task.priority || 'No Priority']}`}>
-                          {task.tasks?.priority || task.priority || 'No Priority'}
+                        <span className={`inline-block w-3 h-3 rounded-full text-xs font-medium ${priorityColors[task.tasks?.priority || task.priority || 'No Priority']}`}>
                         </span>
+                      </div>
                       </div>
                     </div>
                   </div>
@@ -922,10 +905,3 @@ export default function KanbanComponent() {
     </div>
   );
 }
-
-/*
-@keyframes epicDropdownFadeIn {
-  0% { opacity: 0; transform: translateY(-10px) scaleY(0.98); }
-  100% { opacity: 1; transform: translateY(0) scaleY(1); }
-}
-*/

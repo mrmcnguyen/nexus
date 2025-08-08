@@ -73,6 +73,7 @@ export default function Dashboard() {
                 console.log('✅ Dashboard: User authenticated:', data.user.email);
                 setUser(data.user);
                 const res = await getUserFullName(data.user.id);
+                console.log('🔍 Dashboard: User full name:', res);
                 if (res) setUserName(res[0].first_name);
             } else {
                 console.error("❌ Dashboard: User not found:", error);

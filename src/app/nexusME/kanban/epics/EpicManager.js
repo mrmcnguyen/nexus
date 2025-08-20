@@ -11,6 +11,7 @@ import {
     deleteEpic,
     getEpicTasks
 } from "../../../../lib/db/epicQueries";
+import { toast } from "react-hot-toast";
 
 export default function EpicManager() {
     const [epics, setEpics] = useState([]);
@@ -93,10 +94,20 @@ export default function EpicManager() {
                 setIsModalOpen(false);
             }
         }
+        toast.success(`Epic ${epicName} created`, {
+            duration: 3000,
+            position: 'top-center',
+            icon: '✅',
+            style: {
+                borderRadius: '10px',
+                background: '#333',
+                color: '#fff',
+            },
+        });
     };
 
     const handleEditEpic = async (e) => {
-        e.preventDefault();
+        //e.preventDefault();
         if (epicName.trim() && editingEpic) {
             const result = await updateEpic(editingEpic.epic_id, epicName, epicDescription);
             if (result.success) {
@@ -113,11 +124,21 @@ export default function EpicManager() {
         }
     };
 
-    const handleDeleteEpic = async (epicId) => {
+    const handleDeleteEpic = async (epicId, title) => {
         const result = await deleteEpic(epicId);
         if (result.success) {
             setEpics(epics.filter(epic => epic.epic_id !== epicId));
         }
+        toast.success(`Epic ${title} deleted`, {
+            duration: 3000,
+            position: 'top-center',
+            icon: '🗑️',
+            style: {
+                borderRadius: '10px',
+                background: '#333',
+                color: '#fff',
+            },
+        });
     };
 
     const openEditModal = (epic) => {
@@ -274,7 +295,7 @@ export default function EpicManager() {
                                 className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
                                 title="AI Summary (coming soon)"
                             >
-                                <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
+                                <span className="relative px-2 py-1.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
                                     AI Summary
                                 </span>
                             </button>
@@ -288,7 +309,7 @@ export default function EpicManager() {
                                 </button>
                                 <button
                                     className="px-2 py-1 text-xs text-red-400 hover:text-red-200 rounded hover:bg-[#232323] transition"
-                                    onClick={() => handleDeleteEpic(epic.epic_id)}
+                                    onClick={() => handleDeleteEpic(epic.epic_id, epic.title)}
                                     title="Delete Epic"
                                 >
                                     Delete

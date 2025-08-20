@@ -31,7 +31,8 @@
     "react-firebase-hooks": "^5.1.1",
     "react-icons": "^5.4.0",
     "svelte-french-toast": "^1.2.0",
-    "tailwind-merge": "^2.5.5"
+    "tailwind-merge": "^2.5.5",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/react": "18.3.4",

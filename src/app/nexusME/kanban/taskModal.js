@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { deleteKanbanTaskByID } from "../../../lib/db/queries";
 import debounce from 'lodash/debounce'; // Debounce functions recommended for performance
+import { useRouter } from "next/navigation";
 
 export default function KanbanTaskModal({
   isVisible,
@@ -28,6 +29,7 @@ export default function KanbanTaskModal({
   const titleRef = useRef(null);
   const epicDropdownRef = useRef(null);
   const priorityDropdownRef = useRef(null);
+  const router = useRouter();
 
   console.log(task);
 
@@ -420,7 +422,7 @@ export default function KanbanTaskModal({
                   </div>
 
                   {currentEpic ? (
-                    <div className={`${getEpicBackgroundColor(currentEpic.epic_id)} rounded-lg p-4 border border-opacity-30`}>
+                    <div className={`${getEpicBackgroundColor(currentEpic.epic_id)} rounded-lg p-4 border border-[#333]`}>
                       <div className="flex items-center space-x-3">
                         <div className={`w-3 h-3 rounded-full ${getEpicColor(currentEpic.epic_id).split(' ')[0]}`}></div>
                         <div>
@@ -477,6 +479,7 @@ export default function KanbanTaskModal({
                     <p className="text-sm text-gray-400">{new Date(updatedAt).toLocaleDateString()}</p>
                   </div>
                 </div>
+
               </div>
             </div>
 
@@ -506,6 +509,9 @@ export default function KanbanTaskModal({
                           key={option.value}
                           onClick={() => handlePriorityUpdate(option.value)}
                           className="w-full flex items-center space-x-3 px-3 py-2 hover:bg-[#333] transition-colors text-left"
+                          style={{
+                            animation: 'epicDropdownFadeIn 0.18s cubic-bezier(0.4,0,0.2,1)'
+                          }}
                         >
                           <div className={`w-3 h-3 rounded-full ${option.bgColor}`}></div>
                           <span className="text-gray-200">{option.label}</span>
@@ -538,8 +544,25 @@ export default function KanbanTaskModal({
                 </div>
               </div>
 
+
               {/* Delete */}
+              {/* Start Pomodoro */}
               <div className="pt-4 border-t space-y-2 border-[#333]">
+                <button
+                  className="w-full flex items-center justify-center space-x-2 p-2 bg-[#91C8FF]/20 border border-[#91C8FF]/30 rounded-lg text-[#91C8FF] hover:bg-[#91C8FF]/30 transition-colors"
+                  onClick={() => {
+                    const taskId = task.task_id || task.tasks?.task_id || '';
+                    const titleParam = encodeURIComponent(editedTitle || title || '');
+                    const descParam = encodeURIComponent(editedDescription || description || '');
+                    router.push(`/nexusME/pomodoro?taskId=${taskId}&title=${titleParam}&description=${descParam}`);
+                    closeModal();
+                  }}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m5-3a8 8 0 11-16 0 8 8 0 0116 0z" />
+                  </svg>
+                  <span>Start Pomodoro</span>
+                </button>
                 <button
                   className="w-full flex items-center justify-center space-x-1 p-2 bg-red-600/20 border border-red-600/30 rounded-lg text-red-400 hover:bg-red-600/30 transition-colors"
                   onClick={handleDeleteTask}

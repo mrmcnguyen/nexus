@@ -1,10 +1,18 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export default function Pomodoro() {
   const [time, setTime] = useState(25 * 60); // 25 minutes in seconds
   const [isActive, setIsActive] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const searchParams = useSearchParams();
+  const title = searchParams.get('title') || 'Pomodoro Timer';
+  const description = searchParams.get('description') || '';
+
+  const totalDuration = 25 * 60;
+  const progressPercent = Math.max(0, Math.min(1, time / totalDuration));
+  const progressDeg = progressPercent * 360;
 
   useEffect(() => {
     let interval = null;
@@ -36,30 +44,111 @@ export default function Pomodoro() {
   };
 
   return (
-    <div className="min-h-screen h-4/5 flex flex-col items-start text-left p-8 bg-[#171717]">
-      <h1 className="text-5xl text-gray-400 font-normal text-left mb-4 lg:text-5xl md:text-3xl 2xl:text-6xl">Pomodoro Timer</h1>
-      <p className='text-light text-gray-300 text-left mb-4'>The Pomodoro technique helps you manage time more effectively by breaking work into intervals (25 minutes of focused work followed by a short break). This technique improves concentration, prevents burnout, and enhances productivity by allowing structured breaks, making it easier to maintain long periods of focus without feeling overwhelmed.
-
-By using this timer, you can create a productive workflow that balances effort and rest, leading to more efficient task completion.</p>
-      <div className='flex flex-col justify-center items-center w-full'>
-      <div className="text-white text-9xl mb-8">
-        {formatTime(time)}
+    <div className="relative min-h-screen overflow-hidden bg-[#0d0d10]">
+      {/* Animated vibrant background when active */}
+      <div
+        className={`pointer-events-none absolute inset-0 transition-[opacity,filter] duration-700 ${isActive ? 'opacity-100' : 'opacity-70'}`}
+        style={{ filter: isActive ? 'saturate(1.45) brightness(1.15)' : 'saturate(1.1) brightness(1)' }}
+      >
+        <div
+          className="absolute -top-44 -left-40 w-[560px] h-[560px] rounded-full blur-[140px]"
+          style={{ background: 'radial-gradient(circle at 50% 50%, rgba(255,168,112,0.45), rgba(0,0,0,0) 60%)', animation: 'floatGlow 16s ease-in-out infinite alternate' }}
+        />
+        <div
+          className="absolute -bottom-36 -right-40 w-[700px] h-[700px] rounded-full blur-[140px]"
+          style={{ background: 'radial-gradient(circle at 50% 50%, rgba(255,100,100,0.38), rgba(0,0,0,0) 60%)', animation: 'floatGlow 20s ease-in-out infinite alternate-reverse' }}
+        />
+        <div
+          className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[820px] h-[820px] rounded-full blur-[160px]"
+          style={{ background: 'radial-gradient(circle at 50% 50%, rgba(255,210,140,0.32), rgba(0,0,0,0) 60%)', animation: 'floatGlow 24s ease-in-out infinite alternate' }}
+        />
+        <div
+          className="absolute top-10 right-20 w-[360px] h-[360px] rounded-full blur-[120px]"
+          style={{ background: 'radial-gradient(circle at 50% 50%, rgba(255,120,180,0.28), rgba(0,0,0,0) 60%)', animation: 'floatGlow 18s ease-in-out infinite alternate' }}
+        />
       </div>
-      <div className="flex space-x-4">
-        <button
-          onClick={toggleStartPause}
-          className="bg-white text-gray-600 px-6 py-2 rounded-lg text-xl"
-        >
-          {isActive && !isPaused ? 'Pause' : 'Start'}
-        </button>
-        <button
-          onClick={resetTimer}
-          className="bg-white text-gray-600 px-6 py-2 rounded-lg text-xl"
-        >
-          Reset
-        </button>
+
+      {/* Content */}
+      <div className="relative z-10 px-6 md:px-10 lg:px-14 py-10">
+        <div className="max-w-5xl mx-auto">
+          {/* Header + Task Summary */}
+          <div className="mb-6 flex items-start justify-between gap-6">
+            <div className="flex-1">
+              <h1 className="text-4xl md:text-5xl 2xl:text-6xl font-semibold text-gray-100 tracking-tight">
+                {title}
+              </h1>
+              {description && (
+                <div className="mt-4 p-4 md:p-5 rounded-xl bg-[#1c1c1c]/85 border border-[#323232] shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+                  <p className="text-gray-200 leading-relaxed whitespace-pre-wrap">
+                    {description}
+                  </p>
+                </div>
+              )}
+            </div>
+            {/* Quick Tips */}
+            <div className="hidden md:block min-w-[220px] rounded-xl bg-[#161616]/90 border border-[#2a2a2a] p-4 text-sm text-gray-200">
+              <div className="font-medium text-gray-100 mb-2">Focus tips</div>
+              <ul className="list-disc list-inside space-y-1 marker:text-[#ffc45a]">
+                <li>Silence distractions</li>
+                <li>Set a clear micro-goal</li>
+                <li>Reward your focus</li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Timer + Controls */}
+          <div className="mt-6 flex flex-col items-center justify-center min-h-[46vh] lg:min-h-[58vh]">
+            {/* Circular progress timer */}
+            <div className="relative w-64 h-64 md:w-80 md:h-80">
+              <div
+                className="absolute inset-0 rounded-full"
+                style={{
+                  background: `conic-gradient(#91C8FF ${progressDeg}deg, #2a2a2a ${progressDeg}deg)`
+                }}
+              />
+              <div className="absolute inset-3 bg-[#111215] rounded-full border border-[#3a3a3a] shadow-[inset_0_0_40px_rgba(0,0,0,0.35)]" />
+              <div className="relative w-full h-full flex items-center justify-center">
+                <div className="text-5xl md:text-6xl font-semibold tracking-tight text-gray-100 drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]">
+                  {formatTime(time)}
+                </div>
+              </div>
+            </div>
+
+            {/* Controls */}
+            <div className="mt-6 flex items-center gap-3">
+              <button
+                onClick={toggleStartPause}
+                className="px-6 md:px-7 py-2.5 md:py-3 rounded-lg bg-gradient-to-br from-[#6f99da] to-[#91C8FF] text-[#0f172a] font-medium shadow-md hover:brightness-110 active:scale-[0.99] transition"
+              >
+                {isActive && !isPaused ? 'Pause' : 'Start'}
+              </button>
+              <button
+                onClick={resetTimer}
+                className="px-6 md:px-7 py-2.5 md:py-3 rounded-lg bg-[#232323] text-gray-100 border border-[#3a3a3a] hover:bg-[#2b2b2b] active:scale-[0.99] transition"
+              >
+                Reset
+              </button>
+            </div>
+
+            {/* Helper text */}
+            <div className="mt-4 text-sm text-gray-300">
+              {isActive ? (
+                <span>Focus mode is on. We'll let you know when it's time to take a break.</span>
+              ) : (
+                <span>Review your plan above, then press Start when you're ready.</span>
+              )}
+            </div>
+          </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes floatGlow {
+          0% { transform: translate3d(0, 0, 0) scale(1); }
+          50% { transform: translate3d(0, -12px, 0) scale(1.04); }
+          100% { transform: translate3d(0, 0, 0) scale(1); }
+        }
+      `}</style>
     </div>
   );
 }

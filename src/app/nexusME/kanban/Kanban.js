@@ -8,6 +8,7 @@ import { getEpicsWithTaskCounts, assignTaskToEpic, removeTaskFromEpic, getTaskEp
 import { createClient } from "../../../../supabase/client";
 import Loading from "./loading";
 import TaskModal from "./taskModal";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function KanbanComponent() {
   const [editingColumn, setEditingColumn] = useState(null);
@@ -418,15 +419,16 @@ export default function KanbanComponent() {
 
   // Function to show deletion notification
   const showDeletionNotification = (task) => {
-    setDeletionNotification(task);
-
-    // Clear notification after 3 seconds
-    const timer = setTimeout(() => {
-      setDeletionNotification(null);
-    }, 3000);
-
-    // Cleanup the timer if component unmounts
-    return () => clearTimeout(timer);
+    toast.success(`Task "${task.tasks?.title || task.title}" deleted`, {
+      duration: 3000,
+      position: 'top-center',
+      icon: '🗑️',
+      style: {
+        borderRadius: '10px',
+        background: '#333',
+        color: '#fff',
+      },
+    });
   };
 
   // Helper to get all tasks for list view, filtered by epic
@@ -677,7 +679,7 @@ export default function KanbanComponent() {
             className="flex flex-row border border-[#2F2F2F] lg:text-sm 2xl:text-base bg-[#222222] items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-lg hover:bg-[#333]"
           >
             <Image
-              src={viewMode === 'kanban' ? "/list.svg" : "/todo.svg"}
+              src={viewMode === 'kanban' ? "/list.svg" : "/kanban.svg"}
               style={{ filter: 'invert(1)' }}
               className="mr-2"
               width={14}
@@ -833,18 +835,18 @@ export default function KanbanComponent() {
 
                       {/* Epic Badge */}
                       <div className="flex flex-row items-center justify-between">
-                      {task.tasks.taskEpics?.[0]?.epics?.title && (
-                        <div className="flex items-center space-x-1">
-                          <div className={`${getEpicColor(task.tasks.taskEpics[0].epics.epic_id)} px-2 rounded-full text-xs`}>
-                            {task.tasks.taskEpics[0].epics.title}
+                        {task.tasks.taskEpics?.[0]?.epics?.title && (
+                          <div className="flex items-center space-x-1">
+                            <div className={`${getEpicColor(task.tasks.taskEpics[0].epics.epic_id)} px-2 rounded-full text-xs`}>
+                              {task.tasks.taskEpics[0].epics.title}
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
 
-                      <div className="flex items-center space-x-1">
-                        <span className={`inline-block w-3 h-3 rounded-full text-xs font-medium ${priorityColors[task.tasks?.priority || task.priority || 'No Priority']}`}>
-                        </span>
-                      </div>
+                        <div className="flex items-center space-x-1">
+                          <span className={`inline-block w-3 h-3 rounded-full text-xs font-medium ${priorityColors[task.tasks?.priority || task.priority || 'No Priority']}`}>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>

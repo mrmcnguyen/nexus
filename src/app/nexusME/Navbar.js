@@ -33,7 +33,7 @@ const frameworks = [
   {
     name: 'Mind Map',
     description: 'Map out your thoughts and ideas.',
-    link: '/nexusME/mindMap',
+    link: '/nexusME/mind-map',
   },
 ];
 
@@ -79,8 +79,8 @@ export default function Navbar({ page }) {
             key={framework.name}
             href={framework.link}
             className={`text-sm font-medium relative h-full flex items-center hover:text-[#91C8FF] ${pathname === framework.link
-                ? 'text-[#91C8FF] border-b-2 border-[#91C8FF]'
-                : 'text-gray-400'
+              ? 'text-[#91C8FF] border-b-2 border-[#91C8FF]'
+              : 'text-gray-400'
               }`}
           >
             {framework.name}

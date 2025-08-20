@@ -90,24 +90,32 @@ export default function Quadrant({
         onDragEnter={onDragEnter}
         onDragLeave={onDragLeave}
       >
-        {tasks.map((task, index) => (
-          <li
-            key={index}
-            className={`p-3 rounded-lg border text-sm font-normal shadow transition-colors cursor-pointer ${task.status || task.tasks?.status
-              ? 'bg-green-700 text-white border-green-500'
-              : 'bg-[#232323] text-gray-300 border-[#444] hover:bg-[#292929]'
-              }`}
-            onClick={() => onTaskClick(task)}
-          >
-            {task?.tasks?.title ? (
-              task.tasks.title
-            ) : task?.title ? (
-              task.title
-            ) : (
-              JSON.stringify(task)
-            )}
-          </li>
-        ))}
+        {tasks.map((task, index) => {
+          const isDone = task.status === true || task.tasks?.status === true;
+          return (
+            <li
+              key={index}
+              className={`p-3 rounded-lg border text-sm font-normal shadow transition-colors cursor-pointer ${isDone
+                ? 'bg-green-900/30 text-green-300 border-green-600/40 line-through opacity-80'
+                : 'bg-[#232323] text-gray-300 border-[#444] hover:bg-[#292929]'}
+              `}
+              onClick={() => onTaskClick(task)}
+            >
+              {task?.tasks?.title ? (
+                task.tasks.title
+              ) : task?.title ? (
+                task.title
+              ) : (
+                JSON.stringify(task)
+              )}
+              {isDone && (
+                <span className="ml-2 inline-flex items-center text-[10px] px-2 py-[2px] rounded-full bg-green-600/20 border border-green-600/40 text-green-300 align-middle">
+                  Done
+                </span>
+              )}
+            </li>
+          );
+        })}
         {/* Conditionally render input box or button */}
         {isEditing ? (
           <input

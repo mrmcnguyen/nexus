@@ -8,6 +8,11 @@ import HelpModal from './helpModal';
 import Image from 'next/image';
 import TaskModal from './taskModal'
 import Loading from './loading';
+import { toast } from 'react-hot-toast';
+
+// Main Eisenhower Matrix Page Component
+// This component displays the Eisenhower Matrix with tasks divided into quadrants
+// It allows users to drag and drop tasks, add new tasks, and view task details in a modal
 
 export default function EisenhowerMatrixPage() {
   const [tasks, setTasks] = useState({
@@ -93,17 +98,24 @@ export default function EisenhowerMatrixPage() {
   };
 
   const removeTask = (quadrant, taskToRemove) => {
-    console.log(quadrant);
-    console.log(taskToRemove);
-    setTasks((prevTasks) => ({
+    // Remove from quadrant view
+    setTasks(prevTasks => ({
       ...prevTasks,
-      [quadrant]: prevTasks[quadrant].filter((t) => {
-        // Compare task IDs, handling both nested and flat structures
+      [quadrant]: prevTasks[quadrant].filter(t => {
         const taskId = t.tasks?.task_id || t.task_id;
         const removeTaskId = taskToRemove.tasks?.task_id || taskToRemove.task_id;
         return taskId !== removeTaskId;
-      }),
+      })
     }));
+
+    // ALSO remove from allTasks
+    setAllTasks(prevAllTasks =>
+      prevAllTasks.filter(t => {
+        const taskId = t.tasks?.task_id || t.task_id;
+        const removeTaskId = taskToRemove.tasks?.task_id || taskToRemove.task_id;
+        return taskId !== removeTaskId;
+      })
+    );
   };
 
   const handleDrop = async (quadrant, e) => {
@@ -131,7 +143,7 @@ export default function EisenhowerMatrixPage() {
 
   const handleFinishTask = async (task) => {
     console.log(task);
-    finishEisenhowerTask(task.task_id || task.tasks?.task_id);
+    await finishEisenhowerTask(task.task_id || task.tasks?.task_id);
 
     const finishedTask = await getEisenhowerTaskByID(task.task_id || task.tasks?.task_id, userID);
 
@@ -140,12 +152,14 @@ export default function EisenhowerMatrixPage() {
       tasks[quadrant].some(t => (t.task_id || t.tasks?.task_id) === (task.task_id || task.tasks?.task_id))
     );
 
+    // Update the task in its quadrant
     if (currentQuadrant) {
-      // Remove the task from its current quadrant
       setTasks(prevTasks => ({
         ...prevTasks,
-        [currentQuadrant]: prevTasks[currentQuadrant].filter(
-          t => (t.task_id || t.tasks?.task_id) !== (task.task_id || task.tasks?.task_id)
+        [currentQuadrant]: prevTasks[currentQuadrant].map(t =>
+          (t.task_id || t.tasks?.task_id) === (finishedTask.task_id || finishedTask.tasks?.task_id)
+            ? finishedTask
+            : t
         )
       }));
     }
@@ -158,6 +172,16 @@ export default function EisenhowerMatrixPage() {
           : t
       )
     );
+
+    toast.success(`Task "${task.tasks?.title || task.title}" completed`, {
+      duration: 3000,
+      position: 'top-center',
+      style: {
+        borderRadius: '10px',
+        background: '#333',
+        color: '#fff',
+      },
+    });
   }
 
   const handleSubmit = async (e) => {
@@ -194,15 +218,16 @@ export default function EisenhowerMatrixPage() {
 
   // Function to show deletion notification
   const showDeletionNotification = (task) => {
-    setDeletionNotification(task);
-
-    // Clear notification after 3 seconds
-    const timer = setTimeout(() => {
-      setDeletionNotification(null);
-    }, 3000);
-
-    // Cleanup the timer if component unmounts
-    return () => clearTimeout(timer);
+    toast.success(`Task "${task.tasks?.title || task.title}" deleted`, {
+      duration: 3000,
+      position: 'top-center',
+      icon: '🗑️',
+      style: {
+        borderRadius: '10px',
+        background: '#333',
+        color: '#fff',
+      },
+    });
   };
 
   // Show loading spinner or placeholder while fetching tasks

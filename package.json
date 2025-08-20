@@ -29,8 +29,8 @@
     "react": "^18",
     "react-dom": "^18",
     "react-firebase-hooks": "^5.1.1",
+    "react-hot-toast": "^2.6.0",
     "react-icons": "^5.4.0",
-    "svelte-french-toast": "^1.2.0",
     "tailwind-merge": "^2.5.5",
     "uuid": "^11.1.0"
   },

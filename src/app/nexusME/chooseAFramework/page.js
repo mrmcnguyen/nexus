@@ -19,19 +19,9 @@ export default function ChooseFramework() {
         link: "/nexusME/pomodoro",
       },
       {
-        name: "1-3-5 Method",
-        description: "Focus on 1 big task, 3 medium tasks, and 5 small tasks each day.",
-        link: "/nexusME/1-3-5",
-      },
-      {
         name: "Kanban",
         description: "Visualize tasks using a board and limit work in progress.",
         link: "/nexusME/kanban",
-      },
-      {
-        name: "To-Do List",
-        description: "Create a normal daily To-Do list to breeze through your tasks.",
-        link: "/nexusME/to-do-list",
       },
       {
         name: "Mind Map",

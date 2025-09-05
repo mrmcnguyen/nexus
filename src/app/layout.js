@@ -14,8 +14,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${dmSans.className} antialiased bg-[#171717]`}>
+    <html lang="en" className="dark">
+      <body className={`${dmSans.className} antialiased bg-white dark:bg-[#171717] transition-colors duration-300`}>
         <NotificationProvider>
           {children}
           <NotificationContainer />

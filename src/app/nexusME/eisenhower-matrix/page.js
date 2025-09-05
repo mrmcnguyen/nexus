@@ -9,13 +9,13 @@ export const metadata = {
 
 export default function EisenhowerMatrixPage() {
   return (
-<>
-    <Navbar page={'/nexusME/eisenhower-matrix'} />
-    <div style={{ paddingTop: '50px', backgroundColor:'#171717' }}> 
-          <Suspense fallback={<Loading />}>
+    <>
+      <Navbar page={'/nexusME/eisenhower-matrix'} />
+      <div style={{ paddingTop: '50px', backgroundColor: '#171717' }}>
+        <Suspense fallback={<Loading />}>
           <EisenhowerMatrix />
-          </Suspense>
-        </div>
-  </>
+        </Suspense>
+      </div>
+    </>
   );
 }

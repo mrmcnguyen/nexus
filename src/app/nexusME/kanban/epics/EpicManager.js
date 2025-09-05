@@ -207,8 +207,8 @@ export default function EpicManager() {
                         className="flex flex-row border border-[#2F2F2F] lg:text-sm 2xl:text-base bg-[#1f1f1f] items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-lg hover:bg-[#707070]"
                     >
                         <Image
-                            src="/todo.svg"
-                            className="mr-2"
+                            src="/kanban.svg"
+                            className="mr-2 filter invert"
                             width={14}
                             alt="kanban"
                             height={14}

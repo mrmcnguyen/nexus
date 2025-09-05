@@ -12,10 +12,10 @@ export const metadata = {
 export default function ToDoListPage() {
   return (
     <body className={`overflow-y-hidden ${dmSans.className}`}>
-    <Navbar page={'/nexusME/to-do-list'} />
-    <div style={{ paddingTop: '60px' }}> 
-          <TodoList />
-        </div>
-  </body>
+      <Navbar page={'/nexusME/to-do-list'} />
+      <div style={{ paddingTop: '60px' }}>
+        <TodoList />
+      </div>
+    </body>
   );
 }

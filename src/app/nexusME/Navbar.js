@@ -26,11 +26,6 @@ const frameworks = [
     link: '/nexusME/kanban',
   },
   {
-    name: 'To-Do List',
-    description: 'Create a normal daily To-Do list to breeze through your tasks.',
-    link: '/nexusME/to-do-list',
-  },
-  {
     name: 'Mind Map',
     description: 'Map out your thoughts and ideas.',
     link: '/nexusME/mind-map',

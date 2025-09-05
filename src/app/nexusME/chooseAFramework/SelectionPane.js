@@ -12,6 +12,7 @@ export default function SelectionPane({ frameworks }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto lg:max-w-6xl">
         {frameworks.map((framework) => (
+          <Link href={framework.link} key={framework.name}>
           <div
             key={framework.name}
             onClick={() => setSelectedFramework(framework)} // Set selected framework when clicked
@@ -21,17 +22,9 @@ export default function SelectionPane({ frameworks }) {
             <h2 className="text-xl font-semibold text-white mb-2">{framework.name}</h2>
             <p className="text-gray-400">{framework.description}</p>
           </div>
+          </Link>
         ))}
       </div>
-
-      {/* Get Started Button */}
-      {selectedFramework && (
-        <Link href={selectedFramework.link}>
-          <button className="p-4 bg-[#6F99D8] mt-8 mx-auto block text-white rounded-lg hover:bg-[#7896c8] transition">
-            Get Started with {selectedFramework.name}
-          </button>
-        </Link>
-      )}
     </div>
   );
 }

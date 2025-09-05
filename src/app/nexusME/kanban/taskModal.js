@@ -45,20 +45,20 @@ export default function KanbanTaskModal({
   const [editedTitle, setEditedTitle] = useState('');
   const [editedDescription, setEditedDescription] = useState('');
 
-  // Epic color generation
+  // Modern epic color generation
   const epicColors = [
-    'bg-purple-600 text-purple-100',
-    'bg-blue-600 text-blue-100',
-    'bg-green-600 text-green-100',
-    'bg-yellow-600 text-yellow-100',
-    'bg-red-600 text-red-100',
-    'bg-indigo-600 text-indigo-100',
-    'bg-pink-600 text-pink-100',
-    'bg-teal-600 text-teal-100',
-    'bg-orange-600 text-orange-100',
-    'bg-cyan-600 text-cyan-100',
-    'bg-emerald-600 text-emerald-100',
-    'bg-violet-600 text-violet-100'
+    'bg-purple-100 text-purple-700 border border-purple-200',
+    'bg-blue-100 text-blue-700 border border-blue-200',
+    'bg-green-100 text-green-700 border border-green-200',
+    'bg-yellow-100 text-yellow-700 border border-yellow-200',
+    'bg-red-100 text-red-700 border border-red-200',
+    'bg-indigo-100 text-indigo-700 border border-indigo-200',
+    'bg-pink-100 text-pink-700 border border-pink-200',
+    'bg-teal-100 text-teal-700 border border-teal-200',
+    'bg-orange-100 text-orange-700 border border-orange-200',
+    'bg-cyan-100 text-cyan-700 border border-cyan-200',
+    'bg-emerald-100 text-emerald-700 border border-emerald-200',
+    'bg-violet-100 text-violet-700 border border-violet-200'
   ];
 
   const getEpicColor = (epicId) => {
@@ -73,53 +73,53 @@ export default function KanbanTaskModal({
 
   const getEpicBackgroundColor = (epicId) => {
     const color = getEpicColor(epicId);
-    const colorName = color.split('-')[1]; // Extract color name (e.g., 'purple' from 'bg-purple-600')
-    return `bg-${colorName}-600/20`;
+    const colorName = color.split('-')[1]; // Extract color name (e.g., 'purple' from 'bg-purple-100')
+    return `bg-${colorName}-50`;
   };
 
   const getEpicTextColor = (epicId) => {
     const color = getEpicColor(epicId);
     const colorName = color.split('-')[1];
-    return `text-${colorName}-300`;
+    return `text-${colorName}-700`;
   };
 
-  // Kanban-specific status colors and labels
+  // Modern status colors and labels
   const statusOptions = {
     Backlog: {
       label: 'Backlog',
-      color: 'bg-gray-600',
+      color: 'bg-slate-800 text-slate-300 border border-slate-700',
       icon: '📋'
     },
     'To Do': {
       label: 'To Do',
-      color: 'bg-blue-600',
+      color: 'bg-amber-900/30 text-amber-300 border border-amber-700',
       icon: '📝'
     },
     'In Progress': {
       label: 'In Progress',
-      color: 'bg-yellow-600',
+      color: 'bg-blue-900/30 text-blue-300 border border-blue-700',
       icon: '🚧'
     },
     'Done': {
       label: 'Done',
-      color: 'bg-green-600',
+      color: 'bg-emerald-900/30 text-emerald-300 border border-emerald-700',
       icon: '✅'
     }
   }
 
   const currentStatus = statusOptions[task.status] || {
     label: 'Unknown Status',
-    color: 'bg-gray-900',
+    color: 'bg-slate-800 text-slate-300 border border-slate-700',
     icon: '❓'
   };
 
-  // Priority options
+  // Modern priority options
   const priorityOptions = [
-    { value: 'Critical', label: 'Critical', color: 'text-red-500', bgColor: 'bg-red-500' },
-    { value: 'High', label: 'High', color: 'text-orange-500', bgColor: 'bg-orange-500' },
-    { value: 'Medium', label: 'Medium', color: 'text-yellow-500', bgColor: 'bg-yellow-500' },
-    { value: 'Low', label: 'Low', color: 'text-blue-500', bgColor: 'bg-blue-500' },
-    { value: 'No Priority', label: 'No Priority', color: 'text-gray-400', bgColor: 'bg-gray-400' }
+    { value: 'urgent', label: 'Urgent', color: 'text-red-700', bgColor: 'bg-red-100 border border-red-200', icon: '/urgent.svg' },
+    { value: 'high', label: 'High', color: 'text-orange-700', bgColor: 'bg-orange-100 border border-orange-200', icon: '/high.svg' },
+    { value: 'medium', label: 'Medium', color: 'text-yellow-700', bgColor: 'bg-yellow-100 border border-yellow-200', icon: '/middle.svg' },
+    { value: 'low', label: 'Low', color: 'text-blue-700', bgColor: 'bg-blue-100 border border-blue-200', icon: '/low.svg' },
+    { value: 'No Priority', label: 'No Priority', color: 'text-slate-600', bgColor: 'bg-slate-100 border border-slate-200', icon: '/no-priority.svg' }
   ];
 
   const getCurrentPriorityOption = () => {
@@ -322,13 +322,13 @@ export default function KanbanTaskModal({
             stiffness: 300,
             damping: 30
           }}
-          className="bg-[#1a1a1a] border border-[#333] rounded-xl w-full max-w-4xl max-h-[90vh] shadow-2xl flex flex-col"
+          className="bg-gray-800 border border-slate-700 rounded-2xl w-full max-w-4xl max-h-[90vh] shadow-2xl flex flex-col"
         >
           {/* Header */}
-          <div className="flex justify-between items-center p-6 border-b border-[#333]">
+          <div className="flex justify-between items-center p-6 border-b border-slate-700">
             {!isEditingTitle ? (
               <h2
-                className="text-xl font-medium text-gray-100 flex-grow cursor-pointer hover:text-gray-200 transition-colors"
+                className="text-xl font-semibold text-white flex-grow cursor-pointer hover:text-slate-300 transition-colors"
                 onClick={() => setIsEditingTitle(true)}
               >
                 {editedTitle}
@@ -343,13 +343,13 @@ export default function KanbanTaskModal({
                   setIsEditingTitle(true);
                 }}
                 onBlur={handleTitleSave}
-                className="w-full bg-transparent text-gray-100 focus:outline-none border-b border-gray-600 focus:border-blue-500 text-xl font-medium"
+                className="w-full bg-transparent text-white focus:outline-none border-b border-slate-600 focus:border-blue-500 text-xl font-semibold"
                 placeholder="Enter task title..."
               />
             )}
             <button
               onClick={closeModal}
-              className="text-gray-400 hover:text-gray-200 transition-colors p-2 rounded-lg hover:bg-[#333]"
+              className="text-slate-400 hover:text-slate-200 transition-colors p-2 rounded-lg hover:bg-slate-700"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -364,7 +364,7 @@ export default function KanbanTaskModal({
               <div className="space-y-6">
                 {/* Status Badge */}
                 <div className="flex items-center space-x-3">
-                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${currentStatus.color} bg-opacity-20`}>
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${currentStatus.color}`}>
                     {currentStatus.label}
                   </span>
                 </div>
@@ -372,11 +372,11 @@ export default function KanbanTaskModal({
                 {/* Epic Section */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium text-gray-300">Epic</h3>
+                    <h3 className="text-sm font-medium text-slate-300">Epic</h3>
                     <div className="relative" ref={epicDropdownRef}>
                       <button
                         onClick={() => setIsEpicDropdownOpen(!isEpicDropdownOpen)}
-                        className="flex items-center space-x-2 text-sm text-blue-400 hover:text-blue-300 transition-colors px-3 py-1 rounded-md hover:bg-[#333]"
+                        className="flex items-center space-x-2 text-sm text-blue-400 hover:text-blue-300 transition-colors px-3 py-1 rounded-lg hover:bg-blue-900/30"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -385,11 +385,11 @@ export default function KanbanTaskModal({
                       </button>
 
                       {isEpicDropdownOpen && (
-                        <div className="absolute right-0 top-8 bg-[#2a2a2a] border border-[#444] rounded-lg shadow-xl z-10 min-w-56">
+                        <div className="absolute right-0 top-8 bg-gray-800 border border-slate-700 rounded-xl shadow-lg z-10 min-w-56">
                           {currentEpic && (
                             <button
                               onClick={handleRemoveEpic}
-                              className="w-full text-left px-4 py-2 text-red-400 hover:bg-[#333] transition-colors text-sm border-b border-[#444]"
+                              className="w-full text-left px-4 py-2 text-red-400 hover:bg-red-900/30 transition-colors text-sm border-b border-slate-700"
                             >
                               Remove from Epic
                             </button>
@@ -398,21 +398,21 @@ export default function KanbanTaskModal({
                             <button
                               key={epic.epic_id}
                               onClick={() => handleAssignEpic(epic.epic_id)}
-                              className="w-full text-left px-4 py-3 hover:bg-[#333] transition-colors"
+                              className="w-full text-left px-4 py-3 hover:bg-slate-700 transition-colors"
                             >
                               <div className="flex items-center space-x-3">
                                 <div className={`w-3 h-3 rounded-full ${getEpicColor(epic.epic_id).split(' ')[0]}`}></div>
                                 <div className="flex-1">
-                                  <div className="text-gray-200 font-medium">{epic.name}</div>
+                                  <div className="text-white font-medium">{epic.name}</div>
                                   {epic.description && (
-                                    <div className="text-gray-400 text-xs mt-1">{epic.description}</div>
+                                    <div className="text-slate-400 text-xs mt-1">{epic.description}</div>
                                   )}
                                 </div>
                               </div>
                             </button>
                           ))}
                           {epics.length === 0 && (
-                            <div className="px-4 py-3 text-gray-500 text-sm">
+                            <div className="px-4 py-3 text-slate-400 text-sm">
                               No epics available
                             </div>
                           )}
@@ -422,15 +422,15 @@ export default function KanbanTaskModal({
                   </div>
 
                   {currentEpic ? (
-                    <div className={`${getEpicBackgroundColor(currentEpic.epic_id)} rounded-lg p-4 border border-[#333]`}>
+                    <div className="bg-slate-700/50 rounded-xl p-4 border border-slate-600">
                       <div className="flex items-center space-x-3">
                         <div className={`w-3 h-3 rounded-full ${getEpicColor(currentEpic.epic_id).split(' ')[0]}`}></div>
                         <div>
-                          <div className={`${getEpicTextColor(currentEpic.epic_id)} font-medium`}>
+                          <div className="text-white font-medium">
                             {currentEpic.name}
                           </div>
                           {currentEpic.description && (
-                            <div className={`${getEpicTextColor(currentEpic.epic_id)} text-sm mt-1 opacity-80`}>
+                            <div className="text-slate-300 text-sm mt-1 opacity-80">
                               {currentEpic.description}
                             </div>
                           )}
@@ -438,7 +438,7 @@ export default function KanbanTaskModal({
                       </div>
                     </div>
                   ) : (
-                    <div className="text-gray-500 text-sm bg-[#2a2a2a] rounded-lg p-4 border border-[#444]">
+                    <div className="text-slate-400 text-sm bg-slate-700/50 rounded-xl p-4 border border-slate-600">
                       No epic assigned
                     </div>
                   )}
@@ -446,21 +446,21 @@ export default function KanbanTaskModal({
 
                 {/* Description */}
                 <div className="space-y-3">
-                  <h3 className="text-sm font-medium text-gray-300">Description</h3>
+                  <h3 className="text-sm font-medium text-slate-300">Description</h3>
                   <div
                     ref={descriptionRef}
                     onClick={() => setIsEditingDescription(true)}
                     className="min-h-[100px] cursor-text"
                   >
                     {!isEditingDescription ? (
-                      <div className="text-gray-400 text-sm bg-[#2a2a2a] rounded-lg p-4 border border-[#444] min-h-[100px]">
+                      <div className="text-slate-300 text-sm bg-slate-700/50 rounded-xl p-4 border border-slate-600 min-h-[100px]">
                         {editedDescription || 'Click to add a description...'}
                       </div>
                     ) : (
                       <textarea
                         value={editedDescription}
                         onChange={(e) => setEditedDescription(e.target.value)}
-                        className="w-full bg-[#2a2a2a] border border-[#444] rounded-lg p-4 text-gray-300 text-sm resize-none min-h-[100px] focus:outline-none focus:border-blue-500"
+                        className="w-full bg-slate-700/50 border border-slate-600 rounded-xl p-4 text-slate-300 text-sm resize-none min-h-[100px] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         placeholder="Enter task description..."
                         onBlur={handleDescriptionSave}
                       />
@@ -469,14 +469,14 @@ export default function KanbanTaskModal({
                 </div>
 
                 {/* Metadata */}
-                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-[#333]">
+                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-200">
                   <div>
-                    <p className="text-xs text-gray-500 font-medium">Created</p>
-                    <p className="text-sm text-gray-400">{new Date(createdAt).toLocaleDateString()}</p>
+                    <p className="text-xs text-slate-400 font-medium">Created</p>
+                    <p className="text-sm text-slate-300">{new Date(createdAt).toLocaleDateString()}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 font-medium">Updated</p>
-                    <p className="text-sm text-gray-400">{new Date(updatedAt).toLocaleDateString()}</p>
+                    <p className="text-xs text-slate-400 font-medium">Updated</p>
+                    <p className="text-sm text-slate-300">{new Date(updatedAt).toLocaleDateString()}</p>
                   </div>
                 </div>
 
@@ -484,37 +484,57 @@ export default function KanbanTaskModal({
             </div>
 
             {/* Sidebar */}
-            <div className="w-80 border-l border-[#333] p-6 space-y-6">
+            <div className="w-80 border-l border-slate-700 p-6 space-y-6">
               {/* Priority */}
               <div className="space-y-3">
-                <h3 className="text-sm font-medium text-gray-300">Priority</h3>
+                <h3 className="text-sm font-medium text-slate-300">Priority</h3>
                 <div className="relative" ref={priorityDropdownRef}>
                   <button
                     onClick={() => setIsPriorityDropdownOpen(!isPriorityDropdownOpen)}
-                    className="w-full flex items-center justify-between p-3 bg-[#2a2a2a] border border-[#444] rounded-lg hover:bg-[#333] transition-colors"
+                    className="w-full flex items-center justify-between p-3 bg-slate-700/50 border border-slate-600 rounded-xl hover:bg-slate-600 transition-colors"
                   >
                     <div className="flex items-center space-x-3">
-                      <div className={`w-3 h-3 rounded-full ${getCurrentPriorityOption().bgColor}`}></div>
-                      <span className="text-gray-200">{getCurrentPriorityOption().label}</span>
+                      {getCurrentPriorityOption().icon ? (
+                        <Image
+                          src={getCurrentPriorityOption().icon}
+                          alt={getCurrentPriorityOption().label}
+                          width={16}
+                          height={16}
+                          className="filter invert"
+                        />
+                      ) : (
+                        <div className={`w-3 h-3 rounded-full ${getCurrentPriorityOption().bgColor.split(' ')[0]}`}></div>
+                      )}
+                      <span className="text-white">{getCurrentPriorityOption().label}</span>
                     </div>
-                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
 
                   {isPriorityDropdownOpen && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-[#2a2a2a] border border-[#444] rounded-lg shadow-xl z-10">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-gray-800 border border-slate-700 rounded-xl shadow-lg z-10">
                       {priorityOptions.map((option) => (
                         <button
                           key={option.value}
                           onClick={() => handlePriorityUpdate(option.value)}
-                          className="w-full flex items-center space-x-3 px-3 py-2 hover:bg-[#333] transition-colors text-left"
+                          className="w-full flex items-center space-x-3 px-3 py-2 hover:bg-slate-700 transition-colors text-left"
                           style={{
                             animation: 'epicDropdownFadeIn 0.18s cubic-bezier(0.4,0,0.2,1)'
                           }}
                         >
-                          <div className={`w-3 h-3 rounded-full ${option.bgColor}`}></div>
-                          <span className="text-gray-200">{option.label}</span>
+                          {option.icon ? (
+                            <Image
+                              src={option.icon}
+                              alt={option.label}
+                              width={16}
+                              height={16}
+                              className="filter invert"
+                            />
+                          ) : (
+                            <div className={`w-3 h-3 rounded-full ${option.bgColor.split(' ')[0]}`}></div>
+                          )}
+                          <span className="text-white">{option.label}</span>
                         </button>
                       ))}
                     </div>
@@ -524,7 +544,7 @@ export default function KanbanTaskModal({
 
               {/* Move Task */}
               <div className="space-y-3">
-                <h3 className="text-sm font-medium text-gray-300">Move to Status</h3>
+                <h3 className="text-sm font-medium text-slate-300">Move to Status</h3>
                 <div className="space-y-2">
                   {Object.entries(statusOptions)
                     .filter(([key]) => key !== task.status)
@@ -535,10 +555,10 @@ export default function KanbanTaskModal({
                           onMoveTask(key, task);
                           closeModal();
                         }}
-                        className={`w-full flex items-center space-x-2 p-2 rounded-lg text-sm transition-colors ${value.color} bg-opacity-20 hover:bg-opacity-30`}
+                        className={`w-full flex items-center space-x-2 p-3 rounded-xl text-sm transition-colors ${value.color} hover:opacity-80`}
                       >
                         <span>{value.icon}</span>
-                        <span className="text-gray-200">{value.label}</span>
+                        <span className="font-medium">{value.label}</span>
                       </button>
                     ))}
                 </div>
@@ -547,9 +567,9 @@ export default function KanbanTaskModal({
 
               {/* Delete */}
               {/* Start Pomodoro */}
-              <div className="pt-4 border-t space-y-2 border-[#333]">
+              <div className="pt-4 border-t space-y-2 border-slate-700">
                 <button
-                  className="w-full flex items-center justify-center space-x-2 p-2 bg-[#91C8FF]/20 border border-[#91C8FF]/30 rounded-lg text-[#91C8FF] hover:bg-[#91C8FF]/30 transition-colors"
+                  className="w-full flex items-center justify-center space-x-2 p-3 bg-blue-900/30 border border-blue-700 rounded-xl text-blue-300 hover:bg-blue-800/50 transition-colors"
                   onClick={() => {
                     const taskId = task.task_id || task.tasks?.task_id || '';
                     const titleParam = encodeURIComponent(editedTitle || title || '');
@@ -564,7 +584,7 @@ export default function KanbanTaskModal({
                   <span>Start Pomodoro</span>
                 </button>
                 <button
-                  className="w-full flex items-center justify-center space-x-1 p-2 bg-red-600/20 border border-red-600/30 rounded-lg text-red-400 hover:bg-red-600/30 transition-colors"
+                  className="w-full flex items-center justify-center space-x-1 p-3 bg-red-900/30 border border-red-700 rounded-xl text-red-300 hover:bg-red-800/50 transition-colors"
                   onClick={handleDeleteTask}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -573,7 +593,7 @@ export default function KanbanTaskModal({
                   <span>Delete Task</span>
                 </button>
                 <button
-                  className="w-full flex items-center justify-center space-x-1 p-2 bg-gray-600/20 border border-gray-600/30 rounded-lg text-gray-400 hover:bg-gray-600/30 transition-colors"
+                  className="w-full flex items-center justify-center space-x-1 p-3 bg-slate-700/50 border border-slate-600 rounded-xl text-slate-300 hover:bg-slate-600 transition-colors"
                   onClick={closeModal}
                 >
                   <span>Close</span>

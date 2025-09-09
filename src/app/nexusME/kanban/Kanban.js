@@ -520,13 +520,13 @@ const epicColors = [
     };
 
     return (
-      <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 h-[calc(100vh-160px)] overflow-y-auto shadow-sm">
+      <div className="h-[calc(100vh-160px)] overflow-y-auto shadow-sm">
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-2xl font-semibold text-slate-800">All Tasks ({allTasks.length})</h2>
+            <h2 className="text-2xl font-semibold tracking-tighttext-gray-200">All Tasks ({allTasks.length})</h2>
             <button
               onClick={() => setIsAddingTask(!isAddingTask)}
-              className="flex items-center space-x-2 bg-slate-900 hover:bg-black text-white px-4 py-2 rounded-xl transition-colors duration-200 shadow-sm"
+              className="flex items-center space-x-2 bg-neutral-900 hover:bg-neutral-800 text-white px-4 py-2 rounded-md transition-colors duration-200 shadow-sm"
             >
               <Image
                 src="/plus.svg"
@@ -584,7 +584,7 @@ const epicColors = [
               <motion.div
                 key={taskId}
                 layout
-                className={`bg-neutral-900 rounded-2xl px-4 py-3 hover:bg-black transition-colors duration-200 border border-neutral-800 cursor-pointer shadow-sm hover:shadow-md`}
+                className={`bg-black rounded-md px-4 py-3 hover:bg-neutral-900 transition-colors duration-200 border border-neutral-800 cursor-pointer shadow-sm hover:shadow-md`}
                 onClick={() => handleTaskClick(task)}
                 whileHover={{ y: -1 }}
               >
@@ -629,7 +629,7 @@ const epicColors = [
                       );
                     })()}
                   </div>
-                  <span className="text-[11px] text-slate-400">•</span>
+                  <span className="text-[11px] text-slate-400"></span>
                 </div>
               </motion.div>
             );
@@ -672,7 +672,7 @@ const epicColors = [
             {/* Epic Filter Dropdown */}
             <div className="relative" ref={dropdownRef}>
               <button
-                className={`flex flex-row items-center bg-neutral-900 border border-neutral-800 px-3 py-2 text-gray-100 tracking-tight text-sm rounded-md hover:bg-black transition-colors duration-200 shadow-sm ${selectedEpicFilter ? 'ring-1 ring-slate-900/10' : ''}`}
+                className={`flex flex-row items-center bg-black border border-neutral-800 px-3 py-2 text-gray-100 tracking-tight text-sm rounded-md hover:bg-neutral-900 transition-colors duration-200 shadow-sm ${selectedEpicFilter ? 'ring-1 ring-slate-900/10' : ''}`}
                 onClick={() => setShowEpicDropdown((v) => !v)}
                 type="button"
               >
@@ -719,7 +719,7 @@ const epicColors = [
             {/* End Epic Filter Dropdown */}
             <button
               onClick={toggleViewMode}
-              className="flex flex-row bg-neutral-900 border border-neutral-800 items-center px-3 py-2 text-gray-100 tracking-tight text-sm transition-colors duration-200 rounded-md hover:bg-black shadow-sm"
+              className="flex flex-row bg-black border border-neutral-800 items-center px-3 py-2 text-gray-100 tracking-tight text-sm transition-colors duration-200 rounded-md hover:bg-neutral-900 shadow-sm"
             >
               <Image
                 src={viewMode === 'kanban' ? "/list.svg" : "/kanban.svg"}
@@ -733,7 +733,7 @@ const epicColors = [
             </button>
             <button
               onClick={navigateToEpics}
-              className="flex flex-row bg-neutral-900 border border-neutral-800 items-center px-3 py-2 text-gray-100 tracking-tight text-sm transition-colors duration-200 rounded-md hover:bg-black shadow-sm"
+              className="flex flex-row bg-black border border-neutral-800 items-center px-3 py-2 text-gray-100 tracking-tight text-sm transition-colors duration-200 rounded-md hover:bg-neutral-900 shadow-sm"
             >
               <Image
                 src="/epic.svg"

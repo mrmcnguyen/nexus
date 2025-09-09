@@ -87,7 +87,7 @@ export default function KanbanTaskModal({
   const statusOptions = {
     Backlog: {
       label: 'Backlog',
-      color: 'bg-slate-800 text-slate-300 border border-slate-700',
+      color: 'bg-slate-800 text-slate-300 border border-neutral-800',
       icon: '📋'
     },
     'To Do': {
@@ -109,7 +109,7 @@ export default function KanbanTaskModal({
 
   const currentStatus = statusOptions[task.status] || {
     label: 'Unknown Status',
-    color: 'bg-slate-800 text-slate-300 border border-slate-700',
+    color: 'bg-slate-800 text-slate-300 border border-neutral-800',
     icon: '❓'
   };
 
@@ -322,10 +322,10 @@ export default function KanbanTaskModal({
             stiffness: 300,
             damping: 30
           }}
-          className="bg-gray-800 border border-slate-700 rounded-2xl w-full max-w-4xl max-h-[90vh] shadow-2xl flex flex-col"
+          className="bg-neutral-900 border border-neutral-800 rounded-md w-full max-w-4xl max-h-[90vh] shadow-2xl flex flex-col"
         >
           {/* Header */}
-          <div className="flex justify-between items-center p-6 border-b border-slate-700">
+          <div className="flex justify-between items-center p-6 border-b border-neutral-800">
             {!isEditingTitle ? (
               <h2
                 className="text-xl font-semibold text-white flex-grow cursor-pointer hover:text-slate-300 transition-colors"
@@ -349,7 +349,7 @@ export default function KanbanTaskModal({
             )}
             <button
               onClick={closeModal}
-              className="text-slate-400 hover:text-slate-200 transition-colors p-2 rounded-lg hover:bg-slate-700"
+              className="text-slate-400 hover:text-slate-200 transition-colors p-2 rounded-md hover:bg-slate-700"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -376,7 +376,7 @@ export default function KanbanTaskModal({
                     <div className="relative" ref={epicDropdownRef}>
                       <button
                         onClick={() => setIsEpicDropdownOpen(!isEpicDropdownOpen)}
-                        className="flex items-center space-x-2 text-sm text-blue-400 hover:text-blue-300 transition-colors px-3 py-1 rounded-lg hover:bg-blue-900/30"
+                        className="flex items-center space-x-2 text-sm text-blue-400 hover:text-blue-300 transition-colors px-3 py-1 rounded-md hover:bg-blue-900/30"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -385,11 +385,11 @@ export default function KanbanTaskModal({
                       </button>
 
                       {isEpicDropdownOpen && (
-                        <div className="absolute right-0 top-8 bg-gray-800 border border-slate-700 rounded-xl shadow-lg z-10 min-w-56">
+                        <div className="absolute right-0 top-8 bg-gray-800 border border-neutral-800 rounded-md shadow-lg z-10 min-w-56">
                           {currentEpic && (
                             <button
                               onClick={handleRemoveEpic}
-                              className="w-full text-left px-4 py-2 text-red-400 hover:bg-red-900/30 transition-colors text-sm border-b border-slate-700"
+                              className="w-full text-left px-4 py-2 text-red-400 hover:bg-red-900/30 transition-colors text-sm border-b border-neutral-800"
                             >
                               Remove from Epic
                             </button>
@@ -422,7 +422,7 @@ export default function KanbanTaskModal({
                   </div>
 
                   {currentEpic ? (
-                    <div className="bg-slate-700/50 rounded-xl p-4 border border-slate-600">
+                    <div className="bg-slate-700/50 rounded-md p-4 border border-slate-600">
                       <div className="flex items-center space-x-3">
                         <div className={`w-3 h-3 rounded-full ${getEpicColor(currentEpic.epic_id).split(' ')[0]}`}></div>
                         <div>
@@ -438,7 +438,7 @@ export default function KanbanTaskModal({
                       </div>
                     </div>
                   ) : (
-                    <div className="text-slate-400 text-sm bg-slate-700/50 rounded-xl p-4 border border-slate-600">
+                    <div className="text-slate-400 text-sm bg-slate-700/50 rounded-md p-4 border border-slate-600">
                       No epic assigned
                     </div>
                   )}
@@ -453,14 +453,14 @@ export default function KanbanTaskModal({
                     className="min-h-[100px] cursor-text"
                   >
                     {!isEditingDescription ? (
-                      <div className="text-slate-300 text-sm bg-slate-700/50 rounded-xl p-4 border border-slate-600 min-h-[100px]">
+                      <div className="text-slate-300 text-sm bg-slate-700/50 rounded-md p-4 border border-slate-600 min-h-[100px]">
                         {editedDescription || 'Click to add a description...'}
                       </div>
                     ) : (
                       <textarea
                         value={editedDescription}
                         onChange={(e) => setEditedDescription(e.target.value)}
-                        className="w-full bg-slate-700/50 border border-slate-600 rounded-xl p-4 text-slate-300 text-sm resize-none min-h-[100px] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full bg-slate-700/50 border border-slate-600 rounded-md p-4 text-slate-300 text-sm resize-none min-h-[100px] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         placeholder="Enter task description..."
                         onBlur={handleDescriptionSave}
                       />
@@ -484,14 +484,14 @@ export default function KanbanTaskModal({
             </div>
 
             {/* Sidebar */}
-            <div className="w-80 border-l border-slate-700 p-6 space-y-6">
+            <div className="w-80 border-l border-neutral-800 p-6 space-y-6">
               {/* Priority */}
               <div className="space-y-3">
                 <h3 className="text-sm font-medium text-slate-300">Priority</h3>
                 <div className="relative" ref={priorityDropdownRef}>
                   <button
                     onClick={() => setIsPriorityDropdownOpen(!isPriorityDropdownOpen)}
-                    className="w-full flex items-center justify-between p-3 bg-slate-700/50 border border-slate-600 rounded-xl hover:bg-slate-600 transition-colors"
+                    className="w-full flex items-center justify-between p-3 bg-slate-700/50 border border-slate-600 rounded-md hover:bg-slate-600 transition-colors"
                   >
                     <div className="flex items-center space-x-3">
                       {getCurrentPriorityOption().icon ? (
@@ -513,7 +513,7 @@ export default function KanbanTaskModal({
                   </button>
 
                   {isPriorityDropdownOpen && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-gray-800 border border-slate-700 rounded-xl shadow-lg z-10">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-gray-800 border border-neutral-800 rounded-md shadow-lg z-10">
                       {priorityOptions.map((option) => (
                         <button
                           key={option.value}
@@ -555,7 +555,7 @@ export default function KanbanTaskModal({
                           onMoveTask(key, task);
                           closeModal();
                         }}
-                        className={`w-full flex items-center space-x-2 p-3 rounded-xl text-sm transition-colors ${value.color} hover:opacity-80`}
+                        className={`w-full flex items-center space-x-2 p-3 rounded-md text-sm transition-colors ${value.color} hover:opacity-80`}
                       >
                         <span>{value.icon}</span>
                         <span className="font-medium">{value.label}</span>
@@ -567,9 +567,9 @@ export default function KanbanTaskModal({
 
               {/* Delete */}
               {/* Start Pomodoro */}
-              <div className="pt-4 border-t space-y-2 border-slate-700">
+              <div className="pt-4 border-t space-y-2 border-neutral-800">
                 <button
-                  className="w-full flex items-center justify-center space-x-2 p-3 bg-blue-900/30 border border-blue-700 rounded-xl text-blue-300 hover:bg-blue-800/50 transition-colors"
+                  className="w-full flex items-center justify-center space-x-2 p-3 bg-blue-900/30 border border-blue-700 rounded-md text-blue-300 hover:bg-blue-800/50 transition-colors"
                   onClick={() => {
                     const taskId = task.task_id || task.tasks?.task_id || '';
                     const titleParam = encodeURIComponent(editedTitle || title || '');
@@ -584,7 +584,7 @@ export default function KanbanTaskModal({
                   <span>Start Pomodoro</span>
                 </button>
                 <button
-                  className="w-full flex items-center justify-center space-x-1 p-3 bg-red-900/30 border border-red-700 rounded-xl text-red-300 hover:bg-red-800/50 transition-colors"
+                  className="w-full flex items-center justify-center space-x-1 p-3 bg-red-900/30 border border-red-700 rounded-md text-red-300 hover:bg-red-800/50 transition-colors"
                   onClick={handleDeleteTask}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -593,7 +593,7 @@ export default function KanbanTaskModal({
                   <span>Delete Task</span>
                 </button>
                 <button
-                  className="w-full flex items-center justify-center space-x-1 p-3 bg-slate-700/50 border border-slate-600 rounded-xl text-slate-300 hover:bg-slate-600 transition-colors"
+                  className="w-full flex items-center justify-center space-x-1 p-3 bg-slate-700/50 border border-slate-600 rounded-md text-slate-300 hover:bg-slate-600 transition-colors"
                   onClick={closeModal}
                 >
                   <span>Close</span>

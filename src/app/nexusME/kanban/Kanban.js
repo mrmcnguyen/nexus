@@ -9,6 +9,7 @@ import { createClient } from "../../../../supabase/client";
 import Loading from "./loading";
 import TaskModal from "./taskModal";
 import toast, { Toaster } from 'react-hot-toast';
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function KanbanComponent() {
   const [editingColumn, setEditingColumn] = useState(null);
@@ -34,48 +35,48 @@ export default function KanbanComponent() {
   const router = useRouter();
 
   const headerColors = {
-    'Backlog': 'text-slate-400',
-    'To Do': 'text-amber-400',
-    'In Progress': 'text-blue-400',
-    'Done': 'text-emerald-400'
+    'Backlog': 'text-gray-200',
+    'To Do': 'text-gray-200',
+    'In Progress': 'text-gray-200',
+    'Done': 'text-gray-200'
   }
 
   const borderColors = {
-    'Backlog': 'border-slate-700',
-    'To Do': 'border-amber-700',
-    'In Progress': 'border-blue-700',
-    'Done': 'border-emerald-700'
+    'Backlog': 'border-neutral-800',
+    'To Do': 'border-neutral-800',
+    'In Progress': 'border-neutral-800',
+    'Done': 'border-neutral-800'
   }
 
   const hoverBorderColors = {
-    'Backlog': 'hover:border-slate-700',
-    'To Do': 'hover:border-amber-700',
-    'In Progress': 'hover:border-blue-700',
-    'Done': 'hover:border-emerald-700'
+    'Backlog': 'hover:border-gray-300',
+    'To Do': 'hover:border-gray-300',
+    'In Progress': 'hover:border-gray-300',
+    'Done': 'hover:border-gray-300'
   }
 
   const columnColors = {
-    'Backlog': 'bg-slate-800/50',
-    'To Do': 'bg-amber-900/20',
-    'In Progress': 'bg-blue-900/20',
-    'Done': 'bg-emerald-900/20'
+    'Backlog': 'bg-neutral-900',
+    'To Do': 'bg-neutral-900',
+    'In Progress': 'bg-neutral-900',
+    'Done': 'bg-neutral-900'
   }
 
   // Modern priority badge styles
   const priorityColors = {
-    urgent: 'bg-red-900/30 border border-red-700 text-red-300',
-    high: 'bg-orange-900/30 border border-orange-700 text-orange-300',
-    medium: 'bg-yellow-900/30 border border-yellow-700 text-yellow-300',
-    low: 'bg-blue-900/30 border border-blue-700 text-blue-300',
-    'No Priority': 'bg-slate-800/50 border border-slate-700 text-slate-400'
+    urgent: 'bg-red-50 border border-red-200 text-red-600',
+    high: 'bg-orange-50 border border-orange-200 text-orange-600',
+    medium: 'bg-yellow-50 border border-yellow-200 text-yellow-700',
+    low: 'bg-blue-50 border border-blue-200 text-blue-600',
+    'No Priority': 'bg-black border border-neutral-800 text-gray-500'
   };
 
   const priorityLabels = {
-    urgent: 'text-red-300',
-    high: 'text-orange-300',
-    medium: 'text-yellow-300',
-    low: 'text-blue-300',
-    'No Priority': 'text-slate-400'
+    urgent: 'text-red-600',
+    high: 'text-orange-600',
+    medium: 'text-yellow-700',
+    low: 'text-blue-600',
+    'No Priority': 'text-gray-300'
   };
 
   // Priority icons mapping
@@ -88,21 +89,21 @@ export default function KanbanComponent() {
     'No Priority': '/no-priority.svg'
   };
 
-  // Modern epic color generation
-  const epicColors = [
-    'bg-purple-900/30 text-purple-300 border border-purple-700',
-    'bg-blue-900/30 text-blue-300 border border-blue-700',
-    'bg-green-900/30 text-green-300 border border-green-700',
-    'bg-yellow-900/30 text-yellow-300 border border-yellow-700',
-    'bg-red-900/30 text-red-300 border border-red-700',
-    'bg-indigo-900/30 text-indigo-300 border border-indigo-700',
-    'bg-pink-900/30 text-pink-300 border border-pink-700',
-    'bg-teal-900/30 text-teal-300 border border-teal-700',
-    'bg-orange-900/30 text-orange-300 border border-orange-700',
-    'bg-cyan-900/30 text-cyan-300 border border-cyan-700',
-    'bg-emerald-900/30 text-emerald-300 border border-emerald-700',
-    'bg-violet-900/30 text-violet-300 border border-violet-700'
-  ];
+// Modern epic color generation (Dark Mode Optimized)
+const epicColors = [
+  'bg-purple-900 text-purple-200 border border-purple-800',
+  'bg-blue-900 text-blue-200 border border-blue-800',
+  'bg-green-900 text-green-200 border border-green-800',
+  'bg-yellow-900 text-yellow-200 border border-yellow-800',
+  'bg-red-900 text-red-200 border border-red-800',
+  'bg-indigo-900 text-indigo-200 border border-indigo-800',
+  'bg-pink-900 text-pink-200 border border-pink-800',
+  'bg-teal-900 text-teal-200 border border-teal-800',
+  'bg-orange-900 text-orange-200 border border-orange-800',
+  'bg-cyan-900 text-cyan-200 border border-cyan-800',
+  'bg-emerald-900 text-emerald-200 border border-emerald-800',
+  'bg-violet-900 text-violet-200 border border-violet-800',
+];
 
   const getEpicColor = (epicId) => {
     if (!epicId) return epicColors[0];
@@ -448,8 +449,8 @@ export default function KanbanComponent() {
       position: 'top-center',
       icon: '🗑️',
       style: {
-        borderRadius: '10px',
-        background: '#333',
+        borderRadius: '12px',
+        background: '#111827',
         color: '#fff',
       },
     });
@@ -519,13 +520,13 @@ export default function KanbanComponent() {
     };
 
     return (
-      <div className="bg-gray-800 border border-slate-700 rounded-2xl p-6 h-[calc(100vh-140px)] overflow-y-auto shadow-sm">
+      <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 h-[calc(100vh-160px)] overflow-y-auto shadow-sm">
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-2xl font-bold text-white">All Tasks ({allTasks.length})</h2>
+            <h2 className="text-2xl font-semibold text-slate-800">All Tasks ({allTasks.length})</h2>
             <button
               onClick={() => setIsAddingTask(!isAddingTask)}
-              className="flex items-center space-x-2 bg-blue-600 border border-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl transition duration-200 shadow-sm"
+              className="flex items-center space-x-2 bg-slate-900 hover:bg-black text-white px-4 py-2 rounded-xl transition-colors duration-200 shadow-sm"
             >
               <Image
                 src="/plus.svg"
@@ -536,23 +537,23 @@ export default function KanbanComponent() {
               <span>Add Task</span>
             </button>
           </div>
-          <p className="text-slate-300 text-sm">Tasks organized by status and creation date</p>
+          <p className="text-gray-300 text-sm">Tasks organized by status and creation date</p>
 
           {/* Quick Add Task Form */}
           {isAddingTask && (
-            <form onSubmit={handleAddTaskToList} className="mt-4 p-4 bg-slate-700/50 border border-slate-600 rounded-xl">
+            <form onSubmit={handleAddTaskToList} className="mt-4 p-4 bg-black border border-neutral-800 rounded-xl">
               <div className="flex items-center space-x-3">
                 <input
                   type="text"
                   value={newTaskInput}
                   onChange={(e) => setNewTaskInput(e.target.value)}
                   placeholder="Enter task title..."
-                  className="flex-1 bg-slate-800 border border-slate-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 bg-neutral-900 border border-gray-300 rounded-xl px-3 py-2 text-gray-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900/30"
                   autoFocus
                 />
                 <button
                   type="submit"
-                  className="bg-green-600 border border-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition duration-200 shadow-sm"
+                  className="bg-slate-900 hover:bg-black text-white px-4 py-2 rounded-xl transition-colors duration-200 shadow-sm"
                 >
                   Add
                 </button>
@@ -562,7 +563,7 @@ export default function KanbanComponent() {
                     setIsAddingTask(false);
                     setNewTaskInput("");
                   }}
-                  className="bg-slate-600 border border-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-xl transition duration-200 shadow-sm"
+                  className="bg-neutral-900 border border-gray-300 hover:bg-black text-gray-100 px-4 py-2 rounded-xl transition-colors duration-200 shadow-sm"
                 >
                   Cancel
                 </button>
@@ -580,17 +581,19 @@ export default function KanbanComponent() {
             const createdAt = task.tasks?.created_at || task.created_at;
 
             return (
-              <div
+              <motion.div
                 key={taskId}
-                className={`bg-gray-800 rounded-xl px-4 py-3 hover:bg-slate-700 transition duration-200 border-l-4 ${borderColors[task.status]} cursor-pointer shadow-sm hover:shadow-md`}
+                layout
+                className={`bg-neutral-900 rounded-2xl px-4 py-3 hover:bg-black transition-colors duration-200 border border-neutral-800 cursor-pointer shadow-sm hover:shadow-md`}
                 onClick={() => handleTaskClick(task)}
+                whileHover={{ y: -1 }}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h3 className="text-white font-semibold text-sm">{title}</h3>
+                    <h3 className="text-gray-100 font-medium text-sm leading-6">{title}</h3>
 
                     {description && (
-                      <p className="text-slate-300 text-sm line-clamp-2 mt-1">
+                      <p className="text-gray-300 text-sm line-clamp-2 mt-1">
                         {description}
                       </p>
                     )}
@@ -602,7 +605,7 @@ export default function KanbanComponent() {
                         e.stopPropagation();
                         handleFinishTask(task);
                       }}
-                      className="text-green-400 hover:text-green-300 transition duration-200 p-1 rounded-lg hover:bg-green-900/30"
+                      className="text-gray-200 hover:text-gray-100 transition-colors duration-200 p-1 rounded-lg hover:bg-gray-100"
                       title="Mark as Done"
                     >
                       <Image
@@ -614,7 +617,21 @@ export default function KanbanComponent() {
                     </button>
                   </div>
                 </div>
-              </div>
+                {/* Lightweight metadata row */}
+                <div className="mt-2 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    {(() => {
+                      const priorityRaw = task.tasks?.priority || task.priority || 'No Priority';
+                      const normalizedPriority = typeof priorityRaw === 'string' ? priorityRaw.toLowerCase() : priorityRaw;
+                      const labelClass = priorityLabels[normalizedPriority] || 'text-gray-300';
+                      return (
+                        <span className={`text-[11px] ${labelClass}`}>{String(priorityRaw)}</span>
+                      );
+                    })()}
+                  </div>
+                  <span className="text-[11px] text-slate-400">•</span>
+                </div>
+              </motion.div>
             );
           })}
         </div>
@@ -634,128 +651,139 @@ export default function KanbanComponent() {
   }
 
   return (
-    <div className="p-6 min-h-screen flex flex-col bg-[#171717]">
-      <div className="flex flex-row justify-between items-center mb-6">
-        <div className="flex flex-row items-center">
-          <h1 className="text-4xl text-white font-bold text-left lg:text-3xl md:text-2xl 2xl:text-3xl">Personal Kanban Board</h1>
-          <span className="flex flex-row items-center ml-4 border border-slate-700 bg-gray-800 text-slate-300 text-xs rounded-xl px-3 py-1 shadow-sm">
-            <Image
-              src="/synced.svg"
-              width={14}
-              className="mr-1"
-              height={14}
-              alt="synced"
-              priority
-            />
-            Synced
-          </span>
-        </div>
-        <div className="flex flex-row space-x-3">
-          {/* Epic Filter Dropdown */}
-          <div className="relative">
+    <div className="p-6 min-h-screen flex flex-col bg-black">
+      <div className="sticky top-0 z-10 -mx-6 px-6 pb-4 bg-black/80 backdrop-blur supports-[backdrop-filter]:bg-black/70">
+        <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-row items-center">
+            <h1 className="text-2xl text-white font-semibold tracking-tight">Personal Kanban</h1>
+            <span className="flex flex-row items-center ml-3 border border-neutral-800 bg-neutral-900 text-gray-200 tracking-tight text-xs rounded-xl px-3 py-1 shadow-sm">
+              <Image
+                src="/synced.svg"
+                width={14}
+                className="mr-1"
+                height={14}
+                alt="synced"
+                priority
+              />
+              Synced
+            </span>
+          </div>
+          <div className="flex flex-row gap-2">
+            {/* Epic Filter Dropdown */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                className={`flex flex-row items-center bg-neutral-900 border border-neutral-800 px-3 py-2 text-gray-100 tracking-tight text-sm rounded-md hover:bg-black transition-colors duration-200 shadow-sm ${selectedEpicFilter ? 'ring-1 ring-slate-900/10' : ''}`}
+                onClick={() => setShowEpicDropdown((v) => !v)}
+                type="button"
+              >
+                <Image
+                  src={"/filter.svg"}
+                  className="mr-2 filter invert"
+                  width={14}
+                  alt={"filter"}
+                  height={14}
+                  priority
+                />
+                {selectedEpicFilter ? (epics.find(e => e.epic_id === selectedEpicFilter)?.title || 'Epic') : 'Filter by Epic'}
+                <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+              </button>
+
+              <AnimatePresence>
+                {showEpicDropdown && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -6, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -6, scale: 0.98 }}
+                    transition={{ duration: 0.12, ease: 'easeOut' }}
+                    className="absolute right-0 z-20 mt-2 w-64 bg-neutral-800 border py-2 border-neutral-800 rounded-md shadow-lg"
+                  >
+                    <button
+                      className="w-full text-left text-sm px-4 py-2 text-gray-100 hover:bg-neutral-900"
+                      onClick={() => { setSelectedEpicFilter(null); setShowEpicDropdown(false); }}
+                    >
+                      All Epics
+                    </button>
+                    {epics.map(epic => (
+                      <button
+                        key={epic.epic_id}
+                        className={`w-full text-left px-4 py-2 hover:bg-neutral-900 flex items-center space-x-2 ${selectedEpicFilter === epic.epic_id ? 'bg-black' : ''}`}
+                        onClick={() => { setSelectedEpicFilter(epic.epic_id); setShowEpicDropdown(false); }}
+                      >
+                        <span className={`${getEpicColor(epic.epic_id)} px-2 py-1 rounded-full text-xs`}>{epic.title}</span>
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+            {/* End Epic Filter Dropdown */}
             <button
-              className={`flex flex-row items-center border border-slate-700 bg-gray-800 px-4 py-2 text-slate-300 rounded-xl hover:bg-gray-700 transition duration-200 shadow-sm ${selectedEpicFilter ? 'border-blue-600 bg-blue-900/30' : ''}`}
-              onClick={() => setShowEpicDropdown((v) => !v)}
-              type="button"
+              onClick={toggleViewMode}
+              className="flex flex-row bg-neutral-900 border border-neutral-800 items-center px-3 py-2 text-gray-100 tracking-tight text-sm transition-colors duration-200 rounded-md hover:bg-black shadow-sm"
             >
               <Image
-                src={"/filter.svg"}
+                src={viewMode === 'kanban' ? "/list.svg" : "/kanban.svg"}
                 className="mr-2 filter invert"
                 width={14}
-                alt={"filter"}
+                alt={viewMode === 'kanban' ? "list" : "kanban"}
                 height={14}
                 priority
               />
-              {selectedEpicFilter ? (epics.find(e => e.epic_id === selectedEpicFilter)?.title || 'Epic') : 'Filter by Epic'}
-              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+              {viewMode === 'kanban' ? 'View as List' : 'View as Kanban'}
             </button>
-
-            {/* Dropdown */}
-            {showEpicDropdown && (
-              <div
-                className="absolute z-20 mt-2 w-64 bg-gray-800 border border-slate-700 rounded-xl shadow-lg transition-all duration-200 ease-out origin-top opacity-100 scale-100 translate-y-0 animate-epic-dropdown"
-                style={{
-                  animation: 'epicDropdownFadeIn 0.18s cubic-bezier(0.4,0,0.2,1)'
-                }}
-              >
-                <button
-                  className="w-full text-left px-4 py-2 text-slate-300 hover:bg-gray-700 rounded-t-xl"
-                  onClick={() => { setSelectedEpicFilter(null); setShowEpicDropdown(false); }}
-                >
-                  All Epics
-                </button>
-                {epics.map(epic => (
-                  <button
-                    key={epic.epic_id}
-                    className={`w-full text-left px-4 py-2 hover:bg-gray-700 flex items-center space-x-2 ${selectedEpicFilter === epic.epic_id ? 'bg-blue-900/30' : ''}`}
-                    onClick={() => { setSelectedEpicFilter(epic.epic_id); setShowEpicDropdown(false); }}
-                  >
-                    <span className={`${getEpicColor(epic.epic_id)} px-2 py-1 rounded-full text-xs`}>{epic.title}</span>
-                  </button>
-                ))}
-              </div>
-            )}
+            <button
+              onClick={navigateToEpics}
+              className="flex flex-row bg-neutral-900 border border-neutral-800 items-center px-3 py-2 text-gray-100 tracking-tight text-sm transition-colors duration-200 rounded-md hover:bg-black shadow-sm"
+            >
+              <Image
+                src="/epic.svg"
+                className="mr-2 filter invert"
+                width={14}
+                alt="epic"
+                height={14}
+                priority
+              />
+              Manage Epics
+            </button>
           </div>
-          {/* End Epic Filter Dropdown */}
-          <button
-            onClick={toggleViewMode}
-            className="flex flex-row border border-slate-700 bg-gray-800 items-center px-4 py-2 text-slate-300 transition duration-200 rounded-xl hover:bg-gray-700 shadow-sm"
-          >
-            <Image
-              src={viewMode === 'kanban' ? "/list.svg" : "/kanban.svg"}
-              className="mr-2 filter invert"
-              width={14}
-              alt={viewMode === 'kanban' ? "list" : "kanban"}
-              height={14}
-              priority
-            />
-            {viewMode === 'kanban' ? 'View as List' : 'View as Kanban'}
-          </button>
-          <button
-            onClick={navigateToEpics}
-            className="flex flex-row border border-slate-700 bg-gray-800 items-center px-4 py-2 text-slate-300 transition duration-200 rounded-xl hover:bg-gray-700 shadow-sm"
-          >
-            <Image
-              src="/epic.svg"
-              className="mr-2 filter invert"
-              width={14}
-              alt="epic"
-              height={14}
-              priority
-            />
-            Manage Epics
-          </button>
         </div>
       </div>
 
-      {isModalOpen && (<TaskModal
-        isVisible={isModalOpen}
-        closeModal={() => setIsModalOpen(false)}
-        task={selectedTask}
-        onDeleteTask={(task) => {
-          removeTask(task);
-          showDeletionNotification(task);
-          setIsModalOpen(false);
-        }}
-        onDescriptionUpdate={(task, description) => updateTaskDescription(task, description)}
-        onTitleUpdate={(task, title) => updateTaskTitle(task, title)}
-        onFinishTask={(task) => handleFinishTask(task)}
-        onMoveTask={(task, key) => handleMoveTask(task, key)}
-        epics={epics}
-        onAssignEpicToTask={(taskID, epic_id) => assignEpicToTask(taskID, epic_id)}
-        onRemoveEpicFromTask={removeEpicFromTask}
-        onPriorityUpdate={(taskId, priority) => handleTaskPriorityUpdate(taskId, priority)}
-      />)}
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <TaskModal
+              isVisible={isModalOpen}
+              closeModal={() => setIsModalOpen(false)}
+              task={selectedTask}
+              onDeleteTask={(task) => {
+                removeTask(task);
+                showDeletionNotification(task);
+                setIsModalOpen(false);
+              }}
+              onDescriptionUpdate={(task, description) => updateTaskDescription(task, description)}
+              onTitleUpdate={(task, title) => updateTaskTitle(task, title)}
+              onFinishTask={(task) => handleFinishTask(task)}
+              onMoveTask={(task, key) => handleMoveTask(task, key)}
+              epics={epics}
+              onAssignEpicToTask={(taskID, epic_id) => assignEpicToTask(taskID, epic_id)}
+              onRemoveEpicFromTask={removeEpicFromTask}
+              onPriorityUpdate={(taskId, priority) => handleTaskPriorityUpdate(taskId, priority)}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Epic Assignment Modal */}
+      <AnimatePresence>
       {isEpicModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white border border-slate-200 rounded-xl p-6 w-full max-w-md shadow-xl">
+        <motion.div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <motion.div initial={{ y: 12, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 12, opacity: 0 }} transition={{ type: 'spring', stiffness: 300, damping: 26 }} className="bg-neutral-900 border border-slate-200 rounded-2xl p-6 w-full max-w-md shadow-xl">
             <h2 className="text-xl font-semibold text-slate-800 mb-4">
               Assign Epic
             </h2>
 
-            <p className="text-slate-600 mb-4">
+            <p className="text-gray-200 mb-4">
               Assign "{selectedTaskForEpic?.tasks?.title || selectedTaskForEpic?.title}" to an epic:
             </p>
 
@@ -764,7 +792,7 @@ export default function KanbanComponent() {
                 <button
                   key={epic.epic_id}
                   onClick={() => assignEpicToTask(epic.epic_id)}
-                  className="w-full text-left p-3 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition duration-200"
+                  className="w-full text-left p-3 bg-black border border-neutral-800 rounded-xl hover:bg-gray-100 transition-colors duration-200"
                 >
                   <div className="flex items-center space-x-2">
                     <span className={`${getEpicColor(epic.epic_id)} px-2 py-1 rounded-full text-xs`}>
@@ -773,15 +801,15 @@ export default function KanbanComponent() {
                     <span className="text-slate-800 font-medium">{epic.name}</span>
                   </div>
                   {epic.description && (
-                    <div className="text-slate-600 text-sm mt-1">{epic.description}</div>
+                    <div className="text-gray-200 text-sm mt-1">{epic.description}</div>
                   )}
-                  <div className="text-slate-500 text-xs mt-1">{epic.task_count} tasks</div>
+                  <div className="text-gray-300 text-xs mt-1">{epic.task_count} tasks</div>
                 </button>
               ))}
             </div>
 
             {epics.length === 0 && (
-              <p className="text-slate-500 text-center py-4">
+              <p className="text-gray-300 text-center py-4">
                 No epics available. Create one first!
               </p>
             )}
@@ -792,25 +820,31 @@ export default function KanbanComponent() {
                   setIsEpicModalOpen(false);
                   setSelectedTaskForEpic(null);
                 }}
-                className="px-4 py-2 text-slate-600 hover:text-slate-800 transition duration-200"
+                className="px-4 py-2 text-gray-200 hover:text-gray-100 transition-colors duration-200"
               >
                 Cancel
               </button>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       {/* Kanban Board */}
       {viewMode === 'kanban' && (
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
-          {['Backlog', 'To Do', 'In Progress', 'Done'].map((status, index) => (
-            <div
+        <div className="flex flex-1 gap-4 overflow-x-auto">
+        <motion.div layout className="flex flex-row gap-4 w-full">
+          {['Backlog', 'To Do', 'In Progress', 'Done'].map((status) => (
+            <motion.div
               key={status}
-              className={`${columnColors[status]} rounded-2xl p-4 flex flex-col min-h-[600px]`}
+              layout
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.15 }}
+              className={`${columnColors[status]} rounded-md p-4 flex flex-col min-h-[600px] flex-1 min-w-[300px] border border-neutral-800 shadow-sm`}
             >
               {/* Column Header */}
-              <div className="flex flex-row items-center mb-6">
+              <div className="flex flex-row items-center mb-4">
                 <Image
                   src={`/${status.toLowerCase().replace(' ', '')}.svg`}
                   className="mr-3"
@@ -820,18 +854,18 @@ export default function KanbanComponent() {
                   priority
                 />
                 <div className="flex flex-row w-full justify-between items-center">
-                  <h2 className={`text-lg ${headerColors[status]} font-semibold`}>
+                  <h2 className={`text-base ${headerColors[status]} tracking-tight font-semibold`}>
                     {status}
                   </h2>
-                  <div className={`text-sm ${headerColors[status]} bg-gray-700/60 px-2 py-1 rounded-full font-medium`}>
+                  <div className={`text-xs text-gray-200 border border-neutral-800 bg-black px-2 py-1 rounded-full font-medium`}>
                     {getTasksByStatus(status).length}
                   </div>
                 </div>
               </div>
-
+      
               {/* Task List */}
               <div
-                className={`flex-1 space-y-3 transition-colors ${dragOverColumn === status ? 'bg-gray-700/30 rounded-xl' : ''}`}
+                className={`flex-1 space-y-3 transition-colors overflow-y-auto ${dragOverColumn === status ? 'bg-black rounded-xl' : ''}`}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
                   handleDrop(status, e);
@@ -841,29 +875,33 @@ export default function KanbanComponent() {
                 onDragLeave={() => setDragOverColumn(null)}
               >
                 {getTasksByStatus(status).map((task) => (
-                  <div
+                  <motion.div
                     key={task.tasks?.task_id || task.task_id || 'UNKNOWN'}
-                    className={`p-4 bg-gray-800 rounded-xl shadow-sm border border-gray-800 ${borderColors[status]} ${hoverBorderColors[status]} transition-all duration-100 ease-in-out cursor-pointer`}
+                    layout
+                    className={`p-4 bg-neutral-900 rounded-md shadow-sm border ${borderColors[status]} ${hoverBorderColors[status]} transition-all duration-150 ease-in-out cursor-pointer hover:shadow-md`}
                     draggable="true"
                     onDragStart={(e) => e.dataTransfer.setData('task', JSON.stringify(task))}
                     onClick={() => handleTaskClick(task)}
                   >
-                    <div className="flex flex-col space-y-3">
-                      <p className="text-white text-sm font-medium leading-relaxed">
+                    <div className="flex flex-col gap-2">
+                      <p className="text-gray-100 text-sm tracking-tight font-medium leading-relaxed">
                         {task.tasks?.title || task.title || 'UNKNOWN'}
                       </p>
-
+      
                       {/* Epic Badge and Priority */}
                       <div className="flex flex-row items-center justify-between">
                         {task.tasks.taskEpics?.[0]?.epics?.title && (
                           <div className="flex items-center space-x-1">
-                            <div className={`${getEpicColor(task.tasks.taskEpics[0].epics.epic_id)} px-2 py-1 rounded-full text-xs font-medium`}>
-                              {task.tasks.taskEpics[0].epics.title}
+                            <div className="flex items-center space-x-1 px-2 py-1 border border-neutral-800 rounded-full">
+                              <div className={`w-2 h-2 rounded-full ${getEpicColor(task.tasks.taskEpics[0].epics.epic_id)}`}></div>
+                              <span className="text-[9px] tracking-tight font-normal text-gray-200">
+                                {task.tasks.taskEpics[0].epics.title}
+                              </span>
                             </div>
                           </div>
                         )}
-
-                        <div className="flex items-center space-x-1">
+      
+                        <div className="flex items-center space-x-2">
                           {(() => {
                             const priorityRaw = task.tasks?.priority || task.priority || 'No Priority';
                             const normalizedPriority = typeof priorityRaw === 'string' ? priorityRaw.toLowerCase() : priorityRaw;
@@ -871,19 +909,19 @@ export default function KanbanComponent() {
                             return (
                               <Image
                                 src={iconPath}
+                                className="filter invert"
                                 alt={priorityRaw}
                                 width={16}
                                 height={16}
-                                className="filter invert"
                               />
                             );
                           })()}
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
-
+      
                 {/* Add Task Section */}
                 {editingColumn === status ? (
                   <input
@@ -893,12 +931,12 @@ export default function KanbanComponent() {
                     onKeyDown={(e) => handleKeyDown(e, status)}
                     onBlur={() => setEditingColumn(null)}
                     autoFocus
-                    className="p-3 bg-gray-800 border border-slate-700 text-white w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+                    className="p-3 bg-neutral-900 border border-gray-300 text-gray-100 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900/30 shadow-sm"
                     placeholder="Add new task..."
                   />
                 ) : (
                   <button
-                    className="flex w-full text-sm rounded-xl items-center text-slate-400 p-3 hover:bg-gray-700/50 transition duration-200 ease-in-out border-2 border-dashed border-slate-600 hover:border-slate-500"
+                    className="flex w-full text-sm rounded-xl items-center text-gray-300 p-3 hover:bg-black transition-colors duration-200 ease-in-out border-2 border-dashed border-neutral-800 hover:border-gray-300"
                     onClick={() => {
                       setEditingColumn(status);
                       setNewTaskTitle(''); // Reset input when opening
@@ -906,7 +944,7 @@ export default function KanbanComponent() {
                   >
                     <Image
                       src="/plus.svg"
-                      className="mr-2 filter invert"
+                      className="mr-2"
                       width={14}
                       height={14}
                       alt="Add Task"
@@ -916,9 +954,10 @@ export default function KanbanComponent() {
                   </button>
                 )}
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
+      </div>
       )}
 
       {/* List View */}
@@ -928,7 +967,7 @@ export default function KanbanComponent() {
 
       {deletionNotification && (
         <div
-          className="fixed bottom-4 right-4 bg-green-600 border border-green-700 text-white p-4 rounded-xl shadow-lg z-50 transition-all duration-300 ease-in-out"
+          className="fixed bottom-4 right-4 bg-slate-900 border border-black/10 text-white px-4 py-2 rounded-xl shadow-lg z-50 transition-all duration-300 ease-in-out"
           style={{
             animation: 'fadeInOut 3s ease-in-out'
           }}

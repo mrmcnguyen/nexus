@@ -15,7 +15,7 @@ export default function ChooseFramework() {
       },
       {
         name: "The Pomodoro",
-        description: "Work in short, focused intervals, followed by brief breaks to enhance focus and productivity.",
+        description: "Work in short, focused intervals, followed by breaks.",
         link: "/nexusME/pomodoro",
       },
       {
@@ -29,29 +29,6 @@ export default function ChooseFramework() {
         link: "/nexusME/mindMap",
       },
     ];
-
-  //   const [user, setUser] = useState(null);
-  //   const router = useRouter();
-  //   const [loading, setLoading] = useState(true);
-
-  //   useEffect(() => {
-  //     const fetchUser = async () => {
-  //         const { data, error } = await supabase.auth.getUser();
-  //         console.log(data);
-  //         if (!error){
-  //             setUser(data.user);  // Set the user data
-  //             setLoading(false);  // Stop loading after fetching
-  //         } else{
-  //             setUser("undefined");
-  //         }
-  //     }
-
-  //     if (user === "undefined") {
-  //         router.push('/signIn');  // Redirect only when loading is done and user is still null
-  //     }
-
-  //     fetchUser();
-  // }, []);
   
     return (
       <main className="bg-fixed bg-cover bg-center">

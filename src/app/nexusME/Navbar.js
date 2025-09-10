@@ -85,7 +85,7 @@ export default function Navbar({ page }) {
 
       {/* Right-side Buttons */}
       <div className="flex flex-row ml-auto pr-4 items-center space-x-4">
-        <a className="flex flex-row bg-gradient-to-br from-[#2f2f2f] items-center px-4 py-1 text-gray-300 transition duration-200 border border-[#454545] align-middle text-sm text-light rounded-lg hover:bg-[#2F2F2F]"
+        <a className="flex flex-row bg-gradient-to-br from-black items-center px-4 py-1 text-gray-300 transition duration-200 border border-[#454545] align-middle text-sm text-light rounded-lg hover:bg-[#2F2F2F]"
           href='https://github.com/mrmcnguyen/nexus'
           target='_blank'
         >

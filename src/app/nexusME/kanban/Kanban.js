@@ -56,10 +56,10 @@ export default function KanbanComponent() {
   }
 
   const columnColors = {
-    'Backlog': 'bg-neutral-900',
-    'To Do': 'bg-neutral-900',
-    'In Progress': 'bg-neutral-900',
-    'Done': 'bg-neutral-900'
+    'Backlog': 'bg-neutral-950',
+    'To Do': 'bg-neutral-950',
+    'In Progress': 'bg-neutral-950',
+    'Done': 'bg-neutral-950'
   }
 
   // Modern priority badge styles
@@ -89,6 +89,51 @@ export default function KanbanComponent() {
     'No Priority': '/no-priority.svg'
   };
 
+// Priority badge configuration
+const priorityConfig = {
+  low: {
+    label: 'Low',
+    icon: '●',
+    bgColor: 'bg-green-500/15',
+    textColor: 'text-green-400',
+    borderColor: 'border-green-500/15'
+  },
+  medium: {
+    label: 'Medium',
+    icon: '▲',
+    bgColor: 'bg-amber-500/15',
+    textColor: 'text-amber-400',
+    borderColor: 'border-amber-500/15'
+  },
+  high: {
+    label: 'High',
+    icon: '◆',
+    bgColor: 'bg-red-500/15',
+    textColor: 'text-red-400',
+    borderColor: 'border-red-500/15'
+  },
+  critical: {
+    label: 'Critical',
+    icon: '⚠',
+    bgColor: 'bg-purple-500/15',
+    textColor: 'text-purple-400',
+    borderColor: 'border-purple-500/15'
+  },
+  urgent: {
+    label: 'Urgent',
+    icon: '⚠',
+    bgColor: 'bg-purple-500/15',
+    textColor: 'text-purple-400',
+    borderColor: 'border-purple-500/15'
+  },
+  'no priority': {
+    label: 'None',
+    icon: '○',
+    bgColor: 'bg-gray-500/15',
+    textColor: 'text-gray-400',
+    borderColor: 'border-gray-500/15'
+  }
+};
 // Modern epic color generation (Dark Mode Optimized)
 const epicColors = [
   'bg-purple-900 text-purple-200 border border-purple-800',
@@ -833,14 +878,12 @@ const epicColors = [
       {/* Kanban Board */}
       {viewMode === 'kanban' && (
         <div className="flex flex-1 gap-4 overflow-x-auto">
-        <motion.div layout className="flex flex-row gap-4 w-full">
+        <motion.div className="flex flex-row gap-4 w-full">
           {['Backlog', 'To Do', 'In Progress', 'Done'].map((status) => (
             <motion.div
               key={status}
-              layout
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.15 }}
               className={`${columnColors[status]} rounded-md p-4 flex flex-col min-h-[600px] flex-1 min-w-[300px] border border-neutral-800 shadow-sm`}
             >
               {/* Column Header */}
@@ -877,8 +920,7 @@ const epicColors = [
                 {getTasksByStatus(status).map((task) => (
                   <motion.div
                     key={task.tasks?.task_id || task.task_id || 'UNKNOWN'}
-                    layout
-                    className={`p-4 bg-neutral-900 rounded-md shadow-sm border ${borderColors[status]} ${hoverBorderColors[status]} transition-all duration-150 ease-in-out cursor-pointer hover:shadow-md`}
+                    className={`p-4 bg-neutral-900 rounded-md shadow-sm border ${borderColors[status]} transition-all duration-150 ease-in-out cursor-pointer hover:border-neutral-600`}
                     draggable="true"
                     onDragStart={(e) => e.dataTransfer.setData('task', JSON.stringify(task))}
                     onClick={() => handleTaskClick(task)}
@@ -894,29 +936,30 @@ const epicColors = [
                           <div className="flex items-center space-x-1">
                             <div className="flex items-center space-x-1 px-2 py-1 border border-neutral-800 rounded-full">
                               <div className={`w-2 h-2 rounded-full ${getEpicColor(task.tasks.taskEpics[0].epics.epic_id)}`}></div>
-                              <span className="text-[9px] tracking-tight font-normal text-gray-200">
+                              <span className="text-[10px] tracking-tight font-normal text-gray-200">
                                 {task.tasks.taskEpics[0].epics.title}
                               </span>
                             </div>
                           </div>
                         )}
-      
                         <div className="flex items-center space-x-2">
-                          {(() => {
-                            const priorityRaw = task.tasks?.priority || task.priority || 'No Priority';
-                            const normalizedPriority = typeof priorityRaw === 'string' ? priorityRaw.toLowerCase() : priorityRaw;
-                            const iconPath = priorityIcons[normalizedPriority] || priorityIcons[priorityRaw];
-                            return (
-                              <Image
-                                src={iconPath}
-                                className="filter invert"
-                                alt={priorityRaw}
-                                width={16}
-                                height={16}
-                              />
-                            );
-                          })()}
-                        </div>
+                        {(() => {
+                          const priorityRaw = task.tasks?.priority || task.priority || 'No Priority';
+                          const normalizedPriority = typeof priorityRaw === 'string' ? priorityRaw.toLowerCase() : priorityRaw;
+                          const config = priorityConfig[normalizedPriority] || priorityConfig['no priority'];
+
+                          return (
+                            <div className={`
+                              inline-flex items-center gap-1 px-2 py-1 rounded-md
+                              ${config.bgColor} ${config.textColor} ${config.borderColor}
+                              text-xs font-semibold uppercase tracking-tight
+                            `}>
+                              <span className="text-xs">{config.icon}</span>
+                              <span className="text-[10px] tracking-tight">{config.label}</span>
+                            </div>
+                          );
+                        })()}
+                      </div>
                       </div>
                     </div>
                   </motion.div>

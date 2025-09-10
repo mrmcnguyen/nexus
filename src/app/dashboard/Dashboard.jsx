@@ -164,19 +164,19 @@ export default function Dashboard() {
     }
 
     return (
-        <main className="flex flex-col min-h-screen p-5 bg-fixed bg-cover bg-center overflow-hidden">
+        <main className="flex flex-col min-h-screen p-5 bg-fixed bg-cover bg-center bg-black overflow-hidden">
             <header className="w-full flex justify-between items-center pt-5">
                 <Image src="/nexusNoBorder.png" width={160} height={40} alt="Nexus Logo" className="pl-10" />
                 <div className="flex flex-row space-x-2 mr-10">
-                    {/* <div className="flex flex-row items-center bg-[#1f1f1f] px-4 text-sm text-gray-400 rounded-2xl">Help <FiHelpCircle className="ml-1"/></div> */}
+                    {/* <div className="flex flex-row items-center bg-neutral-900 px-4 text-sm text-gray-400 rounded-2xl">Help <FiHelpCircle className="ml-1"/></div> */}
                     <motion.button
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         variants={buttonVariants}
                         whileHover="hover"
-                        className="px-4 py-2 bg-gradient-to-br from-[#2f2f2f] text-gray-400 hover:text-white border border-gray-700 
+                        className="px-4 py-2 bg-gradient-to-br from-[#2f2f2f] text-gray-400 hover:text-white border border-neutral-800 
                              rounded-lg transition-all duration-200 flex items-center space-x-2 
-                             hover:border-gray-500 "
+                             hover:border-neutral-800 "
                         onClick={() => setIsModalOpen(true)}
                     >
                         Account
@@ -186,7 +186,7 @@ export default function Dashboard() {
                         animate={{ opacity: 1 }}
                         variants={buttonVariants}
                         whileHover="hover"
-                        className="px-4 py-2 text-gray-800 border border-gray-700 
+                        className="px-4 py-2 text-gray-800 border border-neutral-800 
                              rounded-lg transition-all duration-200 flex items-center space-x-2 
                              bg-[#91C8FF]"
                         href='https://github.com/mrmcnguyen/nexus'
@@ -208,8 +208,8 @@ export default function Dashboard() {
                 <div className="flex flex-row w-full p-10 text-left justify-between h-full pt-5">
                     <div className="flex flex-col">
                         <h1 className="lg:text-7xl md:text-6xl 2xl:text-8xl font-semibold text-gray-400 mb-4">{currentTime}</h1>
-                        <h2 className="text-gray-400 text-2xl md:text-4xl font-light mb-2">Welcome, {userName}</h2>
-                        <h2 className="text-gray-400 text-2xl md:text-4xl font-semibold mb-2">{formatDate()}</h2>
+                        <h2 className="text-gray-400 text-2xl md:text-4xl tracking-tight font-light mb-2">Welcome, {userName}</h2>
+                        <h2 className="text-gray-400 text-2xl md:text-4xl tracking-tight font-semibold mb-2">{formatDate()}</h2>
                     </div>
 
                     <div className="flex flex-col space-y-4">
@@ -223,7 +223,7 @@ export default function Dashboard() {
                                     whileHover={{ scale: 1.02 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.3 }}
-                                    className="p-6 rounded-xl bg-gradient-to-br from-[#1f1f1f] relative overflow-hidden
+                                    className="p-6 rounded-md bg-gradient-to-br from-[#1f1f1f] relative overflow-hidden
                                           hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-800
                                           hover:border-blue-500/30"
                                 >
@@ -247,7 +247,7 @@ export default function Dashboard() {
                                     whileHover={{ scale: 1.02 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.3 }}
-                                    className="p-6 rounded-xl bg-gradient-to-br from-[#1f1f1f] relative overflow-hidden
+                                    className="p-6 rounded-md bg-gradient-to-br from-[#1f1f1f] relative overflow-hidden
                                           hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-800
                                           hover:border-blue-500/30"
                                 >
@@ -269,7 +269,7 @@ export default function Dashboard() {
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="bg-[#1f1f1f] bg-[#1f1f1f] rounded-xl p-6 border border-[#2e2e2e]"
+                        className="bg-neutral-900 rounded-md p-6 border border-neutral-800"
                     >
                         <h3 className="text-gray-200 text-lg font-semibold mb-4">Notifications</h3>
                         <div className="space-y-3">
@@ -309,16 +309,16 @@ export default function Dashboard() {
                     </motion.div>
 
                     {/* Personal Tasks */}
-                    <div className="bg-[#1f1f1f] rounded-xl p-6 border border-[#2e2e2e] shadow-lg flex flex-col w-full max-w-xl mx-auto">
+                    <div className="bg-neutral-900 rounded-md p-6 border border-neutral-800 shadow-lg flex flex-col w-full max-w-xl mx-auto">
                         <h2 className="text-lg font-semibold text-gray-100 mb-4">Personal Tasks</h2>
                         {tasks.personal && tasks.personal.length > 0 ? (
                             <>
                                 {tasks.personal.slice(0, 6).map((task, idx) => {
-                                    let borderColor = 'border-l-4 border-gray-600';
+                                    let borderColor = 'border-l-4 border-neutral-800';
                                     if (task.status === 'Done') borderColor = 'border-l-4 border-green-500';
                                     else if (task.status === 'In Progress') borderColor = 'border-l-4 border-blue-500';
                                     else if (task.status === 'To Do') borderColor = 'border-l-4 border-yellow-400';
-                                    else if (task.status === 'Backlog') borderColor = 'border-l-4 border-gray-500';
+                                    else if (task.status === 'Backlog') borderColor = 'border-l-4 border-neutral-800';
                                     return (
                                         <div
                                             key={task.id || idx}
@@ -349,7 +349,7 @@ export default function Dashboard() {
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="bg-[#1f1f1f] rounded-xl p-6 border border-[#2e2e2e] col-span-2"
+                        className="bg-neutral-900 rounded-md p-6 border border-neutral-800 col-span-2"
                     >
                         <h3 className="text-gray-200 text-lg font-semibold mb-4">Team Tasks</h3>
                         <div className="grid grid-cols-2 gap-4">

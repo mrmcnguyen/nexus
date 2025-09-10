@@ -70,12 +70,12 @@ export default function Quadrant({
 
   return (
     <div
-      className={`p-6 bg-[#1a1a1a] text-white ${borderRoundness} shadow-2xl flex flex-col h-full border border-[#333] transition-colors`}
+      className={`p-6 bg-neutral-950 text-white ${borderRoundness} shadow-2xl flex flex-col h-full border border-[#333] transition-colors`}
       onDragOver={onDragOver}
       onDrop={onDrop}
     >
-      <h2 className="text-lg font-medium text-gray-100 mb-1">{title}</h2>
-      <p className="text-sm font-light text-gray-400 mb-4">{description}</p>
+      <h2 className="text-lg tracking-tight font-medium text-gray-100 mb-1">{title}</h2>
+      <p className="text-sm tracking-tight font-light text-gray-400 mb-4">{description}</p>
       {/* Task List */}
       <ul
         ref={ulRef}
@@ -95,9 +95,9 @@ export default function Quadrant({
           return (
             <li
               key={index}
-              className={`p-3 rounded-lg border text-sm font-normal shadow transition-colors cursor-pointer ${isDone
+              className={`p-3 rounded-md border text-sm tracking-tight font-normal shadow transition-colors cursor-pointer ${isDone
                 ? 'bg-green-900/30 text-green-300 border-green-600/40 line-through opacity-80'
-                : 'bg-[#232323] text-gray-300 border-[#444] hover:bg-[#292929]'}
+                : 'bg-neutral-900 text-gray-300 border-neutral-800 hover:bg-neutral-800'}
               `}
               onClick={() => onTaskClick(task)}
             >
@@ -124,13 +124,13 @@ export default function Quadrant({
             onChange={(e) => setNewTask(e.target.value)}
             onKeyDown={handleKeyPress}
             onBlur={() => setIsEditing(false)}
-            className="p-3 mt-2 text-sm rounded-lg bg-[#2a2a2a] border border-[#444] text-gray-300 w-full focus:outline-none focus:border-blue-500 placeholder:text-gray-500 transition-colors"
+            className="p-3 mt-2 text-sm rounded-lg bg-[#2a2a2a] border border-neutral-800 text-gray-300 w-full focus:outline-none focus:border-blue-500 placeholder:text-gray-500 transition-colors"
             placeholder="Add new task..."
             autoFocus
           />
         ) : (
           <button
-            className={`flex flex-row items-center text-sm w-full text-blue-400 p-3 mt-2 rounded-lg hover:bg-[#232323] transition-colors opacity-90 hover:opacity-100`}
+            className={`flex flex-row items-center border-2 border-dashed border-neutral-800 hover:border-neutral-700 text-sm w-full text-gray-200 p-3 mt-2 rounded-lg hover:bg-[#232323] transition-colors opacity-90 hover:opacity-100`}
             onClick={() => setIsEditing(true)}
           >
             <Image

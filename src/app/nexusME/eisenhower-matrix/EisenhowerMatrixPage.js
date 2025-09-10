@@ -236,7 +236,7 @@ export default function EisenhowerMatrixPage() {
   }
 
   return (
-    <div className="h-screen flex p-4 bg-[#171717] space-x-8 relative">
+    <div className="h-screen flex p-4 bg-black space-x-8 relative">
       {/* Deletion Notification */}
 
       <style jsx global>{`
@@ -246,9 +246,9 @@ export default function EisenhowerMatrixPage() {
         }
       `}</style>
 
-      <div className="w-1/4 bg-[#1a1a1a] border border-[#333] shadow-2xl rounded-xl p-6 h-full flex flex-col">
+      <div className="w-1/4 bg-neutral-950 border border-[#333] shadow-2xl rounded-xl p-6 h-full flex flex-col">
         <div className='flex flex-row justify-between items-center mb-4'>
-          <h2 className="text-lg font-medium text-gray-100">Backlog</h2>
+          <h2 className="text-lg font-medium tracking-tight text-gray-100">Backlog</h2>
           <button className='flex flex-row items-center text-gray-400 hover:text-gray-200 transition-colors px-3 py-1 rounded-lg hover:bg-[#333]' onClick={() => setHelpClick(true)}>
             Help
             <Image
@@ -263,7 +263,7 @@ export default function EisenhowerMatrixPage() {
           <HelpModal isVisible={helpClick} closeModal={() => setHelpClick(false)} />
         </div>
         <input
-          className='bg-[#2a2a2a] border border-[#444] w-full text-sm text-gray-300 p-3 mb-4 rounded-lg focus:outline-none focus:border-blue-500 placeholder:text-gray-500 transition-colors'
+          className='bg-neutral-800 border border-[#444] w-full text-sm text-gray-300 p-3 mb-4 rounded-lg focus:outline-none focus:border-blue-500 placeholder:text-gray-500 transition-colors'
           placeholder='Enter everything you need done...'
           onKeyDown={handleKeyPress}
           value={newTask}

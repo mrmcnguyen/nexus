@@ -182,12 +182,10 @@ export default function EpicManager() {
     }
 
     return (
-        <div className="p-8 pt-4 min-h-screen bg-[#171717]">
+        <div className="p-8 pt-4 min-h-screen bg-black">
             <div className="flex flex-row justify-between items-center mb-6">
                 <div className="flex flex-row items-center">
-                    <h1 className="text-5xl text-gray-300 font-black text-left lg:text-4xl md:text-3xl 2xl:text-4xl">
-                        Epic Management
-                    </h1>
+                <h1 className="text-2xl text-white font-semibold tracking-tight">Epic Management</h1>
                     <span className="flex flex-row items-center m-4 border border-[#2F2F2F] bg-gradient-to-br from-[#1f1f1f] text-gray-400 text-xs rounded-2xl px-2">
                         <Image
                             src="/epic.svg"
@@ -204,7 +202,7 @@ export default function EpicManager() {
                 <div className="flex flex-row space-x-4">
                     <button
                         onClick={navigateToKanban}
-                        className="flex flex-row border border-[#2F2F2F] lg:text-sm 2xl:text-base bg-[#1f1f1f] items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-lg hover:bg-[#707070]"
+                        className="flex flex-row border border-neutral-800 lg:text-sm 2xl:text-base bg-black tracking-tight items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-md hover:bg-neutral-900"
                     >
                         <Image
                             src="/kanban.svg"
@@ -218,7 +216,7 @@ export default function EpicManager() {
                     </button>
                     <button
                         onClick={openAddModal}
-                        className="flex flex-row border border-[#2F2F2F] lg:text-sm 2xl:text-base bg-[#1f1f1f] items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-lg hover:bg-[#707070]"
+                        className="flex flex-row border border-neutral-800 lg:text-sm 2xl:text-base bg-black tracking-tight items-center px-4 py-2 text-gray-300 transition duration-200 align-middle text-light rounded-md hover:bg-neutral-900"
                     >
                         <Image
                             src="/plus.svg"
@@ -239,7 +237,7 @@ export default function EpicManager() {
                 {epics.map((epic, idx) => (
                     <div
                         key={epic.epic_id || idx}
-                        className="relative bg-[#18181b] border border-[#333] rounded-xl shadow-lg p-6 flex flex-col mb-6"
+                        className="relative bg-neutral-950 border border-neutral-800 rounded-xl shadow-lg p-6 flex flex-col mb-6"
                     >
                         <div className="flex flex-row items-center mb-2">
                             <h3 className="text-lg font-bold text-gray-100 flex-1">{epic.title}</h3>

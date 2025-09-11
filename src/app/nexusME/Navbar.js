@@ -30,6 +30,10 @@ const frameworks = [
     description: 'Map out your thoughts and ideas.',
     link: '/nexusME/mind-map',
   },
+  {
+    name: 'My Week',
+    link: '/nexusME/my-week',
+  },
 ];
 
 export default function Navbar({ page }) {

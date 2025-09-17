@@ -740,10 +740,10 @@ const epicColors = [
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -6, scale: 0.98 }}
                     transition={{ duration: 0.12, ease: 'easeOut' }}
-                    className="absolute right-0 z-20 mt-2 w-64 bg-neutral-800 border py-2 border-neutral-800 rounded-md shadow-lg"
+                    className="absolute right-0 z-20 mt-2 w-64 bg-neutral-900 border p-2 border-neutral-700 rounded-md shadow-lg"
                   >
                     <button
-                      className="w-full text-left text-sm px-4 py-2 text-gray-100 hover:bg-neutral-900"
+                      className="w-full text-left text-sm px-4 py-2 text-gray-100 hover:bg-neutral-800 rounded-md"
                       onClick={() => { setSelectedEpicFilter(null); setShowEpicDropdown(false); }}
                     >
                       All Epics
@@ -751,7 +751,7 @@ const epicColors = [
                     {epics.map(epic => (
                       <button
                         key={epic.epic_id}
-                        className={`w-full text-left px-4 py-2 hover:bg-neutral-900 flex items-center space-x-2 ${selectedEpicFilter === epic.epic_id ? 'bg-black' : ''}`}
+                        className={`w-full text-left px-4 py-2 rounded-md hover:bg-neutral-800 flex items-center space-x-2 ${selectedEpicFilter === epic.epic_id ? 'bg-black' : ''}`}
                         onClick={() => { setSelectedEpicFilter(epic.epic_id); setShowEpicDropdown(false); }}
                       >
                         <span className={`${getEpicColor(epic.epic_id)} px-2 py-1 rounded-full text-xs`}>{epic.title}</span>

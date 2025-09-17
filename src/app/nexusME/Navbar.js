@@ -26,13 +26,14 @@ const frameworks = [
     link: '/nexusME/kanban',
   },
   {
-    name: 'Mind Map',
-    description: 'Map out your thoughts and ideas.',
-    link: '/nexusME/mind-map',
-  },
-  {
     name: 'My Week',
     link: '/nexusME/my-week',
+    description: 'Visualize your goals and dreams.',
+  },
+  {
+    name: 'Vision Board',
+    description: 'Visualize your goals and dreams.',
+    link: '/nexusME/vision-board',
   },
 ];
 
@@ -73,18 +74,38 @@ export default function Navbar({ page }) {
 
       {/* Navigation Links - Container with full height */}
       <div className="ml-2 px-2 flex-grow flex items-center text-light justify-left space-x-4 h-full">
-        {frameworks.map((framework) => (
-          <Link
-            key={framework.name}
-            href={framework.link}
-            className={`text-sm font-medium relative h-full flex items-center hover:text-[#91C8FF] ${pathname === framework.link
-              ? 'text-[#91C8FF] border-b-2 border-[#91C8FF]'
-              : 'text-gray-400'
+        {frameworks.map((framework) => {
+          const isVisionBoard = framework.name === 'Vision Board';
+          const isActive = pathname === framework.link;
+          
+          return (
+            <Link
+              key={framework.name}
+              href={framework.link}
+              className={`text-sm font-medium relative transition-all duration-300 ${
+                isVisionBoard
+                  ? `px-2 py-0.5 rounded-lg ${
+                      isActive
+                        ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-300 border border-cyan-400/50 shadow-lg shadow-cyan-500/25'
+                        : 'bg-gradient-to-r from-slate-800/50 to-slate-700/50 text-gray-300 border border-slate-600/50 hover:from-cyan-500/10 hover:to-purple-500/10 hover:text-cyan-300 hover:border-cyan-400/30 hover:shadow-lg hover:shadow-cyan-500/20'
+                    }`
+                  : `h-full flex items-center hover:text-[#91C8FF] ${
+                      isActive
+                        ? 'text-[#91C8FF] border-b-2 border-[#91C8FF]'
+                        : 'text-gray-400'
+                    }`
               }`}
-          >
-            {framework.name}
-          </Link>
-        ))}
+            >
+              {isVisionBoard && (
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-gradient-to-r from-cyan-400 to-purple-400 rounded-full animate-pulse"></div>
+                  <span>{framework.name}</span>
+                </div>
+              )}
+              {!isVisionBoard && framework.name}
+            </Link>
+          );
+        })}
       </div>
 
       {/* Right-side Buttons */}

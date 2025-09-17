@@ -3,80 +3,117 @@
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
-import Beam from '../Beam';
 import { motion } from "framer-motion";
 import { useState, useEffect } from 'react';
 import { createClient } from "../../../supabase/client";
 import { getUserFullName } from "../../lib/db/userQueries";
-import { FiArrowRight, FiHelpCircle } from "react-icons/fi";
+import { FiArrowRight, FiClock, FiTarget, FiCheckSquare, FiEye, FiTrendingUp, FiCalendar, FiZap } from "react-icons/fi";
 import { formatDistanceToNow } from 'date-fns';
 import { useNotifications } from "../../../contexts/NotificationContext";
-import { getProjectByID } from "../../lib/db/projectQueries";
 import { getKanbanTasks } from "../../lib/db/queries";
 
 export default function Dashboard() {
     const [user, setUser] = useState(null);
     const [userName, setUserName] = useState('');
     const [loading, setLoading] = useState(true);
-    const [notifs, setNotifs] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentTime, setCurrentTime] = useState('');
+    const [currentDate, setCurrentDate] = useState('');
+    const [motivationalQuote, setMotivationalQuote] = useState('');
     const router = useRouter();
     const { dashboardNotifs, removeDashboardNotification, markAsRead, showNotificationModal } = useNotifications();
 
-    console.log(dashboardNotifs);
-
     const supabase = createClient();
 
-    const buttonVariants = {
-        initial: { scale: 1 },
-        hover: {
-            scale: 1.05,
-            transition: { duration: 0.2 }
-        }
-    };
+    // Motivational quotes array
+    const quotes = [
+        "The way to get started is to quit talking and begin doing. - Walt Disney",
+        "Don't be pushed around by the fears in your mind. Be led by the dreams in your heart. - Roy T. Bennett",
+        "Success is not final, failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
+        "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
+        "It is during our darkest moments that we must focus to see the light. - Aristotle",
+        "The only way to do great work is to love what you do. - Steve Jobs"
+    ];
 
-    const [tasks, setTasks] = useState({
-        personal: [],
-        team: [
-            { id: 1, title: 'Sprint Planning', team: 'Frontend', status: 'upcoming', due: '2024-12-27' },
-            { id: 2, title: 'Code Review', team: 'Backend', status: 'pending', due: '2024-12-28' },
-            { id: 3, title: 'Sprint Planning', team: 'Frontend', status: 'upcoming', due: '2024-12-27' },
-            { id: 4, title: 'Code Review', team: 'Backend', status: 'pending', due: '2024-12-28' },
-            { id: 5, title: 'Sprint Planning', team: 'Frontend', status: 'upcoming', due: '2024-12-27' },
-            { id: 6, title: 'Code Review', team: 'Backend', status: 'pending', due: '2024-12-28' },
-            { id: 7, title: 'Sprint Planning', team: 'Frontend', status: 'upcoming', due: '2024-12-27' },
-            { id: 8, title: 'Code Review', team: 'Backend', status: 'pending', due: '2024-12-28' },
-            { id: 9, title: 'Sprint Planning', team: 'Frontend', status: 'upcoming', due: '2024-12-27' },
-            { id: 10, title: 'Code Review', team: 'Backend', status: 'pending', due: '2024-12-28' },
-            { id: 11, title: 'Sprint Planning', team: 'Frontend', status: 'upcoming', due: '2024-12-27' },
-            { id: 12, title: 'Code Review', team: 'Backend', status: 'pending', due: '2024-12-28' }
-        ]
-    });
+    // Feature cards data
+    const features = [
+        {
+            id: 'eisenhower',
+            title: 'Eisenhower Matrix',
+            description: 'Prioritize tasks by urgency and importance',
+            icon: FiTarget,
+            href: '/nexusME/eisenhower-matrix',
+            color: 'from-blue-500/20 to-blue-600/20',
+            borderColor: 'border-blue-500/30',
+            iconColor: 'text-blue-400'
+        },
+        {
+            id: 'pomodoro',
+            title: 'Pomodoro Timer',
+            description: 'Focus with 25-minute work sessions',
+            icon: FiClock,
+            href: '/nexusME/pomodoro',
+            color: 'from-red-500/20 to-red-600/20',
+            borderColor: 'border-red-500/30',
+            iconColor: 'text-red-400'
+        },
+        {
+            id: 'kanban',
+            title: 'Kanban Board',
+            description: 'Visualize and manage your workflow',
+            icon: FiCheckSquare,
+            href: '/nexusME/kanban',
+            color: 'from-green-500/20 to-green-600/20',
+            borderColor: 'border-green-500/30',
+            iconColor: 'text-green-400'
+        },
+        {
+            id: 'vision-board',
+            title: 'Vision Board',
+            description: 'Visualize your goals and aspirations',
+            icon: FiEye,
+            href: '/nexusME/vision-board',
+            color: 'from-purple-500/20 to-purple-600/20',
+            borderColor: 'border-purple-500/30',
+            iconColor: 'text-purple-400'
+        },
+        {
+            id: 'my-week',
+            title: 'My Week',
+            description: 'Plan and organize your weekly schedule',
+            icon: FiCalendar,
+            href: '/nexusME/my-week',
+            color: 'from-orange-500/20 to-orange-600/20',
+            borderColor: 'border-orange-500/30',
+            iconColor: 'text-orange-400'
+        },
+        {
+            id: 'to-do',
+            title: 'To-Do List',
+            description: 'Simple task management and tracking',
+            icon: FiZap,
+            href: '/nexusME/to-do-list',
+            color: 'from-yellow-500/20 to-yellow-600/20',
+            borderColor: 'border-yellow-500/30',
+            iconColor: 'text-yellow-400'
+        }
+    ];
 
 
     const handleNotificationClick = (notification) => {
         markAsRead(notification.id);
-        console.log(notification);
         showNotificationModal(notification);
     };
 
     useEffect(() => {
         const fetchUser = async () => {
             setLoading(true);
-            console.log('🔍 Dashboard: Checking user authentication...');
-
             const { data, error } = await supabase.auth.getUser();
-            console.log('🔍 Dashboard: Auth result:', { data, error });
 
             if (data?.user) {
-                console.log('✅ Dashboard: User authenticated:', data.user.email);
                 setUser(data.user);
                 const res = await getUserFullName(data.user.id);
-                console.log('🔍 Dashboard: User full name:', res);
                 if (res) setUserName(res[0].first_name);
             } else {
-                console.error("❌ Dashboard: User not found:", error);
                 setUser(null);
                 router.push('/signIn');
             }
@@ -87,63 +124,29 @@ export default function Dashboard() {
     }, [router]);
 
     useEffect(() => {
-        const updateTime = () => {
-            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const updateDateTime = () => {
+            const now = new Date();
+            const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const date = now.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
             setCurrentTime(time);
+            setCurrentDate(date);
         };
 
-        updateTime();
-        const interval = setInterval(updateTime, 60000);
+        updateDateTime();
+        const interval = setInterval(updateDateTime, 60000);
         return () => clearInterval(interval);
     }, []);
 
-    // Fetch real personal tasks after user is loaded
     useEffect(() => {
-        const fetchPersonalTasks = async () => {
-            if (user) {
-                const kanbanTasks = await getKanbanTasks(user.id);
-                if (kanbanTasks) {
-                    // Flatten and map to dashboard format
-                    const personal = kanbanTasks.map((item) => ({
-                        id: item.tasks?.task_id || item.task_id,
-                        title: item.tasks?.title || item.title,
-                        status: item.status,
-                        due: item.tasks?.created_at || item.created_at // fallback to created_at if no due
-                    }));
-                    setTasks((prev) => ({ ...prev, personal }));
-                }
-            }
-        };
-        fetchPersonalTasks();
-    }, [user]);
-
-    const fetchProjectData = async (project_id) => {
-        try {
-            // Fetch project data
-            const projectData = await getProjectByID(project_id);
-            setProject(projectData);
-
-            // Fetch manager data
-            const managerData = await getProjectManager(projectData[0].project_manager);
-            console.log(managerData);
-            setManager(managerData);
-        } catch (error) {
-            console.error("Failed to fetch project or manager data:", error);
-        } finally {
-            setLoading(false); // Stop the loading state
-        }
-    };
-
-    const formatDate = () => {
-        const date = new Date();
-        const day = date.toLocaleDateString('en-US', { day: 'numeric' });
-        const suffix = (day % 10 === 1 && day !== '11') ? 'st' :
-            (day % 10 === 2 && day !== '12') ? 'nd' :
-                (day % 10 === 3 && day !== '13') ? 'rd' : 'th';
-        return date.toLocaleDateString('en-US', {
-            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-        }).replace(day, `${day}${suffix}`);
-    };
+        // Set a random motivational quote
+        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        setMotivationalQuote(randomQuote);
+    }, []);
 
     const handleLogout = async () => {
         const { error } = await supabase.auth.signOut();
@@ -157,222 +160,191 @@ export default function Dashboard() {
 
     if (loading) {
         return (
-            <div className="flex flex-col min-h-screen items-center justify-center p-5 bg-fixed bg-cover bg-center overflow-hidden">
-                Loading...
+            <div className="flex flex-col min-h-screen items-center justify-center bg-black">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+                <p className="mt-4 text-gray-400">Loading your dashboard...</p>
             </div>
         );
     }
 
     return (
-        <main className="flex flex-col min-h-screen p-5 bg-fixed bg-cover bg-center bg-black overflow-hidden">
-            <header className="w-full flex justify-between items-center pt-5">
-                <Image src="/nexusNoBorder.png" width={160} height={40} alt="Nexus Logo" className="pl-10" />
-                <div className="flex flex-row space-x-2 mr-10">
-                    {/* <div className="flex flex-row items-center bg-neutral-900 px-4 text-sm text-gray-400 rounded-2xl">Help <FiHelpCircle className="ml-1"/></div> */}
-                    <motion.button
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        variants={buttonVariants}
-                        whileHover="hover"
-                        className="px-4 py-2 bg-gradient-to-br from-[#2f2f2f] text-gray-400 hover:text-white border border-neutral-800 
-                             rounded-lg transition-all duration-200 flex items-center space-x-2 
-                             hover:border-neutral-800 "
-                        onClick={() => setIsModalOpen(true)}
-                    >
-                        Account
-                    </motion.button>
-                    <motion.a
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        variants={buttonVariants}
-                        whileHover="hover"
-                        className="px-4 py-2 text-gray-800 border border-neutral-800 
-                             rounded-lg transition-all duration-200 flex items-center space-x-2 
-                             bg-[#91C8FF]"
-                        href='https://github.com/mrmcnguyen/nexus'
-                        target='_blank'
-                    >
-                        <Image
-                            src="/git.svg"
-                            className="mr-2"
-                            alt="GitHub"
-                            width={14}
-                            height={14}
-                            priority
-                        /> Docs
-                    </motion.a>
+        <main className="min-h-screen bg-black text-white">
+            {/* Header */}
+            <header className="border-b border-gray-800/50 bg-black/50 backdrop-blur-sm">
+                <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+                    <Image src="/nexusNoBorder.png" width={100} height={15} alt="Nexus Logo" />
+                    <div className="flex items-center space-x-3">
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="px-4 py-2 bg-gray-800/50 hover:bg-gray-700/50 text-gray-300 hover:text-white 
+                                     border border-gray-700/50 rounded-lg transition-all duration-200"
+                            onClick={handleLogout}
+                        >
+                            Account
+                        </motion.button>
+                        <motion.a
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="px-4 py-2 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 
+                                     border border-blue-500/30 rounded-lg transition-all duration-200 flex items-center space-x-2"
+                            href='https://github.com/mrmcnguyen/nexus'
+                            target='_blank'
+                        >
+                            <Image src="/git.svg" className="w-4 h-4" alt="GitHub" width={16} height={16} />
+                            <span>Docs</span>
+                        </motion.a>
+                    </div>
                 </div>
             </header>
 
-            <div className="flex flex-col items-center justify-center">
-                <div className="flex flex-row w-full p-10 text-left justify-between h-full pt-5">
-                    <div className="flex flex-col">
-                        <h1 className="lg:text-7xl md:text-6xl 2xl:text-8xl font-semibold text-gray-400 mb-4">{currentTime}</h1>
-                        <h2 className="text-gray-400 text-2xl md:text-4xl tracking-tight font-light mb-2">Welcome, {userName}</h2>
-                        <h2 className="text-gray-400 text-2xl md:text-4xl tracking-tight font-semibold mb-2">{formatDate()}</h2>
+            {/* Main Content */}
+            <div className="max-w-7xl mx-auto px-6 py-8">
+                {/* Welcome Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    className="mb-12"
+                >
+                    <div className="text-center mb-8">
+                        <h1 className="text-6xl md:text-7xl font-light text-white mb-2">
+                            {currentTime}
+                        </h1>
+                        <h2 className="text-2xl md:text-3xl text-gray-300 font-light mb-4">
+                            Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'afternoon' : 'evening'}, {userName}
+                        </h2>
+                        <p className="text-lg text-gray-400 mb-6">{currentDate}</p>
+                        
+                        {/* Motivational Quote */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.8, duration: 0.6 }}
+                            className="max-w-3xl mx-auto"
+                        >
+                            <blockquote className="text-lg text-gray-300 italic border-l-4 border-blue-500/30 pl-6 py-4 bg-gray-900/30 rounded-r-lg">
+                                "{motivationalQuote}"
+                            </blockquote>
+                        </motion.div>
                     </div>
+                </motion.div>
 
-                    <div className="flex flex-col space-y-4">
-                        <div className="max-w-full flex flex-col space-y-4">
-                            {/* Nexus ME */}
-                            <Link href="./nexusME/chooseAFramework/">
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    whileInView="visible"
-                                    whileHover={{ scale: 1.02 }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 0.3 }}
-                                    className="p-6 rounded-md bg-gradient-to-br from-[#1f1f1f] relative overflow-hidden
-                                          hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-800
-                                          hover:border-blue-500/30"
-                                >
-                                    <div className="flex flex-row items-center justify-between">
-                                        <div className="flex items-center">
-                                            <Image src="/individual.svg" className="mr-4 filter invert" width={24} height={24} alt="Individual" priority />
-                                            <h2 className="text-xl font-semibold text-gray-200">Nexus ME</h2>
+                {/* Feature Cards Grid */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.4 }}
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"
+                >
+                    {features.map((feature, index) => {
+                        const IconComponent = feature.icon;
+                        return (
+                            <motion.div
+                                key={feature.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: 0.1 * index }}
+                                whileTap={{ scale: 0.98 }}
+                            >
+                                <Link href={feature.href}>
+                                    <div className={`group relative p-6 bg-neutral-900/50 
+                                                   border border-gray-700/50 rounded-md 
+                                                   hover:shadow-2xl hover:shadow-black/20 hover:border-gray-600/50
+                                                   transition-all duration-300 cursor-pointer
+                                                   backdrop-blur-sm`}>
+                                        <div className="flex items-start justify-between mb-4">
+                                            <div className={`p-3 rounded-xl bg-gray-800/50 ${feature.iconColor}`}>
+                                                <IconComponent className="w-6 h-6" />
+                                            </div>
+                                            <FiArrowRight className="w-5 h-5 text-gray-400 group-hover:text-white 
+                                                                 group-hover:translate-x-1 transition-all duration-300" />
                                         </div>
-                                        <FiArrowRight className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />
+                                        <h3 className="text-xl font-semibold tracking-tight text-white mb-2 group-hover:text-white">
+                                            {feature.title}
+                                        </h3>
+                                        <p className="text-gray-400 text-sm tracking-tight group-hover:text-gray-300 transition-colors duration-300">
+                                            {feature.description}
+                                        </p>
+                                        
+                                        {/* Subtle glow effect on hover */}
+                                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent 
+                                                      opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                                     </div>
-                                    <Beam className="top-0" />
-                                </motion.div>
-                            </Link>
+                                </Link>
+                            </motion.div>
+                        );
+                    })}
+                </motion.div>
 
-                            {/* Nexus TEAMS */}
-                            <Link href="./nexusTEAMS/allTeams">
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    whileInView="visible"
-                                    whileHover={{ scale: 1.02 }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 0.3 }}
-                                    className="p-6 rounded-md bg-gradient-to-br from-[#1f1f1f] relative overflow-hidden
-                                          hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-800
-                                          hover:border-blue-500/30"
-                                >
-                                    <div className="flex flex-row items-center justify-between">
-                                        <div className="flex items-center">
-                                            <Image src="/team.svg" className="mr-4 filter invert" width={24} height={24} alt="Team" priority />
-                                            <h2 className="text-xl font-semibold text-gray-200">Nexus TEAMS</h2>
-                                        </div>
-                                        <FiArrowRight className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />
-                                    </div>
-                                    <Beam className="top-0" />
-                                </motion.div>
-                            </Link>
+                {/* Quick Stats & Notifications */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.6 }}
+                    className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+                >
+                    {/* Notifications */}
+                    <div className="bg-gray-900/50 border border-gray-800/50 rounded-2xl p-6 backdrop-blur-sm">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-xl font-semibold text-white">Notifications</h3>
+                            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                         </div>
-                    </div>
-                </div>
-                <div className="grid grid-cols-2 gap-6 w-full px-10">
-                    {/* Notifications Section */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="bg-neutral-900 rounded-md p-6 border border-neutral-800"
-                    >
-                        <h3 className="text-gray-200 text-lg font-semibold mb-4">Notifications</h3>
                         <div className="space-y-3">
                             {dashboardNotifs.length === 0 ? (
-                                <p className="text-gray-400 text-sm">No new notifications</p>
+                                <p className="text-gray-400 text-center py-4">No new notifications</p>
                             ) : (
-                                dashboardNotifs.map((notif) => (
-                                    <div
+                                dashboardNotifs.slice(0, 4).map((notif) => (
+                                    <motion.div
                                         key={notif.id}
-                                        className="flex items-center justify-between text-gray-300 text-sm hover:bg-gray-800/30 p-2 rounded-lg cursor-pointer transition-colors"
+                                        whileHover={{ scale: 1.02 }}
+                                        className="flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-800/50 
+                                                 rounded-lg cursor-pointer transition-all duration-200"
                                         onClick={() => handleNotificationClick(notif)}
                                     >
-                                        <div className="flex items-center space-x-2">
-                                            <div className={`w-2 h-2 rounded-full ${notif.read ? 'bg-gray-500' : 'bg-blue-500'}`}></div>
-                                            <span className={notif.read ? 'text-gray-400' : 'text-gray-300'}>
-                                                {notif.message} from {notif.sender_name}
-                                            </span>
-                                        </div>
                                         <div className="flex items-center space-x-3">
-                                            <span className="text-gray-400 text-xs">
-                                                {formatDistanceToNow(new Date(notif.timestamp), { addSuffix: true })}
+                                            <div className={`w-2 h-2 rounded-full ${notif.read ? 'bg-gray-500' : 'bg-blue-500'}`}></div>
+                                            <span className={`text-sm ${notif.read ? 'text-gray-400' : 'text-gray-300'}`}>
+                                                {notif.message}
                                             </span>
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    removeDashboardNotification(notif.id);
-                                                }}
-                                                className="text-gray-500 hover:text-gray-300"
-                                            >
-                                                ×
-                                            </button>
                                         </div>
-                                    </div>
+                                        <span className="text-xs text-gray-500">
+                                            {formatDistanceToNow(new Date(notif.timestamp), { addSuffix: true })}
+                                        </span>
+                                    </motion.div>
                                 ))
                             )}
                         </div>
-                    </motion.div>
-
-                    {/* Personal Tasks */}
-                    <div className="bg-neutral-900 rounded-md p-6 border border-neutral-800 shadow-lg flex flex-col w-full max-w-xl mx-auto">
-                        <h2 className="text-lg font-semibold text-gray-100 mb-4">Personal Tasks</h2>
-                        {tasks.personal && tasks.personal.length > 0 ? (
-                            <>
-                                {tasks.personal.slice(0, 6).map((task, idx) => {
-                                    let borderColor = 'border-l-4 border-neutral-800';
-                                    if (task.status === 'Done') borderColor = 'border-l-4 border-green-500';
-                                    else if (task.status === 'In Progress') borderColor = 'border-l-4 border-blue-500';
-                                    else if (task.status === 'To Do') borderColor = 'border-l-4 border-yellow-400';
-                                    else if (task.status === 'Backlog') borderColor = 'border-l-4 border-neutral-800';
-                                    return (
-                                        <div
-                                            key={task.id || idx}
-                                            className={`flex flex-row items-center justify-between py-2 bg-[#232323]/0 hover:bg-[#232323]/40 transition ${borderColor}`}
-                                        >
-                                            <div className="flex flex-col ml-4">
-                                                <span className="text-gray-200 font-medium">{task.title}</span>
-                                                <span className="text-xs text-gray-400">Status: {task.status || 'pending'}</span>
-                                            </div>
-                                            <span className="text-xs text-gray-500">Due: {task.due ? new Date(task.due).toLocaleDateString() : 'N/A'}</span>
-                                        </div>
-                                    );
-                                })}
-                                {tasks.personal.length > 6 && (
-                                    <div className="mt-3 text-center text-xs bg-[#232323] rounded-lg py-2 border border-dashed border-[#333]">
-                                        <span className="font-semibold">
-                                            +{tasks.personal.length - 6} more task{tasks.personal.length - 6 > 1 ? 's' : ''}
-                                        </span>
-                                    </div>
-                                )}
-                            </>
-                        ) : (
-                            <div className="text-gray-500 text-center py-8">No personal tasks yet.</div>
-                        )}
                     </div>
 
-                    {/* Team Tasks */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="bg-neutral-900 rounded-md p-6 border border-neutral-800 col-span-2"
-                    >
-                        <h3 className="text-gray-200 text-lg font-semibold mb-4">Team Tasks</h3>
-                        <div className="grid grid-cols-2 gap-4">
-                            {tasks.team.map(task => (
-                                <div key={task.id} className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
-                                    <div className="flex flex-col space-y-1">
-                                        <span className="text-gray-300 text-sm">{task.title}</span>
-                                        <span className="text-gray-400 text-xs">{task.team}</span>
-                                    </div>
-                                    <div className="flex items-center space-x-3">
-                                        <div className={`px-2 py-1 rounded-full text-xs ${task.status === 'pending' ? 'bg-yellow-500/20 text-yellow-300' :
-                                            task.status === 'upcoming' ? 'bg-blue-500/20 text-blue-300' :
-                                                'bg-green-500/20 text-green-300'
-                                            }`}>
-                                            {task.status}
-                                        </div>
-                                        <span className="text-gray-400 text-xs">{new Date(task.due).toLocaleDateString()}</span>
-                                    </div>
+                    {/* Quick Stats */}
+                    <div className="bg-gray-900/50 border border-gray-800/50 rounded-2xl p-6 backdrop-blur-sm">
+                        <h3 className="text-xl font-semibold text-white mb-4">Today's Focus</h3>
+                        <div className="space-y-4">
+                            <div className="flex items-center justify-between p-4 bg-gray-800/30 rounded-lg">
+                                <div className="flex items-center space-x-3">
+                                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                                    <span className="text-gray-300">Tasks Completed</span>
                                 </div>
-                            ))}
+                                <span className="text-2xl font-bold text-green-400">0</span>
+                            </div>
+                            <div className="flex items-center justify-between p-4 bg-gray-800/30 rounded-lg">
+                                <div className="flex items-center space-x-3">
+                                    <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                                    <span className="text-gray-300">In Progress</span>
+                                </div>
+                                <span className="text-2xl font-bold text-blue-400">0</span>
+                            </div>
+                            <div className="flex items-center justify-between p-4 bg-gray-800/30 rounded-lg">
+                                <div className="flex items-center space-x-3">
+                                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                    <span className="text-gray-300">Pending</span>
+                                </div>
+                                <span className="text-2xl font-bold text-yellow-400">0</span>
+                            </div>
                         </div>
-                    </motion.div>
-                </div>
+                    </div>
+                </motion.div>
             </div>
         </main>
     );

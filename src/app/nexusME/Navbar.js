@@ -4,9 +4,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { DM_Sans } from 'next/font/google';
-import { supabase } from '../supabase/supabaseClient'
+import { createClient } from "../../../supabase/client";
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
+import { useCallback } from 'react';
+
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
 const frameworks = [
@@ -16,7 +18,7 @@ const frameworks = [
     link: '/nexusME/eisenhower-matrix',
   },
   {
-    name: 'The Pomodoro',
+    name: 'Pomodoro',
     description: 'Work in short, focused intervals, followed by brief breaks to enhance focus and productivity.',
     link: '/nexusME/pomodoro',
   },
@@ -43,23 +45,23 @@ export default function Navbar({ page }) {
   const router = useRouter();
   const pathname = usePathname(); // Get the current path
 
-  // console.log(pathname);
+  const supabase = createClient();
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("Logout error:", error);
+    if (!error) {
+        setUser(null);
+        router.push('/signIn');
     } else {
-      setUser(null);
-      router.push('/signIn'); // Redirect to the sign-in page
+        console.error("Logout error:", error);
     }
-  };
+  }, [router, supabase.auth]);
 
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-40 flex flex-row items-center border-b border-[#2e2e2e] bg-white ${dmSans.className} ${page === '/nexusME/pomodoro' ? 'bg-red-100' : ''
         }`}
-      style={{ height: '50px', backgroundColor: '#171717' }} // Set height for the navbar
+      style={{ height: '50px', backgroundColor: 'black' }} // Set height for the navbar
     >
       {/* Logo */}
       <Link href="/dashboard" className='h-full flex flex-row items-center bg-gradient-to-br from-[#1f1f1f] border-r border-r-[#2e2e2e]'>
@@ -124,7 +126,7 @@ export default function Navbar({ page }) {
           />
           Docs
         </a>
-        <Link className="flex flex-row px-4 py-1 align-middle items-center transition duration-200 bg-[#6f99da] text-sm text-white text-light rounded-lg hover:bg-[#91c8ff]"
+        {/* <Link className="flex flex-row px-4 py-1 align-middle items-center transition duration-200 bg-[#6f99da] text-sm text-white text-light rounded-lg hover:bg-[#91c8ff]"
           href="/nexusTEAMS/allTeams"
           target='_blank?'
         >
@@ -137,7 +139,7 @@ export default function Navbar({ page }) {
             height={14}
             priority
           />
-        </Link>
+        </Link> */}
 
         {/* Account Icon */}
         <div className="relative">

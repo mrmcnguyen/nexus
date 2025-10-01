@@ -2,9 +2,11 @@
 import Image from "next/image";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { deleteKanbanTaskByID } from "../../../lib/db/queries";
+import { getUserLabelsAction, getTaskLabelsAction } from "../../label-actions";
+import { deleteKanbanTaskByIDAction } from "../../kanban-actions";
 import debounce from 'lodash/debounce'; // Debounce functions recommended for performance
 import { useRouter } from "next/navigation";
+import LabelPicker from "../../../../components/LabelPicker";
 
 export default function KanbanTaskModal({
   isVisible,
@@ -17,7 +19,8 @@ export default function KanbanTaskModal({
   epics = [],
   onAssignEpicToTask,
   onRemoveEpicFromTask,
-  onPriorityUpdate
+  onPriorityUpdate,
+  userId
 }) {
 
   const [isEditingDescription, setIsEditingDescription] = useState(false);
@@ -25,6 +28,8 @@ export default function KanbanTaskModal({
   const [isEditing, setIsEditing] = useState(false);
   const [isEpicDropdownOpen, setIsEpicDropdownOpen] = useState(false);
   const [isPriorityDropdownOpen, setIsPriorityDropdownOpen] = useState(false);
+  const [availableLabels, setAvailableLabels] = useState([]);
+  const [taskLabels, setTaskLabels] = useState([]);
   const descriptionRef = useRef(null);
   const titleRef = useRef(null);
   const epicDropdownRef = useRef(null);
@@ -148,6 +153,23 @@ export default function KanbanTaskModal({
       setIsEditingTitle(false);
     }
   }, [isVisible, task, title, description]);
+
+  // Fetch labels and task labels when modal opens
+  useEffect(() => {
+    const fetchLabels = async () => {
+      if (isVisible && userId) {
+        const labels = await getUserLabelsAction(userId);
+        setAvailableLabels(labels || []);
+        
+        if (taskID && taskID !== 'Unknown Task ID') {
+          const taskLabelsData = await getTaskLabelsAction(taskID);
+          setTaskLabels(taskLabelsData || []);
+        }
+      }
+    };
+
+    fetchLabels();
+  }, [isVisible, userId, taskID]);
 
   // Debounced save function for title
   const debouncedTitleSave = useCallback(
@@ -276,7 +298,7 @@ export default function KanbanTaskModal({
   };
 
   const handleDeleteTask = () => {
-    let res = deleteKanbanTaskByID(taskID);
+    let res = deleteKanbanTaskByIDAction(taskID);
     if (res) {
       onDeleteTask(task);
       closeModal();
@@ -322,7 +344,7 @@ export default function KanbanTaskModal({
             stiffness: 300,
             damping: 30
           }}
-          className="bg-neutral-900 border border-neutral-800 rounded-md w-full max-w-4xl max-h-[90vh] shadow-2xl flex flex-col"
+          className="bg-neutral-900/70 border border-neutral-800 rounded-md w-full max-w-4xl max-h-[90vh] shadow-2xl flex flex-col"
         >
           {/* Header */}
           <div className="flex justify-between items-center p-6 border-b border-neutral-800">
@@ -367,6 +389,19 @@ export default function KanbanTaskModal({
                   <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${currentStatus.color}`}>
                     {currentStatus.label}
                   </span>
+                </div>
+
+                {/* Labels Section */}
+                <div className="space-y-3">
+                  <h3 className="text-sm font-medium text-slate-300">Labels</h3>
+                  <LabelPicker
+                    taskId={taskID}
+                    selectedLabels={taskLabels}
+                    availableLabels={availableLabels}
+                    onLabelsChange={setTaskLabels}
+                    userId={userId}
+                    className="w-full"
+                  />
                 </div>
 
                 {/* Epic Section */}

@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from "react";
-import { getProjectByID, getSectors } from "../../../../lib/db/projectQueries";
+import { getProjectByIDAction, getSectorsAction } from "../../../../project-actions";
 
 export default function DashboardSector({ id }) {
 
@@ -10,7 +10,7 @@ export default function DashboardSector({ id }) {
   useEffect(() => {
       const getProject = async () => {
           try {
-              const res = await getProjectByID(id); // Await the response
+              const res = await getProjectByIDAction(id); // Await the response
               if (res) {
                   setProject(res);
               }
@@ -25,7 +25,7 @@ export default function DashboardSector({ id }) {
   useEffect(() => {
     const getProjectSectors = async () => {
         try {
-            const res = await getSectors(id); // Await the response
+            const res = await getSectorsAction(id); // Await the response
             if (res) {
                 setSectors(res);
             }

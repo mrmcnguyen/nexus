@@ -3,18 +3,23 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { addKanbanTask, editTaskDescription, editTaskName, getKanbanTasks, updateKanbanTaskState, updateTaskPriority } from "../../../lib/db/queries";
-import { getEpicsWithTaskCounts, assignTaskToEpic, removeTaskFromEpic, getTaskEpic } from "../../../lib/db/epicQueries";
+// import { addKanbanTask, editTaskDescription, editTaskName, getKanbanTasks, updateKanbanTaskState, updateTaskPriority, getUserLabels, getTaskLabels } from "../../../lib/db/queries";
+import { getEpicsWithTaskCountsAction, assignTaskToEpicAction, removeTaskFromEpicAction, getTaskEpicAction } from "../../epic-actions";
+import { getUserLabelsAction, getTaskLabelsAction } from "../../label-actions";
+import { fetchKanbanTasks, addKanbanTaskAction, updateKanbanTaskStateAction, deleteKanbanTaskByIDAction, updateTaskPriorityAction } from "../../kanban-actions";
+import { editTaskNameAction, editTaskDescriptionAction } from "../../task-actions";
 import { createClient } from "../../../../supabase/client";
 import Loading from "./loading";
 import TaskModal from "./taskModal";
 import toast, { Toaster } from 'react-hot-toast';
 import { AnimatePresence, motion } from "framer-motion";
+import LabelFilter from "../../../../components/LabelFilter";
+import LabelBadge from "../../../../components/LabelBadge";
 
-export default function KanbanComponent() {
+export default function KanbanComponent( { initialTasks } ) {
   const [editingColumn, setEditingColumn] = useState(null);
   const [dragOverColumn, setDragOverColumn] = useState(null);
-  const [tasks, setTasks] = useState({
+  const [tasks, setTasks] = useState(initialTasks || {
     todo: [],
     inprogress: [],
     done: [],
@@ -28,9 +33,10 @@ export default function KanbanComponent() {
   const [epics, setEpics] = useState([]);
   const [isEpicModalOpen, setIsEpicModalOpen] = useState(false);
   const [selectedTaskForEpic, setSelectedTaskForEpic] = useState(null);
-  const [viewMode, setViewMode] = useState('kanban'); // 'kanban' or 'list'
   const [selectedEpicFilter, setSelectedEpicFilter] = useState(null);
   const [showEpicDropdown, setShowEpicDropdown] = useState(false);
+  const [availableLabels, setAvailableLabels] = useState([]);
+  const [selectedLabelFilters, setSelectedLabelFilters] = useState([]);
 
   const router = useRouter();
 
@@ -179,9 +185,9 @@ const epicColors = [
 
   // Fetch all Kanban tasks and allocate them
   useEffect(() => {
-    const fetchKanbanTasks = async () => {
+    const fetchAllKanbanTasks = async () => {
       if (userID) {
-        const result = await getKanbanTasks(userID);
+        const result = await fetchKanbanTasks(userID);
         if (result) {
           const categorizedTasks = {
             backlog: [], // Initialize Backlog column
@@ -203,14 +209,14 @@ const epicColors = [
       }
     };
 
-    fetchKanbanTasks();
+    fetchAllKanbanTasks();
   }, [userID]);
 
   // Fetch epics
   useEffect(() => {
     const fetchEpics = async () => {
       if (userID) {
-        const result = await getEpicsWithTaskCounts(userID);
+        const result = await getEpicsWithTaskCountsAction(userID);
         if (result) {
           setEpics(result);
         }
@@ -218,6 +224,18 @@ const epicColors = [
     };
 
     fetchEpics();
+  }, [userID]);
+
+  // Fetch available labels
+  useEffect(() => {
+    const fetchLabels = async () => {
+      if (userID) {
+        const labels = await getUserLabelsAction(userID);
+        setAvailableLabels(labels || []);
+      }
+    };
+
+    fetchLabels();
   }, [userID]);
 
   // Helper to get tasks by status, filtered by epic if needed
@@ -239,7 +257,7 @@ const epicColors = [
   const handleAddTask = async (e, status) => {
     e.preventDefault();
     if (newTaskTitle.trim()) {
-      const result = await addKanbanTask(userID, newTaskTitle, status, 'kanban');
+      const result = await addKanbanTaskAction(userID, newTaskTitle, status, 'kanban');
 
       if (result.success) {
         const newTask = { status: status }
@@ -267,7 +285,7 @@ const epicColors = [
 
     let taskId = task.task_id || task.tasks?.task_id;
 
-    let res = await updateKanbanTaskState(taskId, newStatus);
+    let res = await updateKanbanTaskStateAction(taskId, newStatus);
     if (!res) {
       console.error("Error updating Kanban task state.");
     }
@@ -323,7 +341,7 @@ const epicColors = [
   const updateTaskDescription = async (task, description) => {
     const taskId = task.task_id || task.tasks?.task_id;
 
-    const res = await editTaskDescription(taskId, description);
+    const res = await editTaskDescriptionAction(taskId, description);
     if (res[0]) {
       setTasks((prevTasks) => {
         const updatedTasks = { ...prevTasks };
@@ -348,7 +366,8 @@ const epicColors = [
   const updateTaskTitle = async (task, title) => {
     const taskId = task.task_id || task.tasks?.task_id;
 
-    const res = await editTaskName(taskId, title);
+    const res = await editTaskNameAction(taskId, title);
+    console.log(res);
     if (res[0]) {
       setTasks((prevTasks) => {
         const updatedTasks = { ...prevTasks };
@@ -372,7 +391,7 @@ const epicColors = [
 
   const handleTaskPriorityUpdate = async (taskId, priority) => {
     console.log(taskId, priority);
-    const res = await updateTaskPriority(taskId, priority);
+    const res = await updateTaskPriorityAction(taskId, priority);
     if (res.success) {
       setTasks((prevTasks) => {
         const updatedTasks = { ...prevTasks };
@@ -423,12 +442,8 @@ const epicColors = [
     router.push('/nexusME/kanban/epics');
   };
 
-  const toggleViewMode = () => {
-    setViewMode(viewMode === 'kanban' ? 'list' : 'kanban');
-  };
-
   const assignEpicToTask = async (taskId, epicId) => {
-    const result = await assignTaskToEpic(taskId, epicId);
+    const result = await assignTaskToEpicAction(taskId, epicId);
     console.log(result);
     if (result.success) {
       // Update the task in the state to show the epic
@@ -453,7 +468,7 @@ const epicColors = [
   };
 
   const removeEpicFromTask = async (taskId, epicId) => {
-    const result = await removeTaskFromEpic(taskId, epicId);
+    const result = await removeTaskFromEpicAction(taskId, epicId);
     if (result.success) {
       // Update the task in the state to remove the epic
       setTasks((prevTasks) => {
@@ -501,196 +516,6 @@ const epicColors = [
     });
   };
 
-  // Helper to get all tasks for list view, filtered by epic
-  const getAllTasks = () => {
-    let all = [
-      ...tasks.backlog.map(task => ({ ...task, status: 'Backlog' })),
-      ...tasks.todo.map(task => ({ ...task, status: 'To Do' })),
-      ...tasks.inprogress.map(task => ({ ...task, status: 'In Progress' })),
-      ...tasks.done.map(task => ({ ...task, status: 'Done' }))
-    ];
-    if (!selectedEpicFilter) return all.sort((a, b) => {
-      const statusOrder = { 'Backlog': 0, 'To Do': 1, 'In Progress': 2, 'Done': 3 };
-      const statusDiff = statusOrder[a.status] - statusOrder[b.status];
-      if (statusDiff !== 0) return statusDiff;
-      const dateA = new Date(a.tasks?.created_at || a.created_at);
-      const dateB = new Date(b.tasks?.created_at || b.created_at);
-      return dateB - dateA;
-    });
-    return all.filter(task => {
-      const epicId = task.epic?.epic_id || task.tasks?.taskEpics?.[0]?.epics?.epic_id;
-      return epicId === selectedEpicFilter;
-    }).sort((a, b) => {
-      const statusOrder = { 'Backlog': 0, 'To Do': 1, 'In Progress': 2, 'Done': 3 };
-      const statusDiff = statusOrder[a.status] - statusOrder[b.status];
-      if (statusDiff !== 0) return statusDiff;
-      const dateA = new Date(a.tasks?.created_at || a.created_at);
-      const dateB = new Date(b.tasks?.created_at || b.created_at);
-      return dateB - dateA;
-    });
-  };
-
-  // List View Component
-  const ListView = () => {
-    const allTasks = getAllTasks();
-    const [newTaskInput, setNewTaskInput] = useState("");
-    const [isAddingTask, setIsAddingTask] = useState(false);
-
-    const handleAddTaskToList = async (e) => {
-      e.preventDefault();
-      if (newTaskInput.trim()) {
-        const result = await addKanbanTask(userID, newTaskInput, 'To Do', 'kanban');
-        if (result.success) {
-          setNewTaskInput("");
-          setIsAddingTask(false);
-          // Refresh tasks
-          const updatedResult = await getKanbanTasks(userID);
-          if (updatedResult) {
-            const categorizedTasks = {
-              backlog: [],
-              todo: [],
-              inprogress: [],
-              done: [],
-            };
-            updatedResult.forEach((task) => {
-              if (task.status === "Backlog") categorizedTasks.backlog.push(task);
-              else if (task.status === "To Do") categorizedTasks.todo.push(task);
-              else if (task.status === "In Progress") categorizedTasks.inprogress.push(task);
-              else if (task.status === "Done") categorizedTasks.done.push(task);
-            });
-            setTasks(categorizedTasks);
-          }
-        }
-      }
-    };
-
-    return (
-      <div className="h-[calc(100vh-160px)] overflow-y-auto shadow-sm">
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-2xl font-semibold tracking-tighttext-gray-200">All Tasks ({allTasks.length})</h2>
-            <button
-              onClick={() => setIsAddingTask(!isAddingTask)}
-              className="flex items-center space-x-2 bg-neutral-900 hover:bg-neutral-800 text-white px-4 py-2 rounded-md transition-colors duration-200 shadow-sm"
-            >
-              <Image
-                src="/plus.svg"
-                width={14}
-                height={14}
-                alt="Add Task"
-              />
-              <span>Add Task</span>
-            </button>
-          </div>
-          <p className="text-gray-300 text-sm">Tasks organized by status and creation date</p>
-
-          {/* Quick Add Task Form */}
-          {isAddingTask && (
-            <form onSubmit={handleAddTaskToList} className="mt-4 p-4 bg-black border border-neutral-800 rounded-xl">
-              <div className="flex items-center space-x-3">
-                <input
-                  type="text"
-                  value={newTaskInput}
-                  onChange={(e) => setNewTaskInput(e.target.value)}
-                  placeholder="Enter task title..."
-                  className="flex-1 bg-neutral-900 border border-gray-300 rounded-xl px-3 py-2 text-gray-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900/30"
-                  autoFocus
-                />
-                <button
-                  type="submit"
-                  className="bg-slate-900 hover:bg-black text-white px-4 py-2 rounded-xl transition-colors duration-200 shadow-sm"
-                >
-                  Add
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsAddingTask(false);
-                    setNewTaskInput("");
-                  }}
-                  className="bg-neutral-900 border border-gray-300 hover:bg-black text-gray-100 px-4 py-2 rounded-xl transition-colors duration-200 shadow-sm"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          {allTasks.map((task) => {
-            const taskId = task.tasks?.task_id || task.task_id;
-            const title = task.tasks?.title || task.title;
-            const description = task.tasks?.description || task.description;
-            const priority = task.tasks?.priority || task.priority || 'No Priority';
-            const createdAt = task.tasks?.created_at || task.created_at;
-
-            return (
-              <motion.div
-                key={taskId}
-                layout
-                className={`bg-black rounded-md px-4 py-3 hover:bg-neutral-900 transition-colors duration-200 border border-neutral-800 cursor-pointer shadow-sm hover:shadow-md`}
-                onClick={() => handleTaskClick(task)}
-                whileHover={{ y: -1 }}
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h3 className="text-gray-100 font-medium text-sm leading-6">{title}</h3>
-
-                    {description && (
-                      <p className="text-gray-300 text-sm line-clamp-2 mt-1">
-                        {description}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="flex items-center space-x-2 ml-4">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleFinishTask(task);
-                      }}
-                      className="text-gray-200 hover:text-gray-100 transition-colors duration-200 p-1 rounded-lg hover:bg-gray-100"
-                      title="Mark as Done"
-                    >
-                      <Image
-                        src="/done.svg"
-                        width={16}
-                        height={16}
-                        alt="Done"
-                      />
-                    </button>
-                  </div>
-                </div>
-                {/* Lightweight metadata row */}
-                <div className="mt-2 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    {(() => {
-                      const priorityRaw = task.tasks?.priority || task.priority || 'No Priority';
-                      const normalizedPriority = typeof priorityRaw === 'string' ? priorityRaw.toLowerCase() : priorityRaw;
-                      const labelClass = priorityLabels[normalizedPriority] || 'text-gray-300';
-                      return (
-                        <span className={`text-[11px] ${labelClass}`}>{String(priorityRaw)}</span>
-                      );
-                    })()}
-                  </div>
-                  <span className="text-[11px] text-slate-400"></span>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {allTasks.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-slate-300 text-lg mb-2">No tasks found</div>
-            <p className="text-slate-400 text-sm">Create your first task to get started</p>
-          </div>
-        )}
-      </div>
-    );
-  };
-
   if (isLoading || !tasks) {
     return <Loading />;
   }
@@ -714,6 +539,13 @@ const epicColors = [
             </span>
           </div>
           <div className="flex flex-row gap-2">
+            {/* Label Filter */}
+            <LabelFilter
+              availableLabels={availableLabels}
+              selectedLabels={selectedLabelFilters}
+              onSelectionChange={setSelectedLabelFilters}
+            />
+            
             {/* Epic Filter Dropdown */}
             <div className="relative" ref={dropdownRef}>
               <button
@@ -729,7 +561,7 @@ const epicColors = [
                   height={14}
                   priority
                 />
-                {selectedEpicFilter ? (epics.find(e => e.epic_id === selectedEpicFilter)?.title || 'Epic') : 'Filter by Epic'}
+                {selectedEpicFilter ? (epics.find(e => e.epic_id === selectedEpicFilter)?.title || 'Epic') : 'Filter Epics'}
                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
               </button>
 
@@ -740,7 +572,7 @@ const epicColors = [
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -6, scale: 0.98 }}
                     transition={{ duration: 0.12, ease: 'easeOut' }}
-                    className="absolute right-0 z-20 mt-2 w-64 bg-neutral-900 border p-2 border-neutral-700 rounded-md shadow-lg"
+                    className="absolute right-0 z-20 mt-2 w-64 bg-neutral-900 border p-2 border-neutral-800 rounded-md shadow-lg"
                   >
                     <button
                       className="w-full text-left text-sm px-4 py-2 text-gray-100 hover:bg-neutral-800 rounded-md"
@@ -750,32 +582,24 @@ const epicColors = [
                     </button>
                     {epics.map(epic => (
                       <button
-                        key={epic.epic_id}
-                        className={`w-full text-left px-4 py-2 rounded-md hover:bg-neutral-800 flex items-center space-x-2 ${selectedEpicFilter === epic.epic_id ? 'bg-black' : ''}`}
-                        onClick={() => { setSelectedEpicFilter(epic.epic_id); setShowEpicDropdown(false); }}
-                      >
-                        <span className={`${getEpicColor(epic.epic_id)} px-2 py-1 rounded-full text-xs`}>{epic.title}</span>
-                      </button>
+                      key={epic.epic_id}
+                      className={`w-full text-left px-4 py-2 rounded-md hover:bg-neutral-800 flex items-center space-x-2 ${selectedEpicFilter === epic.epic_id ? 'bg-black' : ''}`}
+                      onClick={() => { setSelectedEpicFilter(epic.epic_id); setShowEpicDropdown(false); }}
+                    >
+                      {/* Circle */}
+                      <span
+                        className={`${getEpicColor(epic.epic_id)} w-3 h-3 rounded-full inline-block`}
+                      ></span>
+                    
+                      {/* Text */}
+                      <span className="text-sm text-gray-100">{epic.title}</span>
+                    </button>                    
                     ))}
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
             {/* End Epic Filter Dropdown */}
-            <button
-              onClick={toggleViewMode}
-              className="flex flex-row bg-black border border-neutral-800 items-center px-3 py-2 text-gray-100 tracking-tight text-sm transition-colors duration-200 rounded-md hover:bg-neutral-900 shadow-sm"
-            >
-              <Image
-                src={viewMode === 'kanban' ? "/list.svg" : "/kanban.svg"}
-                className="mr-2 filter invert"
-                width={14}
-                alt={viewMode === 'kanban' ? "list" : "kanban"}
-                height={14}
-                priority
-              />
-              {viewMode === 'kanban' ? 'View as List' : 'View as Kanban'}
-            </button>
             <button
               onClick={navigateToEpics}
               className="flex flex-row bg-black border border-neutral-800 items-center px-3 py-2 text-gray-100 tracking-tight text-sm transition-colors duration-200 rounded-md hover:bg-neutral-900 shadow-sm"
@@ -801,6 +625,7 @@ const epicColors = [
               isVisible={isModalOpen}
               closeModal={() => setIsModalOpen(false)}
               task={selectedTask}
+              userId={userID}
               onDeleteTask={(task) => {
                 removeTask(task);
                 showDeletionNotification(task);
@@ -876,7 +701,6 @@ const epicColors = [
       </AnimatePresence>
 
       {/* Kanban Board */}
-      {viewMode === 'kanban' && (
         <div className="flex flex-1 gap-4 overflow-x-auto">
         <motion.div className="flex flex-row gap-4 w-full">
           {['Backlog', 'To Do', 'In Progress', 'Done'].map((status) => (
@@ -920,28 +744,48 @@ const epicColors = [
                 {getTasksByStatus(status).map((task) => (
                   <motion.div
                     key={task.tasks?.task_id || task.task_id || 'UNKNOWN'}
-                    className={`p-4 bg-neutral-900 rounded-md shadow-sm border ${borderColors[status]} transition-all duration-150 ease-in-out cursor-pointer hover:border-neutral-600`}
+                    className={`p-3 bg-neutral-900/40 rounded-md shadow-sm border ${borderColors[status]} transition-all duration-150 ease-in-out cursor-pointer hover:border-neutral-600`}
                     draggable="true"
                     onDragStart={(e) => e.dataTransfer.setData('task', JSON.stringify(task))}
                     onClick={() => handleTaskClick(task)}
                   >
-                    <div className="flex flex-col gap-2">
-                      <p className="text-gray-100 text-sm tracking-tight font-medium leading-relaxed">
+                    <div className="flex flex-col gap-1/2">
+                      {/* Epic Badge at the top */}
+                      {task.tasks.taskEpics?.[0]?.epics?.title && (
+                        <div className="flex items-center space-x-1 mb-1">
+                          <div className="flex items-center space-x-1">
+                            <div className={`w-2 h-2 rounded-full ${getEpicColor(task.tasks.taskEpics[0].epics.epic_id)}`}></div>
+                            <span className="text-xs tracking-tight font-normal text-gray-400">
+                              {task.tasks.taskEpics[0].epics.title}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      <p className="text-gray-100 text-sm tracking-tight leading-relaxed mb-1">
                         {task.tasks?.title || task.title || 'UNKNOWN'}
                       </p>
-      
-                      {/* Epic Badge and Priority */}
+
+                      {/* Labels and Priority at the bottom */}
                       <div className="flex flex-row items-center justify-between">
-                        {task.tasks.taskEpics?.[0]?.epics?.title && (
-                          <div className="flex items-center space-x-1">
-                            <div className="flex items-center space-x-1 px-2 py-1 border border-neutral-800 rounded-full">
-                              <div className={`w-2 h-2 rounded-full ${getEpicColor(task.tasks.taskEpics[0].epics.epic_id)}`}></div>
-                              <span className="text-[10px] tracking-tight font-normal text-gray-200">
-                                {task.tasks.taskEpics[0].epics.title}
-                              </span>
-                            </div>
+                        {task.tasks?.task_labels && task.tasks.task_labels.length > 0 ? (
+                          <div className="flex flex-wrap gap-1">
+                            {task.tasks.task_labels.map((labelItem) => (
+                              <LabelBadge
+                                key={labelItem.label_id}
+                                label={labelItem.labels}
+                                size="xs"
+                                className="text-xs"
+                              />
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="flex items-center space-x-2">
+                            <span className="text-gray-400 text-xs">No Labels</span>
                           </div>
                         )}
+
+                        {/* Priority */}
                         <div className="flex items-center space-x-2">
                         {(() => {
                           const priorityRaw = task.tasks?.priority || task.priority || 'No Priority';
@@ -950,7 +794,7 @@ const epicColors = [
 
                           return (
                             <div className={`
-                              inline-flex items-center gap-1 px-2 py-1 rounded-md
+                              inline-flex items-center gap-1 px-2 py-1/2 rounded-md
                               ${config.bgColor} ${config.textColor} ${config.borderColor}
                               text-xs font-semibold uppercase tracking-tight
                             `}>
@@ -1001,12 +845,6 @@ const epicColors = [
           ))}
         </motion.div>
       </div>
-      )}
-
-      {/* List View */}
-      {viewMode === 'list' && (
-        <ListView />
-      )}
 
       {deletionNotification && (
         <div

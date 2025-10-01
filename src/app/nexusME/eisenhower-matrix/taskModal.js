@@ -1,13 +1,34 @@
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { deleteEisenhowerTaskByID } from "../../../lib/db/queries";
+import { deleteEisenhowerTaskByIDAction } from "../../eisenhower-actions";
+import { getUserLabelsAction, getTaskLabelsAction } from "../../label-actions";
+import LabelPicker from "../../../../components/LabelPicker";
 
-export default function TaskModal({ isVisible, closeModal, task, onUpdateTask, onDeleteTask, onFinishTask }) {
+export default function TaskModal({ isVisible, closeModal, task, onUpdateTask, onDeleteTask, onFinishTask, userId }) {
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState('');
+  const [availableLabels, setAvailableLabels] = useState([]);
+  const [taskLabels, setTaskLabels] = useState([]);
   const descriptionRef = useRef(null);
+
+  // Fetch labels and task labels when modal opens
+  useEffect(() => {
+    const fetchLabels = async () => {
+      if (isVisible && userId) {
+        const labels = await getUserLabelsAction(userId);
+        setAvailableLabels(labels || []);
+        
+        if (taskID && taskID !== 'Unknown Task ID') {
+          const taskLabelsData = await getTaskLabelsAction(taskID);
+          setTaskLabels(taskLabelsData || []);
+        }
+      }
+    };
+
+    fetchLabels();
+  }, [isVisible, userId, taskID]);
 
   // Click outside logic for description editing
   useEffect(() => {
@@ -88,7 +109,7 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask, o
   };
 
   const handleDeleteTask = () => {
-    let res = deleteEisenhowerTaskByID(taskID);
+    let res = deleteEisenhowerTaskByIDAction(taskID);
     if (res) {
       onDeleteTask(task.matrix_type, task);
       closeModal();
@@ -140,6 +161,19 @@ export default function TaskModal({ isVisible, closeModal, task, onUpdateTask, o
                     <span className="mr-2">{matrixType.icon}</span>
                     {matrixType.label}
                   </span>
+                </div>
+
+                {/* Labels */}
+                <div className="space-y-3">
+                  <h3 className="text-sm font-medium text-gray-300">Labels</h3>
+                  <LabelPicker
+                    taskId={taskID}
+                    selectedLabels={taskLabels}
+                    availableLabels={availableLabels}
+                    onLabelsChange={setTaskLabels}
+                    userId={userId}
+                    className="w-full"
+                  />
                 </div>
 
                 {/* Description */}

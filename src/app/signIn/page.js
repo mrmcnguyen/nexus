@@ -5,7 +5,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { DM_Sans } from 'next/font/google';
 import { createClient } from '../../../supabase/client'
-import { addUser, trial } from '../../lib/db/queries';
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
 

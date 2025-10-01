@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState, useRef } from "react";
-import { getProjectByID, getMembers } from "../../../../../lib/db/projectQueries";
+import { getProjectByIDAction, getMembersAction } from "../../../../../project-actions";
 import { FiPlus, FiSearch } from "react-icons/fi";
 
 export default function Sectors({ id, userID }) {
@@ -33,7 +33,7 @@ export default function Sectors({ id, userID }) {
     useEffect(() => {
           const getProject = async () => {
               try {
-                  const res = await getProjectByID(id); // Await the response
+                  const res = await getProjectByIDAction(id); // Await the response
                   if (res) {
                       setProject(res);
                   }

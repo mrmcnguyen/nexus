@@ -5,7 +5,7 @@ import StageTwo from "./stageTwo";
 import StageThree from './stageThree'
 import { motion, AnimatePresence } from "framer-motion";
 import { createClient } from "../../../../supabase/client";
-import { createProject } from '../../../lib/db/projectQueries';
+import { createProjectAction } from '../../../project-actions';
 import { useRouter } from "next/navigation";
 
 const MultiStageForm = () => {
@@ -54,7 +54,7 @@ const MultiStageForm = () => {
   };
 
   const handleSubmit = async () => {
-    const res = createProject(formData.projName, formData.orgName, formData.description, userID);
+    const res = createProjectAction(formData.projName, formData.orgName, formData.description, userID);
     if (res) {
       console.log("Project Created: ", formData);
       router.push('./allTeams');

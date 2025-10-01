@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiCheck, FiInfo, FiCalendar, FiBook, FiMail, FiLoader } from "react-icons/fi";
-import { addMembertoProject, getProjectByID } from '../src/lib/db/projectQueries';
+import { addMembertoProjectAction, getProjectByIDAction } from '../src/app/project-actions';
 
 const NotificationContext = createContext();
 
@@ -235,7 +235,7 @@ const NotificationModalContainer = () => {
       if (modalNotification.type === 'invitation') {
         // Add your invitation acceptance logic here
         // For example:
-        const res = addMembertoProject(modalNotification.invitation_id, modalNotification.recipient_id, modalNotification.sender_id, modalNotification.project_id)
+        const res = addMembertoProjectAction(modalNotification.invitation_id, modalNotification.recipient_id, modalNotification.sender_id, modalNotification.project_id)
         if (!res){
           console.error(res);
           return "ERROR";

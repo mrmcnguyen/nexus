@@ -14,40 +14,40 @@ const initialGoals = [
     title: "Launch MVP",
     year: "2024",
     position: 0.15, // Position along timeline (0-1)
-    color: "from-cyan-400 to-blue-500",
-    glowColor: "shadow-cyan-500/50"
+    color: "from-blue-400 to-blue-500",
+    glowColor: "shadow-blue-500/50"
   },
   {
     id: 2,
     title: "Scale to 10K Users",
     year: "2025",
     position: 0.35,
-    color: "from-emerald-400 to-green-500",
-    glowColor: "shadow-emerald-500/50"
+    color: "from-blue-500 to-blue-600",
+    glowColor: "shadow-blue-600/50"
   },
   {
     id: 3,
     title: "Series A Funding",
     year: "2025",
     position: 0.55,
-    color: "from-purple-400 to-pink-500",
-    glowColor: "shadow-purple-500/50"
+    color: "from-blue-600 to-blue-700",
+    glowColor: "shadow-blue-700/50"
   },
   {
     id: 4,
     title: "Global Expansion",
     year: "2026",
     position: 0.75,
-    color: "from-orange-400 to-red-500",
-    glowColor: "shadow-orange-500/50"
+    color: "from-blue-700 to-blue-800",
+    glowColor: "shadow-blue-800/50"
   },
   {
     id: 5,
     title: "IPO",
     year: "2028",
     position: 0.95,
-    color: "from-yellow-400 to-amber-500",
-    glowColor: "shadow-yellow-500/50"
+    color: "from-blue-800 to-blue-900",
+    glowColor: "shadow-blue-900/50"
   }
 ];
 
@@ -63,8 +63,8 @@ export default function VisionBoard() {
       title: "New Goal",
       year: "2025",
       position: 0.5,
-      color: "from-indigo-400 to-purple-500",
-      glowColor: "shadow-indigo-500/50"
+      color: "from-blue-500 to-blue-600",
+      glowColor: "shadow-blue-600/50"
     };
     setGoals([...goals, newGoal]);
   };
@@ -77,12 +77,12 @@ export default function VisionBoard() {
   };
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 ${dmSans.className}`}>
+    <div className={`min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 ${dmSans.className}`}>
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),transparent_50%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(120,119,198,0.2),transparent_50%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(120,119,198,0.2),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.3),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.2),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(59,130,246,0.2),transparent_50%)]"></div>
       </div>
 
       {/* Animated Particles */}
@@ -90,7 +90,7 @@ export default function VisionBoard() {
         {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-cyan-400 rounded-full opacity-60"
+            className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-60"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -116,7 +116,7 @@ export default function VisionBoard() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 bg-clip-text text-transparent mb-4">
             Vision Board
           </h1>
           <p className="text-gray-300 text-lg tracking-tight max-w-2xl pb-4 mx-auto">
@@ -125,7 +125,7 @@ export default function VisionBoard() {
           <p className="text-gray-300 text-sm tracking-tight max-w-2xl mx-auto">
             Everything starts with a vision.
             <br />
-            <Link href="/" className="text-cyan-300 hover:text-cyan-400 hover:underline transition-colors duration-300">Learn about the importance of having visions and goals.</Link>
+            <Link href="/" className="text-blue-300 hover:text-blue-400 hover:underline transition-colors duration-300">Importance of having visions and goals.</Link>
           </p>
         </motion.div>
       </div>
@@ -137,10 +137,10 @@ export default function VisionBoard() {
         transition={{ duration: 0.6, delay: 0.3 }}
         className="relative z-10 flex justify-center mb-8"
       >
-        <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-sm border border-cyan-500/30 rounded-2xl px-6 py-3 shadow-lg shadow-cyan-500/20">
+        <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-sm border border-blue-500/30 rounded-2xl px-6 py-3 shadow-lg shadow-blue-500/20">
           <div className="flex items-center space-x-3">
-            <div className="w-3 h-3 bg-cyan-400 rounded-full animate-pulse"></div>
-            <span className="text-cyan-300 font-medium">Today's Focus: Building the Future</span>
+            <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse"></div>
+            <span className="text-blue-300 font-medium">Today's Focus: Building the Future</span>
           </div>
         </div>
       </motion.div>
@@ -154,7 +154,7 @@ export default function VisionBoard() {
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 1.5, delay: 0.5 }}
-              className="absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-cyan-500/50 via-purple-500/50 to-pink-500/50 transform -translate-y-1/2"
+              className="absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500/50 via-blue-600/50 to-blue-700/50 transform -translate-y-1/2"
               style={{ originX: 0 }}
             />
 
@@ -171,17 +171,17 @@ export default function VisionBoard() {
                 <motion.div
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
-                  className="w-6 h-6 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full shadow-lg shadow-cyan-500/50"
+                  className="w-6 h-6 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full shadow-lg shadow-blue-500/50"
                 />
                 {/* Outer Ring */}
                 <motion.div
                   animate={{ scale: [1, 1.5, 1], opacity: [0.8, 0, 0.8] }}
                   transition={{ duration: 2, repeat: Infinity }}
-                  className="absolute inset-0 w-6 h-6 border-2 border-cyan-400 rounded-full"
+                  className="absolute inset-0 w-6 h-6 border-2 border-blue-400 rounded-full"
                 />
                 {/* Label */}
                 <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
-                  <span className="text-cyan-300 text-sm font-medium bg-slate-800/80 px-3 py-1 rounded-full border border-cyan-500/30">
+                  <span className="text-blue-300 text-sm font-medium bg-slate-800/80 px-3 py-1 rounded-full border border-blue-500/30">
                     NOW
                   </span>
                 </div>
@@ -212,7 +212,7 @@ export default function VisionBoard() {
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
                     transition={{ duration: 1, delay: 1.5 + index * 0.1 }}
-                    className="absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-cyan-400/30 to-transparent transform -translate-y-1/2"
+                    className="absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-blue-400/30 to-transparent transform -translate-y-1/2"
                     style={{ 
                       width: `${Math.abs(goal.position - currentPosition) * 100}%`,
                       left: goal.position < currentPosition ? `${goal.position * 100}%` : `${currentPosition * 100}%`,
@@ -290,7 +290,7 @@ export default function VisionBoard() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={addGoal}
-          className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white font-medium px-6 py-3 rounded-xl shadow-lg shadow-cyan-500/25 transition-all duration-300 flex items-center space-x-2"
+          className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-medium px-6 py-3 rounded-xl shadow-lg shadow-blue-500/25 transition-all duration-300 flex items-center space-x-2"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

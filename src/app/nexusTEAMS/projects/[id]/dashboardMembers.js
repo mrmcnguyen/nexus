@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState, useRef } from "react";
-import { getProjectByID, getMembers } from "../../../../lib/db/projectQueries";
+import { getProjectByIDAction, getMembersAction } from "../../../../project-actions";
 import { FiPlus, FiStar } from "react-icons/fi";
 
 export default function DashboardMembers({ id }) {
@@ -29,7 +29,7 @@ export default function DashboardMembers({ id }) {
     useEffect(() => {
           const getProject = async () => {
               try {
-                  const res = await getProjectByID(id); // Await the response
+                  const res = await getProjectByIDAction(id); // Await the response
                   if (res) {
                       setProject(res);
                   }
@@ -44,7 +44,7 @@ export default function DashboardMembers({ id }) {
       useEffect(() => {
         const getProjectMembers = async () => {
             try {
-                const res = await getMembers(id); // Await the response
+                const res = await getMembersAction(id); // Await the response
                 if (res) {
                     setMembers(res);
                 }

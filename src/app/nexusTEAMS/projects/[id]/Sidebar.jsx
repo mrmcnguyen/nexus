@@ -16,7 +16,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { createClient } from "../../../../../supabase/client";
 import Link from "next/link";
-import { getUserFullName } from "../../../../lib/db/userQueries";
+import { getUserFullNameAction } from "../../../../user-actions";
 import { usePathname } from 'next/navigation';
 
 export const Sidebar = ({ width }) => {
@@ -52,7 +52,7 @@ export const Sidebar = ({ width }) => {
     const fetchUser = async () => {
       const { data, error } = await supabase.auth.getUser();
       if (data?.user) {
-        const res = await getUserFullName(data.user.id);
+        const res = await getUserFullNameAction(data.user.id);
         if (res) setUserName(res[0].first_name);
       } else {
         console.error("User not found:", error);

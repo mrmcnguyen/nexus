@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { addEisenhowerTask, getEisenhowerTaskByID } from '../../../lib/db/queries';
+import { addEisenhowerTaskAction, getEisenhowerTaskByIDAction } from '../../eisenhower-actions';
+import LabelBadge from '../../../../components/LabelBadge';
 
 export default function Quadrant({
   title,
@@ -49,11 +50,11 @@ export default function Quadrant({
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (newTask.trim()) {
-      const result = await addEisenhowerTask(userID, newTask, "eisenhower", quadrant);
+      const result = await addEisenhowerTaskAction(userID, newTask, "eisenhower", quadrant);
 
       if (result.success) {
         const taskID = result.data.task_id;
-        const updatedTask = await getEisenhowerTaskByID(taskID, userID); // Query the database for updated tasks
+        const updatedTask = await getEisenhowerTaskByIDAction(taskID, userID); // Query the database for updated tasks
         onAddTask(updatedTask); // Update the parent component's task state
         setNewTask('');
       } else {
@@ -101,18 +102,38 @@ export default function Quadrant({
               `}
               onClick={() => onTaskClick(task)}
             >
-              {task?.tasks?.title ? (
-                task.tasks.title
-              ) : task?.title ? (
-                task.title
-              ) : (
-                JSON.stringify(task)
-              )}
-              {isDone && (
-                <span className="ml-2 inline-flex items-center text-[10px] px-2 py-[2px] rounded-full bg-green-600/20 border border-green-600/40 text-green-300 align-middle">
-                  Done
-                </span>
-              )}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span>
+                    {task?.tasks?.title ? (
+                      task.tasks.title
+                    ) : task?.title ? (
+                      task.title
+                    ) : (
+                      JSON.stringify(task)
+                    )}
+                  </span>
+                  {isDone && (
+                    <span className="ml-2 inline-flex items-center text-[10px] px-2 py-[2px] rounded-full bg-green-600/20 border border-green-600/40 text-green-300 align-middle">
+                      Done
+                    </span>
+                  )}
+                </div>
+                
+                {/* Labels */}
+                {task.tasks?.taskLabels && task.tasks.taskLabels.length > 0 && (
+                  <div className="flex flex-wrap gap-1">
+                    {task.tasks.taskLabels.map((labelItem) => (
+                      <LabelBadge
+                        key={labelItem.label_id}
+                        label={labelItem.labels}
+                        size="xs"
+                        className="text-xs"
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
             </li>
           );
         })}

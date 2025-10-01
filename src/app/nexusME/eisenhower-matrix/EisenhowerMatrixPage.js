@@ -3,12 +3,14 @@
 import React, { useEffect, useState } from 'react';
 import Quadrant from './Quadrant';
 import { createClient } from '../../../../supabase/client';
-import { addUnallocatedEisenhowerTask, getEisenhowerTasks, getEisenhowerTaskByID, allocateEisenhowerTask, finishEisenhowerTask } from '../../../lib/db/queries';
+import { addUnallocatedEisenhowerTaskAction, getEisenhowerTasksAction, getEisenhowerTaskByIDAction, allocateEisenhowerTaskAction, finishEisenhowerTaskAction } from '../../eisenhower-actions';
+import { getUserLabelsAction, getTaskLabelsAction } from '../../label-actions';
 import HelpModal from './helpModal';
 import Image from 'next/image';
 import TaskModal from './taskModal'
 import Loading from './loading';
 import { toast } from 'react-hot-toast';
+import LabelFilter from '../../../../components/LabelFilter';
 
 // Main Eisenhower Matrix Page Component
 // This component displays the Eisenhower Matrix with tasks divided into quadrants
@@ -33,6 +35,8 @@ export default function EisenhowerMatrixPage() {
   const [helpClick, setHelpClick] = useState(false);
   const [deletionNotification, setDeletionNotification] = useState(null);
   const [newTask, setNewTask] = useState('');
+  const [availableLabels, setAvailableLabels] = useState([]);
+  const [selectedLabelFilters, setSelectedLabelFilters] = useState([]);
 
   const supabase = createClient();
 
@@ -54,13 +58,25 @@ export default function EisenhowerMatrixPage() {
   useEffect(() => {
     const fetchAllEisenhowerTasks = async () => {
       if (userID) {
-        const result = await getEisenhowerTasks(userID);
+        const result = await getEisenhowerTasksAction(userID);
         setAllTasks(result || {}); // Safeguard against null
         setIsLoading(false); // Stop loading when data is fetched
       }
     };
 
     fetchAllEisenhowerTasks();
+  }, [userID]);
+
+  // Fetch available labels
+  useEffect(() => {
+    const fetchLabels = async () => {
+      if (userID) {
+        const labels = await getUserLabelsAction(userID);
+        setAvailableLabels(labels || []);
+      }
+    };
+
+    fetchLabels();
   }, [userID]);
 
   // Update tasks whenever allTasks changes
@@ -86,6 +102,17 @@ export default function EisenhowerMatrixPage() {
       setUnallocatedTasks(updatedUnallocatedTasks);
     }
   }, [allTasks]);
+
+  // Filter tasks by selected labels
+  const filterTasksByLabels = (taskList) => {
+    if (selectedLabelFilters.length === 0) return taskList;
+    
+    return taskList.filter(task => {
+      // For now, we'll assume tasks have labels in the future
+      // This will be updated when we modify the task structure
+      return true; // Placeholder - will be implemented when labels are added to tasks
+    });
+  };
 
   const addTask = (quadrant, task) => {
     setTasks((prevTasks) => {
@@ -122,12 +149,12 @@ export default function EisenhowerMatrixPage() {
     e.preventDefault();
     const task = JSON.parse(e.dataTransfer.getData('task'));
 
-    const res = await allocateEisenhowerTask(task.task_id || task.tasks?.task_id, quadrant);
+    const res = await allocateEisenhowerTaskAction(task.task_id || task.tasks?.task_id, quadrant);
     if (!res) {
       console.error('Error allocating task. Please check logs.');
     }
 
-    let newTask = await getEisenhowerTaskByID(task.task_id || task.tasks?.task_id, userID);
+    let newTask = await getEisenhowerTaskByIDAction(task.task_id || task.tasks?.task_id, userID);
 
     // Add task to quadrant and remove from unallocated tasks
     addTask(quadrant, newTask);
@@ -143,9 +170,9 @@ export default function EisenhowerMatrixPage() {
 
   const handleFinishTask = async (task) => {
     console.log(task);
-    await finishEisenhowerTask(task.task_id || task.tasks?.task_id);
+    await finishEisenhowerTaskAction(task.task_id || task.tasks?.task_id);
 
-    const finishedTask = await getEisenhowerTaskByID(task.task_id || task.tasks?.task_id, userID);
+    const finishedTask = await getEisenhowerTaskByIDAction(task.task_id || task.tasks?.task_id, userID);
 
     // Determine the current quadrant of the task
     const currentQuadrant = Object.keys(tasks).find(quadrant =>
@@ -188,12 +215,12 @@ export default function EisenhowerMatrixPage() {
     e.preventDefault();
     if (newTask.trim()) {
       try {
-        const res = await addUnallocatedEisenhowerTask(userID, 'eisenhower', newTask);
+        const res = await addUnallocatedEisenhowerTaskAction(userID, 'eisenhower', newTask);
 
         if (res.success) {
           // Fetch the newly added task
           const taskID = res.data.task_id;
-          const updatedTask = await getEisenhowerTaskByID(taskID, userID);
+          const updatedTask = await getEisenhowerTaskByIDAction(taskID, userID);
 
           setUnallocatedTasks((prevTasks) => [...prevTasks, updatedTask]);
           // Clear the input
@@ -262,6 +289,16 @@ export default function EisenhowerMatrixPage() {
           </button>
           <HelpModal isVisible={helpClick} closeModal={() => setHelpClick(false)} />
         </div>
+        
+        {/* Label Filter */}
+        <div className="mb-4">
+          <LabelFilter
+            availableLabels={availableLabels}
+            selectedLabels={selectedLabelFilters}
+            onSelectionChange={setSelectedLabelFilters}
+            className="w-full"
+          />
+        </div>
         <input
           className='bg-neutral-800 border border-[#444] w-full text-sm text-gray-300 p-3 mb-4 rounded-lg focus:outline-none focus:border-blue-500 placeholder:text-gray-500 transition-colors'
           placeholder='Enter everything you need done...'
@@ -289,6 +326,7 @@ export default function EisenhowerMatrixPage() {
           isVisible={isModalVisible}
           closeModal={() => setModalVisible(false)}
           task={selectedTask}
+          userId={userID}
           onDeleteTask={(quadrant, task) => {
             removeTask(quadrant, task);
             showDeletionNotification(task);

@@ -1,5 +1,5 @@
-import { createClient } from "../../../supabase/client";
-import { supabase } from "../../app/supabase/supabaseClient";
+import 'server-only'; 
+import { createClient } from "../../../supabase/serverComponentClient";
 
 export async function getUserFullName(a_user_id) {
 

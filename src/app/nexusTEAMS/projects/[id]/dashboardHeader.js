@@ -1,5 +1,5 @@
 'use client';
-import { getProjectByID, getProjectManager } from "../../../../lib/db/projectQueries";
+import { getProjectByIDAction, getProjectManagerAction } from "../../../../project-actions";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { createClient } from "../../../../../supabase/client";
@@ -32,11 +32,11 @@ export default function DashboardHeader({ id }) {
         const fetchProjectData = async () => {
             try {
                 // Fetch project data
-                const projectData = await getProjectByID(id);
+                const projectData = await getProjectByIDAction(id);
                 setProject(projectData);
 
                 // Fetch manager data
-                const managerData = await getProjectManager(projectData[0].project_manager);
+                const managerData = await getProjectManagerAction(projectData[0].project_manager);
                 console.log(managerData);
                 setManager(managerData);
             } catch (error) {

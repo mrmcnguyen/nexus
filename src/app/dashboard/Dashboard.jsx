@@ -4,13 +4,50 @@ import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, lazy, Suspense } from 'react';
 import { createClient } from "../../../supabase/client";
-import { getUserFullName } from "../../lib/db/userQueries";
+import { getUserFullNameAction } from "../user-actions";
 import { FiArrowRight, FiClock, FiTarget, FiCheckSquare, FiEye, FiTrendingUp, FiCalendar, FiZap } from "react-icons/fi";
-import { formatDistanceToNow } from 'date-fns';
 import { useNotifications } from "../../../contexts/NotificationContext";
-import { getKanbanTasks } from "../../lib/db/queries";
+
+// Lazy load the chatbot component
+const NexusChatbot = lazy(() => import("../../../components/NexusChatbot"));
+
+// Memoized Feature Card Component
+const FeatureCard = React.memo(({ feature, index }) => {
+    const IconComponent = feature.icon;
+    
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: index * 0.1 }}
+            className="group"
+        >
+            <Link href={feature.href}>
+                <div className={`group relative p-4 bg-neutral-900/50 
+                                border border-neutral-800 rounded-md 
+                                hover:shadow-2xl hover:bg-neutral-800 hover:border-neutral-600/50
+                                transition-all duration-300 cursor-pointer
+                                backdrop-blur-sm`}>
+                    <div>
+                        <div className="flex items-center justify-between mb-4 pr-2">
+                            <div className={`rounded-xl bg-gray-900/30 ${feature.iconColor}`}>
+                                <IconComponent className="w-8 h-8" />
+                            </div>
+                            <FiArrowRight className="w-5 h-5 text-gray-400 group-hover:text-white 
+                                                   group-hover:translate-x-1 transition-all duration-300" />
+                        </div>
+                        <h3 className="text-xl font-semibold text-white">{feature.title}</h3>
+                        <p className="text-gray-300 text-sm leading-relaxed">{feature.description}</p>
+                    </div>
+                </div>
+            </Link>
+        </motion.div>
+    );
+});
+
+FeatureCard.displayName = 'FeatureCard';
 
 export default function Dashboard() {
     const [user, setUser] = useState(null);
@@ -24,18 +61,18 @@ export default function Dashboard() {
 
     const supabase = createClient();
 
-    // Motivational quotes array
-    const quotes = [
+    // Memoize static data to prevent re-creation on every render
+    const quotes = useMemo(() => [
         "The way to get started is to quit talking and begin doing. - Walt Disney",
         "Don't be pushed around by the fears in your mind. Be led by the dreams in your heart. - Roy T. Bennett",
         "Success is not final, failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
         "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
         "It is during our darkest moments that we must focus to see the light. - Aristotle",
         "The only way to do great work is to love what you do. - Steve Jobs"
-    ];
+    ], []);
 
-    // Feature cards data
-    const features = [
+    // Feature cards data - memoized to prevent re-creation
+    const features = useMemo(() => [
         {
             id: 'eisenhower',
             title: 'Eisenhower Matrix',
@@ -96,32 +133,57 @@ export default function Dashboard() {
             borderColor: 'border-yellow-500/30',
             iconColor: 'text-yellow-400'
         }
-    ];
+    ], []);
 
-
-    const handleNotificationClick = (notification) => {
+    // Memoize event handlers to prevent re-creation
+    const handleNotificationClick = useCallback((notification) => {
         markAsRead(notification.id);
         showNotificationModal(notification);
-    };
+    }, [markAsRead, showNotificationModal]);
+
+    const handleLogout = useCallback(async () => {
+        const { error } = await supabase.auth.signOut();
+        if (!error) {
+            setUser(null);
+            router.push('/signIn');
+        } else {
+            console.error("Logout error:", error);
+        }
+    }, [router, supabase.auth]);
+
+    // Memoize expensive computations
+    const greeting = useMemo(() => {
+        const hour = new Date().getHours();
+        if (hour < 12) return 'morning';
+        if (hour < 18) return 'afternoon';
+        return 'evening';
+    }, [currentTime]);
 
     useEffect(() => {
         const fetchUser = async () => {
             setLoading(true);
-            const { data, error } = await supabase.auth.getUser();
+            try {
+                const { data, error } = await supabase.auth.getUser();
 
-            if (data?.user) {
-                setUser(data.user);
-                const res = await getUserFullName(data.user.id);
-                if (res) setUserName(res[0].first_name);
-            } else {
-                setUser(null);
+                if (data?.user) {
+                    setUser(data.user);
+                    const res = await getUserFullNameAction(data.user.id);
+                    console.log(res);
+                    if (res) setUserName(res[0].first_name);
+                } else {
+                    setUser(null);
+                    router.push('/signIn');
+                }
+            } catch (error) {
+                console.error('Error fetching user:', error);
                 router.push('/signIn');
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
         };
 
         fetchUser();
-    }, [router]);
+    }, [router, supabase.auth]);
 
     useEffect(() => {
         const updateDateTime = () => {
@@ -143,20 +205,12 @@ export default function Dashboard() {
     }, []);
 
     useEffect(() => {
-        // Set a random motivational quote
-        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-        setMotivationalQuote(randomQuote);
-    }, []);
-
-    const handleLogout = async () => {
-        const { error } = await supabase.auth.signOut();
-        if (!error) {
-            setUser(null);
-            router.push('/signIn');
-        } else {
-            console.error("Logout error:", error);
+        // Set a random motivational quote only once
+        if (quotes.length > 0) {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            setMotivationalQuote(randomQuote);
         }
-    };
+    }, [quotes]);
 
     if (loading) {
         return (
@@ -204,29 +258,18 @@ export default function Dashboard() {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="mb-12"
+                    transition={{ duration: 0.4 }}
                 >
-                    <div className="text-center mb-8">
+                    <div className="text-center">
                         <h1 className="text-6xl md:text-7xl font-light text-white mb-2">
                             {currentTime}
                         </h1>
                         <h2 className="text-2xl md:text-3xl text-gray-300 font-light mb-4">
-                            Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'afternoon' : 'evening'}, {userName}
+                            Good {greeting}, {userName}
                         </h2>
-                        <p className="text-lg text-gray-400 mb-6">{currentDate}</p>
+                        <p className="text-lg text-gray-400">{currentDate}</p>
                         
-                        {/* Motivational Quote */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.8, duration: 0.6 }}
-                            className="max-w-3xl mx-auto"
-                        >
-                            <blockquote className="text-lg text-gray-300 italic border-l-4 border-blue-500/30 pl-6 py-4 bg-gray-900/30 rounded-r-lg">
-                                "{motivationalQuote}"
-                            </blockquote>
-                        </motion.div>
+                        <NexusChatbot/>
                     </div>
                 </motion.div>
 
@@ -234,117 +277,31 @@ export default function Dashboard() {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
+                    transition={{ duration: 0.4 }}
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"
                 >
-                    {features.map((feature, index) => {
-                        const IconComponent = feature.icon;
-                        return (
-                            <motion.div
-                                key={feature.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: 0.1 * index }}
-                                whileTap={{ scale: 0.98 }}
-                            >
-                                <Link href={feature.href}>
-                                    <div className={`group relative p-6 bg-neutral-900/50 
-                                                   border border-gray-700/50 rounded-md 
-                                                   hover:shadow-2xl hover:shadow-black/20 hover:border-gray-600/50
-                                                   transition-all duration-300 cursor-pointer
-                                                   backdrop-blur-sm`}>
-                                        <div className="flex items-start justify-between mb-4">
-                                            <div className={`p-3 rounded-xl bg-gray-800/50 ${feature.iconColor}`}>
-                                                <IconComponent className="w-6 h-6" />
-                                            </div>
-                                            <FiArrowRight className="w-5 h-5 text-gray-400 group-hover:text-white 
-                                                                 group-hover:translate-x-1 transition-all duration-300" />
-                                        </div>
-                                        <h3 className="text-xl font-semibold tracking-tight text-white mb-2 group-hover:text-white">
-                                            {feature.title}
-                                        </h3>
-                                        <p className="text-gray-400 text-sm tracking-tight group-hover:text-gray-300 transition-colors duration-300">
-                                            {feature.description}
-                                        </p>
-                                        
-                                        {/* Subtle glow effect on hover */}
-                                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent 
-                                                      opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                    {features.map((feature, index) => (
+                        <FeatureCard key={feature.id} feature={feature} index={index} />
+                    ))}
+                </motion.div>
+                    {/* Nexus Chatbot - Lazy Loaded */}
+                    <Suspense fallback={
+                        <div className="bg-neutral-900/50 border border-gray-700/50 rounded-md backdrop-blur-sm overflow-hidden">
+                            <div className="p-6 border-b border-gray-700/50">
+                                <div className="flex items-center space-x-4">
+                                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-pulse"></div>
+                                    <div>
+                                        <div className="h-6 bg-gray-700 rounded w-64 mb-2 animate-pulse"></div>
+                                        <div className="h-4 bg-gray-700 rounded w-48 animate-pulse"></div>
                                     </div>
-                                </Link>
-                            </motion.div>
-                        );
-                    })}
-                </motion.div>
-
-                {/* Quick Stats & Notifications */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.6 }}
-                    className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-                >
-                    {/* Notifications */}
-                    <div className="bg-gray-900/50 border border-gray-800/50 rounded-2xl p-6 backdrop-blur-sm">
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-xl font-semibold text-white">Notifications</h3>
-                            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        </div>
-                        <div className="space-y-3">
-                            {dashboardNotifs.length === 0 ? (
-                                <p className="text-gray-400 text-center py-4">No new notifications</p>
-                            ) : (
-                                dashboardNotifs.slice(0, 4).map((notif) => (
-                                    <motion.div
-                                        key={notif.id}
-                                        whileHover={{ scale: 1.02 }}
-                                        className="flex items-center justify-between p-3 bg-gray-800/30 hover:bg-gray-800/50 
-                                                 rounded-lg cursor-pointer transition-all duration-200"
-                                        onClick={() => handleNotificationClick(notif)}
-                                    >
-                                        <div className="flex items-center space-x-3">
-                                            <div className={`w-2 h-2 rounded-full ${notif.read ? 'bg-gray-500' : 'bg-blue-500'}`}></div>
-                                            <span className={`text-sm ${notif.read ? 'text-gray-400' : 'text-gray-300'}`}>
-                                                {notif.message}
-                                            </span>
-                                        </div>
-                                        <span className="text-xs text-gray-500">
-                                            {formatDistanceToNow(new Date(notif.timestamp), { addSuffix: true })}
-                                        </span>
-                                    </motion.div>
-                                ))
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Quick Stats */}
-                    <div className="bg-gray-900/50 border border-gray-800/50 rounded-2xl p-6 backdrop-blur-sm">
-                        <h3 className="text-xl font-semibold text-white mb-4">Today's Focus</h3>
-                        <div className="space-y-4">
-                            <div className="flex items-center justify-between p-4 bg-gray-800/30 rounded-lg">
-                                <div className="flex items-center space-x-3">
-                                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                                    <span className="text-gray-300">Tasks Completed</span>
                                 </div>
-                                <span className="text-2xl font-bold text-green-400">0</span>
                             </div>
-                            <div className="flex items-center justify-between p-4 bg-gray-800/30 rounded-lg">
-                                <div className="flex items-center space-x-3">
-                                    <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                                    <span className="text-gray-300">In Progress</span>
-                                </div>
-                                <span className="text-2xl font-bold text-blue-400">0</span>
-                            </div>
-                            <div className="flex items-center justify-between p-4 bg-gray-800/30 rounded-lg">
-                                <div className="flex items-center space-x-3">
-                                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                                    <span className="text-gray-300">Pending</span>
-                                </div>
-                                <span className="text-2xl font-bold text-yellow-400">0</span>
+                            <div className="h-[400px] flex items-center justify-center">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                             </div>
                         </div>
-                    </div>
-                </motion.div>
+                    }>
+                    </Suspense>
             </div>
         </main>
     );

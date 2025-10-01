@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState, useRef } from "react";
-import { getProjectByID, getMembers } from "../../../../../lib/db/projectQueries";
+import { getProjectByIDAction, getMembersAction } from "../../../../../project-actions";
 import { FiPlus, FiSearch, FiStar, FiMessageCircle, FiMoreHorizontal } from "react-icons/fi";
 import AddMemberDropdown from './addMemberModal';
 import { usePresence, getUserStatus } from '../../../../../hooks/usePresence';
@@ -34,7 +34,7 @@ export default function Members({ id, userID }) {
     useEffect(() => {
         const getProject = async () => {
             try {
-                const res = await getProjectByID(id);
+                const res = await getProjectByIDAction(id);
                 if (res) {
                     setProject(res);
                 }
@@ -45,7 +45,7 @@ export default function Members({ id, userID }) {
 
         const getProjectMembers = async () => {
             try {
-                const res = await getMembers(id);
+                const res = await getMembersAction(id);
                 if (res) {
                     setMembers(res);
                 }

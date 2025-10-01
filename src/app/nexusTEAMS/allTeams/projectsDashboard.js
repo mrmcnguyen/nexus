@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import { createClient } from "../../../../supabase/client";
-import { getAllProjects } from "../../../lib/db/projectQueries";
+import { getAllProjectsAction } from "../../../project-actions";
 import { FiFolder, FiPlus, FiSearch, FiFilter } from "react-icons/fi";
 import Link from "next/link";
 import Loading from "./Loading";
@@ -34,7 +34,7 @@ export default function ProjectsDashboard() {
   useEffect(() => {
     const fetchAllProjects = async () => {
       try {
-        const res = await getAllProjects(userID);
+        const res = await getAllProjectsAction(userID);
         if (res) {
           setAllProjects(res);
           setFilteredProjects(res);

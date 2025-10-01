@@ -29,7 +29,7 @@ export function addDays(date: Date, days: number): Date {
 export function formatMD(date: Date): string {
   const m = (date.getMonth() + 1).toString().padStart(2, "0");
   const d = date.getDate().toString().padStart(2, "0");
-  return `${m}/${d}`;
+  return `${d}/${m}`;
 }
 
 

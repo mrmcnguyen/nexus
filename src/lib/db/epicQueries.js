@@ -1,4 +1,5 @@
-import { createClient } from "../../../supabase/client";
+import 'server-only'; 
+import { createClient } from "../../../supabase/serverComponentClient";
 
 // Get all epics for a user
 export async function getEpics(userId) {
@@ -187,6 +188,13 @@ export async function getEpicsWithTaskCounts(userId) {
         console.error('Error fetching epics with task counts:', error);
         return null;
     }
+
+    const d = data.map(epic => ({
+        ...epic,
+        task_count: epic.taskEpics?.length || 0
+    }));
+
+    console.log(d);
 
     // Add task count to each epic
     return data.map(epic => ({

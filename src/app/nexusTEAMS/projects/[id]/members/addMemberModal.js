@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FiMail, FiLoader, FiAlertCircle, FiInfo, FiX, FiUserPlus } from 'react-icons/fi';
 import debounce from 'lodash/debounce';
-import { getNameFromEmail, getNameFromID, getProjectByID } from '../../../../../lib/db/projectQueries';
-import { sendInvite } from '../../../../../lib/db//commQueries';
+import { getNameFromEmailAction, getNameFromIDAction, getProjectByIDAction } from '../../../../../project-actions';
+import { sendInviteAction } from '../../../../../communication-actions';
 
 const LoadingSpinner = () => (
   <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -62,7 +62,7 @@ const AddMemberDropdown = ({ isOpen, onClose, projectId, buttonRef, userID }) =>
 
   useEffect(() => {
     const getUserName = async() => {
-      const res = await getNameFromID(userID);
+      const res = await getNameFromIDAction(userID);
       console.log(res);
       if (res) setUserName(`${res.first_name} ${res.last_name}`)
     }
@@ -75,7 +75,7 @@ const AddMemberDropdown = ({ isOpen, onClose, projectId, buttonRef, userID }) =>
         if (projectId) {
           setLoading(true);
           try {
-            const project = await getProjectByID(projectId);
+            const project = await getProjectByIDAction(projectId);
             console.log(project);
             setProjectData(project[0]);
           } catch (err) {
@@ -125,7 +125,7 @@ const AddMemberDropdown = ({ isOpen, onClose, projectId, buttonRef, userID }) =>
 
     setCheckingEmail(true);
     try {
-      const res = await getNameFromEmail(email);
+      const res = await getNameFromEmailAction(email);
 
       if (res && res[0]) {
         setEmailExists(true);
@@ -158,7 +158,7 @@ const AddMemberDropdown = ({ isOpen, onClose, projectId, buttonRef, userID }) =>
 
     try {
       console.log("Sending with organisation name: ", projectData.organisation_name);
-        const res = await sendInvite(userID, customMessage, email, projectId, projectData.project_name, projectData.organisation_name, invitedUser.user_id, userName);
+        const res = await sendInviteAction(userID, customMessage, email, projectId, projectData.project_name, projectData.organisation_name, invitedUser.user_id, userName);
         if (res){
             console.log("Invite sent");
         }

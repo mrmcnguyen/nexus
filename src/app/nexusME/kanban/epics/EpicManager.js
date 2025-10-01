@@ -5,12 +5,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createClient } from "../../../../../supabase/client";
 import {
-    getEpics,
-    addEpic,
-    updateEpic,
-    deleteEpic,
-    getEpicTasks
-} from "../../../../lib/db/epicQueries";
+    getEpicsAction,
+    addEpicAction,
+    updateEpicAction,
+    deleteEpicAction,
+    getEpicTasksAction
+} from "../../../epic-actions";
 import { toast } from "react-hot-toast";
 
 export default function EpicManager() {
@@ -62,13 +62,13 @@ export default function EpicManager() {
     useEffect(() => {
         const fetchEpicsAndStatus = async () => {
             if (userID) {
-                const result = await getEpics(userID);
+                const result = await getEpicsAction(userID);
                 if (result) {
                     setEpics(result);
                     // For each epic, fetch its tasks and compute status breakdown
                     const statusCounts = {};
                     await Promise.all(result.map(async (epic) => {
-                        const tasks = await getEpicTasks(epic.epic_id);
+                        const tasks = await getEpicTasksAction(epic.epic_id);
                         const counts = { Done: 0, 'In Progress': 0, 'To Do': 0, Backlog: 0 };
                         tasks.forEach(task => {
                             if (counts[task.status] !== undefined) counts[task.status]++;
@@ -86,7 +86,7 @@ export default function EpicManager() {
     const handleAddEpic = async (e) => {
         e.preventDefault();
         if (epicName.trim()) {
-            const result = await addEpic(userID, epicName, epicDescription);
+            const result = await addEpicAction(userID, epicName, epicDescription);
             if (result.success) {
                 setEpics([...epics, result.data]);
                 setEpicName("");
@@ -109,7 +109,7 @@ export default function EpicManager() {
     const handleEditEpic = async (e) => {
         //e.preventDefault();
         if (epicName.trim() && editingEpic) {
-            const result = await updateEpic(editingEpic.epic_id, epicName, epicDescription);
+            const result = await updateEpicAction(editingEpic.epic_id, epicName, epicDescription);
             if (result.success) {
                 setEpics(epics.map(epic =>
                     epic.epic_id === editingEpic.epic_id
@@ -125,7 +125,7 @@ export default function EpicManager() {
     };
 
     const handleDeleteEpic = async (epicId, title) => {
-        const result = await deleteEpic(epicId);
+        const result = await deleteEpicAction(epicId);
         if (result.success) {
             setEpics(epics.filter(epic => epic.epic_id !== epicId));
         }
@@ -164,7 +164,7 @@ export default function EpicManager() {
 
     const viewEpicDetails = async (epic) => {
         setSelectedEpic(epic);
-        const tasks = await getEpicTasks(epic.epic_id);
+        const tasks = await getEpicTasksAction(epic.epic_id);
         console.log(tasks);
         setEpicTasks(tasks || []);
     };
@@ -240,7 +240,7 @@ export default function EpicManager() {
                         className="relative bg-neutral-950 border border-neutral-800 rounded-xl shadow-lg p-6 flex flex-col mb-6"
                     >
                         <div className="flex flex-row items-center mb-2">
-                            <h3 className="text-lg font-bold text-gray-100 flex-1">{epic.title}</h3>
+                            <h3 className="text-lg font-bold text-gray-100 tracking-tight flex-1">{epic.title}</h3>
                         </div>
                         <div className="flex justify-between items-start mb-3">
                             <div className="flex items-center space-x-2">
@@ -250,7 +250,7 @@ export default function EpicManager() {
                         </div>
 
                         {epic.description && (
-                            <p className="text-gray-400 text-sm mb-3 line-clamp-2">
+                            <p className="text-gray-400 tracking-tight text-sm mb-3 line-clamp-2">
                                 {epic.description}
                             </p>
                         )}
@@ -261,7 +261,7 @@ export default function EpicManager() {
                                 <span className="text-xs text-gray-500">Progress</span>
                                 <span className="text-xs text-gray-400 ml-auto">{(epicStatusCounts[epic.epic_id]?.Done || 0)}/{Object.values(epicStatusCounts[epic.epic_id] || {}).reduce((a, b) => a + b, 0) || 0} Done</span>
                             </div>
-                            <div className="w-full h-3 bg-[#232323] rounded-full flex overflow-hidden">
+                            <div className="w-full h-0.5 bg-[#232323] rounded-full flex overflow-hidden">
                                 <div className="h-3 bg-green-600" style={{ width: `${((epicStatusCounts[epic.epic_id]?.Done || 0) / ((Object.values(epicStatusCounts[epic.epic_id] || {}).reduce((a, b) => a + b, 0)) || 1)) * 100}%` }}></div>
                                 <div className="h-3 bg-blue-600" style={{ width: `${((epicStatusCounts[epic.epic_id]?.['In Progress'] || 0) / ((Object.values(epicStatusCounts[epic.epic_id] || {}).reduce((a, b) => a + b, 0)) || 1)) * 100}%` }}></div>
                                 <div className="h-3 bg-yellow-500" style={{ width: `${((epicStatusCounts[epic.epic_id]?.['To Do'] || 0) / ((Object.values(epicStatusCounts[epic.epic_id] || {}).reduce((a, b) => a + b, 0)) || 1)) * 100}%` }}></div>

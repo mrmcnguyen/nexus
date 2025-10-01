@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import { createClient } from "../../../../supabase/client";
-import { getAllProjectsAction } from "../../../project-actions";
+import { getAllProjectsAction } from "../../project-actions";
 import { FiFolder, FiPlus, FiSearch, FiFilter } from "react-icons/fi";
 import Link from "next/link";
 import Loading from "./Loading";

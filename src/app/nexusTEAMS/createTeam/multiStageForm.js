@@ -5,7 +5,7 @@ import StageTwo from "./stageTwo";
 import StageThree from './stageThree'
 import { motion, AnimatePresence } from "framer-motion";
 import { createClient } from "../../../../supabase/client";
-import { createProjectAction } from '../../../project-actions';
+import { createProjectAction } from '../../project-actions';
 import { useRouter } from "next/navigation";
 
 const MultiStageForm = () => {

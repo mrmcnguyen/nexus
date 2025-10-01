@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState, useRef } from "react";
-import { getProjectByIDAction, getMembersAction } from "../../../../../project-actions";
+import { getProjectByIDAction, getMembersAction } from "../../../../project-actions";
 import { FiPlus, FiSearch } from "react-icons/fi";
 
 export default function Sectors({ id, userID }) {

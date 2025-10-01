@@ -16,7 +16,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { createClient } from "../../../../../supabase/client";
 import Link from "next/link";
-import { getUserFullNameAction } from "../../../../user-actions";
+import { getUserFullNameAction } from "../../../user-actions";
 import { usePathname } from 'next/navigation';
 
 export const Sidebar = ({ width }) => {

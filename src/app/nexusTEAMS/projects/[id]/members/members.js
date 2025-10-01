@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState, useRef } from "react";
-import { getProjectByIDAction, getMembersAction } from "../../../../../project-actions";
+import { getProjectByIDAction, getMembersAction } from "../../../../project-actions";
 import { FiPlus, FiSearch, FiStar, FiMessageCircle, FiMoreHorizontal } from "react-icons/fi";
 import AddMemberDropdown from './addMemberModal';
 import { usePresence, getUserStatus } from '../../../../../hooks/usePresence';

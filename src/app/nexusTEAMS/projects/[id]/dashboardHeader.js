@@ -1,5 +1,5 @@
 'use client';
-import { getProjectByIDAction, getProjectManagerAction } from "../../../../project-actions";
+import { getProjectByIDAction, getProjectManagerAction } from "../../../project-actions";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { createClient } from "../../../../../supabase/client";

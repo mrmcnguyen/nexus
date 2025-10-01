@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from "react";
-import { getProjectByIDAction, getSectorsAction } from "../../../../project-actions";
+import { getProjectByIDAction, getSectorsAction } from "../../../project-actions";
 
 export default function DashboardSector({ id }) {
 

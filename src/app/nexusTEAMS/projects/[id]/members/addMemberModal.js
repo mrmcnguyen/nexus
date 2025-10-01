@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FiMail, FiLoader, FiAlertCircle, FiInfo, FiX, FiUserPlus } from 'react-icons/fi';
 import debounce from 'lodash/debounce';
-import { getNameFromEmailAction, getNameFromIDAction, getProjectByIDAction } from '../../../../../project-actions';
-import { sendInviteAction } from '../../../../../communication-actions';
+import { getNameFromEmailAction, getNameFromIDAction, getProjectByIDAction } from '../../../../project-actions';
+import { sendInviteAction } from '../../../../communication-actions';
 
 const LoadingSpinner = () => (
   <div className="absolute right-3 top-1/2 transform -translate-y-1/2">

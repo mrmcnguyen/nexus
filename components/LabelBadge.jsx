@@ -82,7 +82,7 @@ const LabelBadge = ({
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       className={`
-        inline-flex items-center gap-1 rounded-md border font-medium transition-all duration-200
+        inline-flex items-center gap-1 rounded-xl border font-medium transition-all duration-200
         ${sizeClasses[size]}
         ${onClick ? 'cursor-pointer hover:shadow-sm' : ''}
         ${className}

@@ -143,7 +143,7 @@ const LabelFilter = ({
             </div>
 
             {/* Available Labels */}
-            <div className="max-h-32 overflow-y-auto">
+            <div className="max-h-32 overflow-y-auto p-1">
               {filteredLabels.length > 0 ? (
                 filteredLabels.map((label) => {
                   const isSelected = selectedLabels.some(selected => selected.label_id === label.label_id);
@@ -151,7 +151,7 @@ const LabelFilter = ({
                     <button
                       key={label.label_id}
                       onClick={() => handleLabelToggle(label)}
-                      className={`w-full px-3 py-2 text-left text-sm hover:bg-neutral-800 flex items-center justify-between ${
+                      className={`w-full px-2 py-2 text-left text-sm rounded-md hover:bg-neutral-800 flex items-center justify-between ${
                         isSelected ? 'bg-blue-900/20' : ''
                       }`}
                     >

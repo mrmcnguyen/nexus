@@ -583,7 +583,7 @@ const epicColors = [
                     {epics.map(epic => (
                       <button
                       key={epic.epic_id}
-                      className={`w-full text-left px-4 py-2 rounded-md hover:bg-neutral-800 flex items-center space-x-2 ${selectedEpicFilter === epic.epic_id ? 'bg-black' : ''}`}
+                      className={`w-full text-left px-2 py-2 rounded-md hover:bg-neutral-800 flex items-center space-x-2 ${selectedEpicFilter === epic.epic_id ? 'bg-black' : ''}`}
                       onClick={() => { setSelectedEpicFilter(epic.epic_id); setShowEpicDropdown(false); }}
                     >
                       {/* Circle */}

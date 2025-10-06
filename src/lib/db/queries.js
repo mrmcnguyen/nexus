@@ -43,6 +43,22 @@ export async function editTaskDescription(a_task_id, a_description) {
     return data;
 }
 
+export async function editTaskDueDate(a_task_id, a_due_date) {
+    const supabase = createClient();
+    let { data, error } = await supabase
+        .from('tasks')
+        .update({ due_date: a_due_date })
+        .eq('task_id', a_task_id)
+        .select('*')
+
+    if (error) {
+        console.error(error);
+        return { success: false, error };
+    }
+    console.log("Due date updated to", a_due_date);
+    return { success: true, data };
+}
+
 // EISENHOWER QUERIES
 
 export async function addUnallocatedEisenhowerTask(a_user_id, a_task_type, a_title) {

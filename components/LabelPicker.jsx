@@ -3,13 +3,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import LabelBadge from './LabelBadge';
-import { createLabelAction, assignLabelToTaskAction, removeLabelFromTaskAction } from '../src/app/label-actions';
+import { createLabelAction, assignLabelToTaskAction, removeLabelFromTaskAction, deleteLabelAction } from '../src/app/label-actions';
 
 const LabelPicker = ({ 
   taskId, 
   selectedLabels = [], 
   availableLabels = [], 
   onLabelsChange,
+  onLabelsRefresh,
   userId,
   className = ''
 }) => {
@@ -128,6 +129,28 @@ const LabelPicker = ({
     }
   };
 
+  const handleDeleteLabel = async (label) => {
+    try {
+      const result = await deleteLabelAction(label.label_id);
+      if (result.success) {
+        // Remove from selected labels if it was selected
+        const updatedSelectedLabels = selectedLabels.filter(selected => 
+          selected.label_id !== label.label_id && selected.labels?.label_id !== label.label_id
+        );
+        onLabelsChange(updatedSelectedLabels);
+        
+        // Optionally refresh available labels by calling a callback
+        if (onLabelsRefresh) {
+          onLabelsRefresh();
+        }
+      } else {
+        console.error('Failed to delete label:', result.error);
+      }
+    } catch (error) {
+      console.error('Error deleting label:', error);
+    }
+  };
+
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       if (isCreating) {
@@ -148,12 +171,14 @@ const LabelPicker = ({
       <div className="flex flex-wrap gap-1">
         {selectedLabels.map((label) => (
           <LabelBadge
-            key={label.label_id}
-            label={label}
-            size="xs"
-            showRemove={true}
-            onRemove={handleLabelToggle}
-          />
+          key={label.label_id}
+          label={label}
+          color={label.labels?.color}
+          size="xs"
+          showRemove={true}
+          onRemove={() => handleLabelToggle(label.labels)}
+        />
+        
         ))}
       </div>
 
@@ -261,25 +286,39 @@ const LabelPicker = ({
             <div className="max-h-32 overflow-y-auto">
               {filteredLabels.length > 0 ? (
                 filteredLabels.map((label) => {
-                  const isSelected = selectedLabels.some(selected => selected.label_id === label.label_id);
+                  const isSelected = selectedLabels.some(selected => selected.label_id === label.label_id || selected.labels?.label_id === label.label_id);
                   return (
-                    <button
+                    <div
                       key={label.label_id}
-                      onClick={() => handleLabelToggle(label)}
                       className={`w-full px-3 py-2 text-left text-sm hover:bg-neutral-800 flex items-center justify-between ${
                         isSelected ? 'bg-blue-900/20' : ''
                       }`}
                     >
-                      <div className="flex items-center gap-2">
-                      <div className={`w-3 h-3 rounded-full ${circleColors[label.color] || "bg-gray-500"}`} />
+                      <button
+                        onClick={() => handleLabelToggle(label)}
+                        className="flex items-center gap-2 flex-1"
+                      >
+                        <div className={`w-3 h-3 rounded-full ${circleColors[label.color] || "bg-gray-500"}`} />
                         <span className="truncate text-gray-100">{label.name}</span>
-                      </div>
-                      {isSelected && (
-                        <svg className="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        {isSelected && (
+                          <svg className="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteLabel(label);
+                        }}
+                        className="ml-2 p-1 hover:bg-red-900/20 rounded transition-colors"
+                        title="Delete label"
+                      >
+                        <svg className="w-4 h-4 text-red-400 hover:text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
-                      )}
-                    </button>
+                      </button>
+                    </div>
                   );
                 })
               ) : (

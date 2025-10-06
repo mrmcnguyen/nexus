@@ -3,11 +3,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import LabelBadge from './LabelBadge';
+import { deleteLabelAction } from '../src/app/label-actions';
 
 const LabelFilter = ({ 
   availableLabels = [], 
   selectedLabels = [], 
   onSelectionChange,
+  onLabelsRefresh,
   className = ''
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,6 +76,26 @@ const LabelFilter = ({
     onSelectionChange([]);
   };
 
+  const handleDeleteLabel = async (label) => {
+    try {
+      const result = await deleteLabelAction(label.label_id);
+      if (result.success) {
+        // Remove from selected labels if it was selected
+        const updatedSelectedLabels = selectedLabels.filter(selected => selected.label_id !== label.label_id);
+        onSelectionChange(updatedSelectedLabels);
+        
+        // Optionally refresh available labels by calling a callback
+        if (onLabelsRefresh) {
+          onLabelsRefresh();
+        }
+      } else {
+        console.error('Failed to delete label:', result.error);
+      }
+    } catch (error) {
+      console.error('Error deleting label:', error);
+    }
+  };
+
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
       {/* Selected Labels Display */}
@@ -131,13 +153,13 @@ const LabelFilter = ({
             className="absolute top-full left-0 right-0 mt-2 bg-neutral-900 border border-neutral-800 rounded-lg shadow-lg z-50 max-h-64 overflow-hidden"
           >
             {/* Search Input */}
-            <div className="p-3 border-b border-neutral-800">
+            <div className="border-b border-neutral-800">
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search labels..."
-                className="w-full px-3 py-2 text-sm bg-black border border-neutral-800 text-gray-100 placeholder:text-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/30"
+                className="w-full px-3 py-2 text-sm bg-black border border-neutral-800 text-gray-100 placeholder:text-gray-400 rounded-md focus:outline-none"
                 autoFocus
               />
             </div>
@@ -148,23 +170,37 @@ const LabelFilter = ({
                 filteredLabels.map((label) => {
                   const isSelected = selectedLabels.some(selected => selected.label_id === label.label_id);
                   return (
-                    <button
+                    <div
                       key={label.label_id}
-                      onClick={() => handleLabelToggle(label)}
                       className={`w-full px-2 py-2 text-left text-sm rounded-md hover:bg-neutral-800 flex items-center justify-between ${
                         isSelected ? 'bg-blue-900/20' : ''
                       }`}
                     >
-                      <div className="flex items-center gap-2">
-                      <div className={`w-3 h-3 rounded-full ${circleColors[label.color] || "bg-gray-500"}`} />
+                      <button
+                        onClick={() => handleLabelToggle(label)}
+                        className="flex items-center gap-2 flex-1"
+                      >
+                        <div className={`w-3 h-3 rounded-full ${circleColors[label.color] || "bg-gray-500"}`} />
                         <span className="truncate text-gray-100">{label.name}</span>
-                      </div>
-                      {isSelected && (
-                        <svg className="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        {isSelected && (
+                          <svg className="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteLabel(label);
+                        }}
+                        className="ml-2 p-1 hover:bg-neutral-900/20 rounded transition-colors"
+                        title="Delete label"
+                      >
+                        <svg className="w-3 h-3 text-neutral-400 hover:text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
-                      )}
-                    </button>
+                      </button>
+                    </div>
                   );
                 })
               ) : (

@@ -7,6 +7,7 @@ import { deleteKanbanTaskByIDAction } from "../../kanban-actions";
 import debounce from 'lodash/debounce'; // Debounce functions recommended for performance
 import { useRouter } from "next/navigation";
 import LabelPicker from "../../../../components/LabelPicker";
+import { Calendar } from "../../../../components/Calendar";
 
 export default function KanbanTaskModal({
   isVisible,
@@ -20,6 +21,7 @@ export default function KanbanTaskModal({
   onAssignEpicToTask,
   onRemoveEpicFromTask,
   onPriorityUpdate,
+  onDueDateUpdate,
   userId
 }) {
 
@@ -31,10 +33,12 @@ export default function KanbanTaskModal({
   const [availableLabels, setAvailableLabels] = useState([]);
   const [taskLabels, setTaskLabels] = useState([]);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
   const descriptionRef = useRef(null);
   const titleRef = useRef(null);
   const epicDropdownRef = useRef(null);
   const priorityDropdownRef = useRef(null);
+  const calendarRef = useRef(null);
   const router = useRouter();
 
   console.log(task);
@@ -47,6 +51,7 @@ export default function KanbanTaskModal({
   const updatedAt = task.updated_at || task.tasks?.updated_at || 'Unknown';
   const currentEpic = task.tasks.taskEpics?.[0]?.epics;
   const currentPriority = task.priority || task.tasks?.priority || 'No Priority';
+  const dueDate = task.tasks?.due_date || null;
 
   const [editedTitle, setEditedTitle] = useState('');
   const [editedDescription, setEditedDescription] = useState('');
@@ -76,19 +81,7 @@ export default function KanbanTaskModal({
     }, 0);
     return epicColors[Math.abs(hash) % epicColors.length];
   };
-
-  const getEpicBackgroundColor = (epicId) => {
-    const color = getEpicColor(epicId);
-    const colorName = color.split('-')[1]; // Extract color name (e.g., 'purple' from 'bg-purple-100')
-    return `bg-${colorName}-50`;
-  };
-
-  const getEpicTextColor = (epicId) => {
-    const color = getEpicColor(epicId);
-    const colorName = color.split('-')[1];
-    return `text-${colorName}-700`;
-  };
-
+ 
   // Modern status colors and labels
     const statusOptions = {
       Backlog: {
@@ -124,8 +117,6 @@ export default function KanbanTaskModal({
         )
       }
     }
-
-
 
   const currentStatus = statusOptions[task.status] || {
     label: 'Unknown Status',
@@ -218,22 +209,23 @@ export default function KanbanTaskModal({
     }
   }, [isVisible, task, title, description]);
 
-  // Fetch labels and task labels when modal opens
-  useEffect(() => {
-    const fetchLabels = async () => {
-      if (isVisible && userId) {
-        const labels = await getUserLabelsAction(userId);
-        setAvailableLabels(labels || []);
-        
-        if (taskID && taskID !== 'Unknown Task ID') {
-          const taskLabelsData = await getTaskLabelsAction(taskID);
-          setTaskLabels(taskLabelsData || []);
-        }
-      }
-    };
+// Fetch available labels when modal opens
+useEffect(() => {
+  const fetchLabels = async () => {
+    if (isVisible && userId) {
+      // Fetch only the user's available labels
+      const labels = await getUserLabelsAction(userId);
+      setAvailableLabels(labels || []);
 
-    fetchLabels();
-  }, [isVisible, userId, taskID]);
+      // Use the passed-in labels for this task
+      if (task?.tasks?.task_labels) {
+        setTaskLabels(task.tasks.task_labels);
+      }
+    }
+  };
+
+  fetchLabels();
+}, [isVisible, userId, task]);
 
   // Debounced save function for title
   const debouncedTitleSave = useCallback(
@@ -345,6 +337,27 @@ export default function KanbanTaskModal({
     };
   }, [isPriorityDropdownOpen]);
 
+  // Click outside logic for calendar dropdown
+  useEffect(() => {
+    const handleCalendarClickOutside = (event) => {
+      if (
+        calendarRef.current &&
+        !calendarRef.current.contains(event.target) &&
+        showCalendar
+      ) {
+        setShowCalendar(false);
+      }
+    };
+
+    if (showCalendar) {
+      document.addEventListener('mousedown', handleCalendarClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleCalendarClickOutside);
+    };
+  }, [showCalendar]);
+
   const handleTitleSave = () => {
     // Immediate save if needed
     if (onTitleUpdate) {
@@ -402,6 +415,20 @@ export default function KanbanTaskModal({
       onPriorityUpdate(taskID, priority);
     }
     setIsPriorityDropdownOpen(false);
+  };
+
+  const handleDueDateUpdate = async (newDueDate) => {
+    if (onDueDateUpdate) {
+      await onDueDateUpdate(taskID, newDueDate);
+    }
+    setShowCalendar(false);
+  };
+
+  const handleCalendarDateSelect = (selectedDate) => {
+    if (selectedDate) {
+      const formattedDate = selectedDate.toISOString().split('T')[0];
+      handleDueDateUpdate(formattedDate);
+    }
   };
 
   return (
@@ -500,7 +527,7 @@ export default function KanbanTaskModal({
                             <div className="flex-1">
                               <div className="text-white font-medium">{epic.name}</div>
                               {epic.description && (
-                                <div className="text-slate-400 text-xs mt-1">{epic.description}</div>
+                                <div className="text-neutral-400 text-xs mt-1">{epic.description}</div>
                               )}
                             </div>
                           </div>
@@ -561,6 +588,42 @@ export default function KanbanTaskModal({
                     </button>
                   ))}
 
+                 {/* Due Date Button */}
+                 <div className="relative" ref={calendarRef}>
+                   <button
+                     className="flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-neutral-800 transition-colors text-sm"
+                     onClick={() => setShowCalendar(!showCalendar)}
+                   >
+                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={`size-4 ${task.tasks?.due_date_color || 'text-neutral-400'}`}>
+                       <path fillRule="evenodd" d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75ZM5.25 6a1.5 1.5 0 0 0-1.5 1.5v11.25a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5V7.5a1.5 1.5 0 0 0-1.5-1.5H5.25Z" clipRule="evenodd" />
+                     </svg>
+                     <span className={`text-xs ${task.tasks?.due_date_color || 'text-neutral-400'}`}>
+                       {task.tasks?.relative_due_date || 'Due Date'}
+                     </span>
+                   </button>
+
+                   {/* Calendar Dropdown */}
+                    {showCalendar && (
+                      <div className="absolute right-0 top-10 z-20 rounded-md border bg-popover p-3 shadow-md">
+                        <Calendar
+                          onSelect={handleDueDateUpdate}
+                          className="rounded-md border-none w-[280px]" // key change here
+                          captionLayout="dropdown"
+                          mode="single"
+                          selected={dueDate ? new Date(dueDate) : undefined}
+                        />
+                        <div className="flex justify-end mt-2">
+                          <button
+                            onClick={() => handleDueDateUpdate('')}
+                            className="text-xs text-red-400 hover:text-red-300 transition-colors"
+                          >
+                            Remove due date
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                 </div>
+
                 {/* Start Pomodoro Button */}
                 <button
                   className="flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-neutral-800 transition-colors text-sm"
@@ -596,7 +659,6 @@ export default function KanbanTaskModal({
             <div className="space-y-6">
               {/* Labels Section */}
               <div className="space-y-3">
-                <h3 className="text-sm font-medium text-slate-300">Labels</h3>
                 <LabelPicker
                   taskId={taskID}
                   selectedLabels={taskLabels}

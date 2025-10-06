@@ -76,28 +76,26 @@ const LabelBadge = ({
 
   return (
     <motion.span
-      initial={{ opacity: 0, scale: 0.8 }}
+      initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
       className={`
         inline-flex items-center gap-1 rounded-xl border font-medium transition-all duration-200
         ${sizeClasses[size]}
         ${onClick ? 'cursor-pointer hover:shadow-sm' : ''}
         ${className}
-        ${getColorClasses(label.color)}
+        ${getColorClasses(label.labels?.color)}
       `}
       onClick={onClick}
     >
-      {/* ✅ circle uses solid color */}
-      <div className={`w-2 h-2 rounded-full ${getCircleColor(label.color)}`}></div>
-      <span className="truncate max-w-24">{label.name}</span>
+      {/* Circle uses solid color */}
+      <div className={`w-2 h-2 rounded-full ${getCircleColor(label.labels?.color)}`}></div>
+      <span className="truncate max-w-24">{label.labels?.name}</span>
       {showRemove && onRemove && (
         <button
           onClick={handleRemove}
           className="hover:bg-white/10 rounded-full transition-colors"
-          aria-label={`Remove ${label.name} label`}
+          aria-label={`Remove ${label.labels?.name} label`}
         >
           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

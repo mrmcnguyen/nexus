@@ -3,11 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-// import { addKanbanTask, editTaskDescription, editTaskName, getKanbanTasks, updateKanbanTaskState, updateTaskPriority, getUserLabels, getTaskLabels } from "../../../lib/db/queries";
 import { getEpicsWithTaskCountsAction, assignTaskToEpicAction, removeTaskFromEpicAction, getTaskEpicAction } from "../../epic-actions";
 import { getUserLabelsAction, getTaskLabelsAction } from "../../label-actions";
 import { fetchKanbanTasks, addKanbanTaskAction, updateKanbanTaskStateAction, deleteKanbanTaskByIDAction, updateTaskPriorityAction } from "../../kanban-actions";
-import { editTaskNameAction, editTaskDescriptionAction } from "../../task-actions";
+import { editTaskNameAction, editTaskDescriptionAction, editTaskDueDateAction } from "../../task-actions";
 import { createClient } from "../../../../supabase/client";
 import Loading from "./loading";
 import TaskModal from "./taskModal";
@@ -54,46 +53,12 @@ export default function KanbanComponent( { initialTasks } ) {
     'Done': 'border-neutral-800'
   }
 
-  const hoverBorderColors = {
-    'Backlog': 'hover:border-gray-300',
-    'To Do': 'hover:border-gray-300',
-    'In Progress': 'hover:border-gray-300',
-    'Done': 'hover:border-gray-300'
-  }
-
   const columnColors = {
     'Backlog': 'bg-neutral-950',
     'To Do': 'bg-neutral-950',
     'In Progress': 'bg-neutral-950',
     'Done': 'bg-neutral-950'
   }
-
-  // Modern priority badge styles
-  const priorityColors = {
-    urgent: 'bg-red-50 border border-red-200 text-red-600',
-    high: 'bg-orange-50 border border-orange-200 text-orange-600',
-    medium: 'bg-yellow-50 border border-yellow-200 text-yellow-700',
-    low: 'bg-blue-50 border border-blue-200 text-blue-600',
-    'No Priority': 'bg-black border border-neutral-800 text-gray-500'
-  };
-
-  const priorityLabels = {
-    urgent: 'text-red-600',
-    high: 'text-orange-600',
-    medium: 'text-yellow-700',
-    low: 'text-blue-600',
-    'No Priority': 'text-gray-300'
-  };
-
-  // Priority icons mapping
-  const priorityIcons = {
-    Critical: '/urgent.svg',
-    high: '/high.svg',
-    medium: '/middle.svg',
-    low: '/low.svg',
-    'no priority': '/no-priority.svg',
-    'No Priority': '/no-priority.svg'
-  };
 
 // Priority badge configuration
 const priorityConfig = {
@@ -165,6 +130,7 @@ const epicColors = [
     }, 0);
     return epicColors[Math.abs(hash) % epicColors.length];
   };
+
 
   const supabase = createClient();
   const dropdownRef = useRef(null);
@@ -386,6 +352,31 @@ const epicColors = [
         }
         return updatedTasks;
       });
+    }
+  };
+
+  const updateTaskDueDate = async (taskId, dueDate) => {
+    const res = await editTaskDueDateAction(taskId, dueDate);
+    if (res.success) {
+      // Refetch all tasks to get updated relative due date calculations
+      const result = await fetchKanbanTasks(userID);
+      if (result) {
+        const categorizedTasks = {
+          backlog: [],
+          todo: [],
+          inprogress: [],
+          done: [],
+        };
+
+        result.forEach((task) => {
+          if (task.status === "Backlog") categorizedTasks.backlog.push(task);
+          else if (task.status === "To Do") categorizedTasks.todo.push(task);
+          else if (task.status === "In Progress") categorizedTasks.inprogress.push(task);
+          else if (task.status === "Done") categorizedTasks.done.push(task);
+        });
+
+        setTasks(categorizedTasks);
+      }
     }
   };
 
@@ -639,6 +630,7 @@ const epicColors = [
               onAssignEpicToTask={(taskID, epic_id) => assignEpicToTask(taskID, epic_id)}
               onRemoveEpicFromTask={removeEpicFromTask}
               onPriorityUpdate={(taskId, priority) => handleTaskPriorityUpdate(taskId, priority)}
+              onDueDateUpdate={(taskId, dueDate) => updateTaskDueDate(taskId, dueDate)}
             />
           </motion.div>
         )}
@@ -750,15 +742,25 @@ const epicColors = [
                     onClick={() => handleTaskClick(task)}
                   >
                     <div className="flex flex-col gap-1/2">
-                      {/* Epic Badge at the top */}
-                      {task.tasks.taskEpics?.[0]?.epics?.title && (
-                        <div className="flex items-center space-x-1 mb-1">
+                      {/* Epic Badge and Due Date at the top */}
+                      {(task.tasks.taskEpics?.[0]?.epics?.title || task.tasks?.due_date) && (
+                        <div className="flex items-center space-x-1 mb-1 justify-between">
                           <div className="flex items-center space-x-1">
-                            <div className={`w-2 h-2 rounded-full ${getEpicColor(task.tasks.taskEpics[0].epics.epic_id)}`}></div>
-                            <span className="text-xs tracking-tight font-normal text-gray-400">
-                              {task.tasks.taskEpics[0].epics.title}
-                            </span>
+                            {task.tasks.taskEpics?.[0]?.epics?.title && (
+                              <>
+                                <div className={`w-2 h-2 rounded-full ${getEpicColor(task.tasks.taskEpics[0].epics.epic_id)}`}></div>
+                                <span className="text-xs tracking-tight font-normal text-gray-400">
+                                  {task.tasks.taskEpics[0].epics.title}
+                                </span>
+                              </>
+                            )}
                           </div>
+
+                          {task.tasks?.due_date && (
+                            <p className={`text-xs tracking-tight font-normal ${task.tasks.due_date_color || 'text-gray-400'}`}>
+                              {task.tasks.relative_due_date || 'Due Date'}
+                            </p>
+                          )}
                         </div>
                       )}
 
@@ -773,7 +775,7 @@ const epicColors = [
                             {task.tasks.task_labels.map((labelItem) => (
                               <LabelBadge
                                 key={labelItem.label_id}
-                                label={labelItem.labels}
+                                label={labelItem}
                                 size="xs"
                                 className="text-xs"
                               />

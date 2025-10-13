@@ -8,6 +8,7 @@ import { createClient } from "../../../supabase/client";
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { useCallback } from 'react';
+import { ThemeToggle } from '../../../components/ThemeToggle';
 
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
@@ -59,12 +60,12 @@ export default function Navbar({ page }) {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-40 flex flex-row items-center border-b border-[#2e2e2e] bg-white ${dmSans.className} ${page === '/nexusME/pomodoro' ? 'bg-red-100' : ''
-        }`}
-      style={{ height: '50px', backgroundColor: 'black' }} // Set height for the navbar
+      className={`fixed top-0 left-0 right-0 z-40 flex flex-row items-center border-b border-gray-200 dark:border-[#2e2e2e] bg-white dark:bg-black ${dmSans.className} ${page === '/nexusME/pomodoro' ? 'bg-red-100 dark:bg-red-900/20' : ''
+        } transition-colors duration-300`}
+      style={{ height: '50px' }} // Set height for the navbar
     >
       {/* Logo */}
-      <Link href="/dashboard" className='h-full flex flex-row items-center bg-gradient-to-br from-[#1f1f1f] border-r border-r-[#2e2e2e]'>
+      <Link href="/dashboard" className='h-full flex flex-row items-center bg-gradient-to-br from-gray-100 to-gray-200 dark:from-[#1f1f1f] dark:to-[#2e2e2e] border-r border-r-gray-300 dark:border-r-[#2e2e2e] transition-colors duration-300'>
         <Image
           src="/nexusLogo.png"
           alt="Logo"
@@ -89,12 +90,12 @@ export default function Navbar({ page }) {
                   ? `px-2 py-0.5 rounded-lg ${
                       isActive
                         ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-300 border border-cyan-400/50 shadow-lg shadow-cyan-500/25'
-                        : 'bg-gradient-to-r from-slate-800/50 to-slate-700/50 text-gray-300 border border-slate-600/50 hover:from-cyan-500/10 hover:to-purple-500/10 hover:text-cyan-300 hover:border-cyan-400/30 hover:shadow-lg hover:shadow-cyan-500/20'
+                        : 'bg-gradient-to-r from-slate-200/50 to-slate-300/50 dark:from-slate-800/50 dark:to-slate-700/50 text-gray-700 dark:text-gray-300 border border-slate-400/50 dark:border-slate-600/50 hover:from-cyan-500/10 hover:to-purple-500/10 hover:text-cyan-600 dark:hover:text-cyan-300 hover:border-cyan-400/30 hover:shadow-lg hover:shadow-cyan-500/20'
                     }`
-                  : `h-full flex items-center hover:text-[#91C8FF] ${
+                  : `h-full flex items-center hover:text-blue-600 dark:hover:text-[#91C8FF] ${
                       isActive
-                        ? 'text-[#91C8FF] border-b-2 border-[#91C8FF]'
-                        : 'text-gray-400'
+                        ? 'text-blue-600 dark:text-[#91C8FF] border-b-2 border-blue-600 dark:border-[#91C8FF]'
+                        : 'text-gray-600 dark:text-gray-400'
                     }`
               }`}
             >
@@ -112,7 +113,8 @@ export default function Navbar({ page }) {
 
       {/* Right-side Buttons */}
       <div className="flex flex-row ml-auto pr-4 items-center space-x-4">
-        <a className="flex flex-row bg-gradient-to-br from-black items-center px-4 py-1 text-gray-300 transition duration-200 border border-[#454545] align-middle text-sm text-light rounded-lg hover:bg-[#2F2F2F]"
+        <ThemeToggle />
+        <a className="flex flex-row bg-gradient-to-br from-gray-100 to-gray-200 dark:from-black dark:to-gray-800 items-center px-4 py-1 text-gray-700 dark:text-gray-300 transition duration-200 border border-gray-300 dark:border-[#454545] align-middle text-sm rounded-lg hover:bg-gray-200 dark:hover:bg-[#2F2F2F]"
           href='https://github.com/mrmcnguyen/nexus'
           target='_blank'
         >
@@ -157,10 +159,10 @@ export default function Navbar({ page }) {
           </button>
 
           {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+            <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 transition-colors duration-300">
               <button
                 onClick={handleLogout}
-                className="block w-full text-left px-4 py-2 text-sm rounded-lg text-gray-700 hover:bg-gray-100"
+                className="block w-full text-left px-4 py-2 text-sm rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300"
               >
                 Log Out
               </button>

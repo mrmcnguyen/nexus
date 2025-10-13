@@ -112,7 +112,7 @@ const LabelFilter = ({
           ))}
           <button
             onClick={clearAllFilters}
-            className="px-2 py-1 text-xs text-gray-200 hover:text-gray-200 hover:bg-neutral-800 rounded-md tracking-tight transition-colors"
+            className="px-2 py-1 text-xs text-gray-600 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-neutral-800 rounded-md tracking-tight transition-colors"
           >
             Clear all
           </button>
@@ -125,7 +125,7 @@ const LabelFilter = ({
         className={`flex items-center gap-2 px-3 py-2 text-sm border rounded-lg transition-colors ${
           selectedLabels.length > 0
             ? 'bg-blue-900/20 text-blue-300 border-blue-800/30 hover:bg-blue-900/30'
-            : 'text-gray-100 hover:text-gray-100 border-neutral-800 hover:bg-neutral-900 tracking-tight'
+            : 'text-gray-700 dark:text-gray-100 hover:text-gray-900 dark:hover:text-gray-100 border-gray-300 dark:border-neutral-800 hover:bg-gray-100 dark:hover:bg-neutral-900 tracking-tight'
         }`}
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,16 +150,16 @@ const LabelFilter = ({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
-            className="absolute top-full left-0 right-0 mt-2 bg-neutral-900 border border-neutral-800 rounded-lg shadow-lg z-50 max-h-64 overflow-hidden"
+            className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-lg shadow-lg z-50 max-h-64 overflow-hidden transition-colors duration-300"
           >
             {/* Search Input */}
-            <div className="border-b border-neutral-800">
+            <div className="border-b border-gray-200 dark:border-neutral-800 transition-colors duration-300">
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search labels..."
-                className="w-full px-3 py-2 text-sm bg-black border border-neutral-800 text-gray-100 placeholder:text-gray-400 rounded-md focus:outline-none"
+                className="w-full px-3 py-2 text-sm bg-gray-100 dark:bg-black border border-gray-300 dark:border-neutral-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-tl-md rounded-tr-md focus:outline-none transition-colors duration-300"
                 autoFocus
               />
             </div>
@@ -181,7 +181,7 @@ const LabelFilter = ({
                         className="flex items-center gap-2 flex-1"
                       >
                         <div className={`w-3 h-3 rounded-full ${circleColors[label.color] || "bg-gray-500"}`} />
-                        <span className="truncate text-gray-100">{label.name}</span>
+                        <span className="truncate text-gray-600 dark:text-gray-100">{label.name}</span>
                         {isSelected && (
                           <svg className="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />

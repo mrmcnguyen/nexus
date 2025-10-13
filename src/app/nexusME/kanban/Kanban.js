@@ -40,24 +40,24 @@ export default function KanbanComponent( { initialTasks } ) {
   const router = useRouter();
 
   const headerColors = {
-    'Backlog': 'text-gray-200',
-    'To Do': 'text-gray-200',
-    'In Progress': 'text-gray-200',
-    'Done': 'text-gray-200'
+    'Backlog': 'text-gray-700 dark:text-gray-200',
+    'To Do': 'text-gray-700 dark:text-gray-200',
+    'In Progress': 'text-gray-700 dark:text-gray-200',
+    'Done': 'text-gray-700 dark:text-gray-200'
   }
 
   const borderColors = {
-    'Backlog': 'border-neutral-800',
-    'To Do': 'border-neutral-800',
-    'In Progress': 'border-neutral-800',
-    'Done': 'border-neutral-800'
+    'Backlog': 'border-gray-300 dark:border-neutral-800',
+    'To Do': 'border-gray-300 dark:border-neutral-800',
+    'In Progress': 'border-gray-300 dark:border-neutral-800',
+    'Done': 'border-gray-300 dark:border-neutral-800'
   }
 
   const columnColors = {
-    'Backlog': 'bg-neutral-950',
-    'To Do': 'bg-neutral-950',
-    'In Progress': 'bg-neutral-950',
-    'Done': 'bg-neutral-950'
+    'Backlog': 'bg-gray-50 dark:bg-neutral-950',
+    'To Do': 'bg-gray-50 dark:bg-neutral-950',
+    'In Progress': 'bg-gray-50 dark:bg-neutral-950',
+    'Done': 'bg-gray-50 dark:bg-neutral-950'
   }
 
 // Priority badge configuration
@@ -512,12 +512,12 @@ const epicColors = [
   }
 
   return (
-    <div className="p-6 min-h-screen flex flex-col bg-black">
-      <div className="sticky top-0 z-10 -mx-6 px-6 pb-4 bg-black/80 backdrop-blur supports-[backdrop-filter]:bg-black/70">
+    <div className="p-6 min-h-screen flex flex-col bg-white dark:bg-black transition-colors duration-300">
+      <div className="sticky top-0 z-10 -mx-6 px-6 pb-4 bg-white/80 dark:bg-black/80 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-black/70 transition-colors duration-300">
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-row items-center">
-            <h1 className="text-2xl text-white font-semibold tracking-tight">Personal Kanban</h1>
-            <span className="flex flex-row items-center ml-3 border border-neutral-800 bg-neutral-900 text-gray-200 tracking-tight text-xs rounded-xl px-3 py-1 shadow-sm">
+            <h1 className="text-2xl text-gray-900 dark:text-white font-semibold tracking-tight transition-colors duration-300">Personal Kanban</h1>
+            <span className="flex flex-row items-center ml-3 border border-gray-300 dark:border-neutral-800 bg-gray-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200 tracking-tight text-xs rounded-xl px-3 py-1 shadow-sm transition-colors duration-300">
               <Image
                 src="/synced.svg"
                 width={14}
@@ -540,13 +540,13 @@ const epicColors = [
             {/* Epic Filter Dropdown */}
             <div className="relative" ref={dropdownRef}>
               <button
-                className={`flex flex-row items-center bg-black border border-neutral-800 px-3 py-2 text-gray-100 tracking-tight text-sm rounded-md hover:bg-neutral-900 transition-colors duration-200 shadow-sm ${selectedEpicFilter ? 'ring-1 ring-slate-900/10' : ''}`}
+                className={`flex flex-row items-center bg-white dark:bg-black border border-gray-300 dark:border-neutral-800 px-3 py-2 text-gray-700 dark:text-gray-100 tracking-tight text-sm rounded-md hover:bg-gray-200 dark:hover:bg-neutral-900 transition-colors duration-200 shadow-sm ${selectedEpicFilter ? 'ring-1 ring-slate-900/10' : ''}`}
                 onClick={() => setShowEpicDropdown((v) => !v)}
                 type="button"
               >
                 <Image
                   src={"/filter.svg"}
-                  className="mr-2 filter invert"
+                  className="mr-2 dark:filter"
                   width={14}
                   alt={"filter"}
                   height={14}
@@ -563,10 +563,10 @@ const epicColors = [
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -6, scale: 0.98 }}
                     transition={{ duration: 0.12, ease: 'easeOut' }}
-                    className="absolute right-0 z-20 mt-2 w-64 bg-neutral-900 border p-2 border-neutral-800 rounded-md shadow-lg"
+                    className="absolute right-0 z-20 mt-2 w-64 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 p-2 rounded-md shadow-lg transition-colors duration-300"
                   >
                     <button
-                      className="w-full text-left text-sm px-4 py-2 text-gray-100 hover:bg-neutral-800 rounded-md"
+                      className="w-full text-left text-sm px-4 py-2 text-gray-700 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded-md transition-colors duration-200"
                       onClick={() => { setSelectedEpicFilter(null); setShowEpicDropdown(false); }}
                     >
                       All Epics
@@ -574,7 +574,7 @@ const epicColors = [
                     {epics.map(epic => (
                       <button
                       key={epic.epic_id}
-                      className={`w-full text-left px-2 py-2 rounded-md hover:bg-neutral-800 flex items-center space-x-2 ${selectedEpicFilter === epic.epic_id ? 'bg-black' : ''}`}
+                      className={`w-full text-left px-2 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center space-x-2 transition-colors duration-200 ${selectedEpicFilter === epic.epic_id ? 'bg-gray-200 dark:bg-black' : ''}`}
                       onClick={() => { setSelectedEpicFilter(epic.epic_id); setShowEpicDropdown(false); }}
                     >
                       {/* Circle */}
@@ -583,7 +583,7 @@ const epicColors = [
                       ></span>
                     
                       {/* Text */}
-                      <span className="text-sm text-gray-100">{epic.title}</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-100">{epic.title}</span>
                     </button>                    
                     ))}
                   </motion.div>
@@ -593,11 +593,11 @@ const epicColors = [
             {/* End Epic Filter Dropdown */}
             <button
               onClick={navigateToEpics}
-              className="flex flex-row bg-black border border-neutral-800 items-center px-3 py-2 text-gray-100 tracking-tight text-sm transition-colors duration-200 rounded-md hover:bg-neutral-900 shadow-sm"
+              className="flex flex-row bg-white dark:bg-black border border-gray-300 dark:border-neutral-800 items-center px-3 py-2 text-gray-700 dark:text-gray-100 tracking-tight text-sm transition-colors duration-200 rounded-md hover:bg-gray-200 dark:hover:bg-neutral-900 shadow-sm"
             >
               <Image
                 src="/epic.svg"
-                className="mr-2 filter invert"
+                className="mr-2 dark:filter"
                 width={14}
                 alt="epic"
                 height={14}
@@ -640,12 +640,12 @@ const epicColors = [
       <AnimatePresence>
       {isEpicModalOpen && (
         <motion.div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-          <motion.div initial={{ y: 12, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 12, opacity: 0 }} transition={{ type: 'spring', stiffness: 300, damping: 26 }} className="bg-neutral-900 border border-slate-200 rounded-2xl p-6 w-full max-w-md shadow-xl">
-            <h2 className="text-xl font-semibold text-slate-800 mb-4">
+          <motion.div initial={{ y: 12, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 12, opacity: 0 }} transition={{ type: 'spring', stiffness: 300, damping: 26 }} className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-slate-200 rounded-2xl p-6 w-full max-w-md shadow-xl transition-colors duration-300">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-slate-800 mb-4 transition-colors duration-300">
               Assign Epic
             </h2>
 
-            <p className="text-gray-200 mb-4">
+            <p className="text-gray-600 dark:text-gray-200 mb-4 transition-colors duration-300">
               Assign "{selectedTaskForEpic?.tasks?.title || selectedTaskForEpic?.title}" to an epic:
             </p>
 
@@ -654,7 +654,7 @@ const epicColors = [
                 <button
                   key={epic.epic_id}
                   onClick={() => assignEpicToTask(epic.epic_id)}
-                  className="w-full text-left p-3 bg-black border border-neutral-800 rounded-xl hover:bg-gray-100 transition-colors duration-200"
+                  className="w-full text-left p-3 bg-gray-100 dark:bg-black border border-gray-300 dark:border-neutral-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-100 transition-colors duration-200"
                 >
                   <div className="flex items-center space-x-2">
                     <span className={`${getEpicColor(epic.epic_id)} px-2 py-1 rounded-full text-xs`}>
@@ -663,9 +663,9 @@ const epicColors = [
                     <span className="text-slate-800 font-medium">{epic.name}</span>
                   </div>
                   {epic.description && (
-                    <div className="text-gray-200 text-sm mt-1">{epic.description}</div>
+                    <div className="text-gray-600 dark:text-gray-200 text-sm mt-1 transition-colors duration-300">{epic.description}</div>
                   )}
-                  <div className="text-gray-300 text-xs mt-1">{epic.task_count} tasks</div>
+                  <div className="text-gray-500 dark:text-gray-300 text-xs mt-1 transition-colors duration-300">{epic.task_count} tasks</div>
                 </button>
               ))}
             </div>
@@ -682,7 +682,7 @@ const epicColors = [
                   setIsEpicModalOpen(false);
                   setSelectedTaskForEpic(null);
                 }}
-                className="px-4 py-2 text-gray-200 hover:text-gray-100 transition-colors duration-200"
+                className="px-4 py-2 text-gray-600 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-100 transition-colors duration-200"
               >
                 Cancel
               </button>
@@ -700,7 +700,7 @@ const epicColors = [
               key={status}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`${columnColors[status]} rounded-md p-4 flex flex-col min-h-[600px] flex-1 min-w-[300px] border border-neutral-800 shadow-sm`}
+              className={`${columnColors[status]} rounded-md p-4 flex flex-col min-h-[600px] flex-1 min-w-[300px] border border-gray-200 dark:border-neutral-800 bg-gray-50 dark:bg-neutral-950 shadow-sm transition-colors duration-300`}
             >
               {/* Column Header */}
               <div className="flex flex-row items-center mb-4">
@@ -716,7 +716,13 @@ const epicColors = [
                   <h2 className={`text-base ${headerColors[status]} tracking-tight font-semibold`}>
                     {status}
                   </h2>
-                  <div className={`text-xs text-gray-200 border border-neutral-800 bg-black px-2 py-1 rounded-full font-medium`}>
+                  <div
+  className={`text-xs text-gray-800 dark:text-gray-200 
+              border border-gray-200 dark:border-neutral-800
+              bg-gray-50 dark:bg-neutral-950 
+              px-2 py-1 rounded-full font-medium 
+              transition-colors duration-300`}
+>
                     {getTasksByStatus(status).length}
                   </div>
                 </div>
@@ -724,7 +730,7 @@ const epicColors = [
       
               {/* Task List */}
               <div
-                className={`flex-1 space-y-3 transition-colors overflow-y-auto ${dragOverColumn === status ? 'bg-black rounded-xl' : ''}`}
+                className={`flex-1 space-y-3 transition-colors overflow-y-auto ${dragOverColumn === status ? 'bg-gray-100 dark:bg-black rounded-xl' : ''}`}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
                   handleDrop(status, e);
@@ -736,7 +742,7 @@ const epicColors = [
                 {getTasksByStatus(status).map((task) => (
                   <motion.div
                     key={task.tasks?.task_id || task.task_id || 'UNKNOWN'}
-                    className={`p-3 bg-neutral-900/40 rounded-md shadow-sm border ${borderColors[status]} transition-all duration-150 ease-in-out cursor-pointer hover:border-neutral-600`}
+                    className={`p-3 bg-white/60 dark:bg-neutral-900/40 rounded-md shadow-sm border ${borderColors[status]} transition-all duration-150 ease-in-out cursor-pointer hover:border-neutral-600`}
                     draggable="true"
                     onDragStart={(e) => e.dataTransfer.setData('task', JSON.stringify(task))}
                     onClick={() => handleTaskClick(task)}
@@ -749,7 +755,7 @@ const epicColors = [
                             {task.tasks.taskEpics?.[0]?.epics?.title && (
                               <>
                                 <div className={`w-2 h-2 rounded-full ${getEpicColor(task.tasks.taskEpics[0].epics.epic_id)}`}></div>
-                                <span className="text-xs tracking-tight font-normal text-gray-400">
+                                <span className="text-xs tracking-tight font-normal text-gray-700 dark:text-gray-400">
                                   {task.tasks.taskEpics[0].epics.title}
                                 </span>
                               </>
@@ -764,7 +770,7 @@ const epicColors = [
                         </div>
                       )}
 
-                      <p className="text-gray-100 text-sm tracking-tight leading-relaxed mb-1">
+                      <p className="text-gray-700 dark:text-gray-100 text-sm tracking-tight leading-relaxed mb-1">
                         {task.tasks?.title || task.title || 'UNKNOWN'}
                       </p>
 
@@ -820,12 +826,12 @@ const epicColors = [
                     onKeyDown={(e) => handleKeyDown(e, status)}
                     onBlur={() => setEditingColumn(null)}
                     autoFocus
-                    className="p-3 bg-neutral-900 border border-gray-300 text-gray-100 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900/30 shadow-sm"
+                    className="p-3 bg-gray-100 dark:bg-neutral-900 border border-gray-300 dark:border-gray-300 text-gray-900 dark:text-gray-100 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/30 shadow-sm transition-colors duration-300"
                     placeholder="Add new task..."
                   />
                 ) : (
                   <button
-                    className="flex w-full text-sm rounded-xl items-center text-gray-300 p-3 hover:bg-black transition-colors duration-200 ease-in-out border-2 border-dashed border-neutral-800 hover:border-gray-300"
+                    className="flex w-full text-sm rounded-xl items-center text-gray-500 dark:text-gray-300 p-3 hover:bg-gray-100 dark:hover:bg-black transition-colors duration-200 ease-in-out border-2 border-dashed border-gray-300 dark:border-neutral-800 hover:border-gray-400 dark:hover:border-gray-300"
                     onClick={() => {
                       setEditingColumn(status);
                       setNewTaskTitle(''); // Reset input when opening
@@ -850,7 +856,7 @@ const epicColors = [
 
       {deletionNotification && (
         <div
-          className="fixed bottom-4 right-4 bg-slate-900 border border-black/10 text-white px-4 py-2 rounded-xl shadow-lg z-50 transition-all duration-300 ease-in-out"
+          className="fixed bottom-4 right-4 bg-gray-800 dark:bg-slate-900 border border-gray-200 dark:border-black/10 text-white px-4 py-2 rounded-xl shadow-lg z-50 transition-all duration-300 ease-in-out"
           style={{
             animation: 'fadeInOut 3s ease-in-out'
           }}

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { ThemeToggle } from '../../components/ThemeToggle';
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -44,13 +45,13 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white scroll-smooth">
+    <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white scroll-smooth transition-colors duration-300">
       {/* Navigation */}
       <motion.nav 
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-gray-800/50"
+        className="fixed top-0 w-full z-50 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-800/50 transition-colors duration-300"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -72,21 +73,21 @@ export default function Home() {
               <motion.a 
                 href="#features" 
                 whileHover={{ y: -1 }}
-                className="text-gray-300 hover:text-white transition-colors font-medium"
+                className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
               >
                 Features
               </motion.a>
               <motion.a 
                 href="/philosophy" 
                 whileHover={{ y: -1 }}
-                className="text-gray-300 hover:text-white transition-colors font-medium"
+                className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
               >
                 Philosophy
               </motion.a>
               <motion.a 
                 href="#about" 
                 whileHover={{ y: -1 }}
-                className="text-gray-300 hover:text-white transition-colors font-medium"
+                className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
               >
                 About
               </motion.a>
@@ -94,6 +95,9 @@ export default function Home() {
                 <Link href="/signIn" className="text-gray-300 hover:text-white transition-colors font-medium">
                   Sign In
                 </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <ThemeToggle />
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
@@ -126,18 +130,18 @@ export default function Home() {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="md:hidden overflow-hidden"
           >
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-800/50">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200/50 dark:border-gray-800/50">
               <motion.a 
                 href="#features" 
                 whileHover={{ x: 5 }}
-                className="block px-3 py-2 text-gray-300 hover:text-white transition-colors font-medium"
+                className="block px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
               >
                 Features
               </motion.a>
               <motion.a 
                 href="#about" 
                 whileHover={{ x: 5 }}
-                className="block px-3 py-2 text-gray-300 hover:text-white transition-colors font-medium"
+                className="block px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
               >
                 About
               </motion.a>
@@ -145,6 +149,10 @@ export default function Home() {
                 <Link href="/signIn" className="block px-3 py-2 text-gray-300 hover:text-white transition-colors font-medium">
                   Sign In
                 </Link>
+              </motion.div>
+              <motion.div whileHover={{ x: 5 }} className="flex items-center space-x-2 px-3 py-2">
+                <span className="text-gray-600 dark:text-gray-300 font-medium">Theme:</span>
+                <ThemeToggle />
               </motion.div>
               <motion.div whileHover={{ x: 5 }}>
                 <Link href="/signUp" className="block px-3 py-2 text-blue-400 hover:text-blue-300 transition-colors font-medium">
@@ -159,7 +167,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Animated Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black">
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 dark:from-black dark:via-gray-900 dark:to-black transition-colors duration-300">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(168,85,247,0.1),transparent_50%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(34,197,94,0.1),transparent_50%)]" />

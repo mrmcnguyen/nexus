@@ -175,18 +175,18 @@ export default function EpicManager() {
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-[#171717]">
-                <div className="text-gray-300">Loading epics...</div>
+            <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-[#171717] transition-colors duration-300">
+                <div className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Loading epics...</div>
             </div>
         );
     }
 
     return (
-        <div className="p-8 pt-4 min-h-screen bg-black">
+        <div className="p-8 pt-4 min-h-screen bg-white dark:bg-black transition-colors duration-300">
             <div className="flex flex-row justify-between items-center mb-6">
                 <div className="flex flex-row items-center">
-                <h1 className="text-2xl text-white font-semibold tracking-tight">Epic Management</h1>
-                    <span className="flex flex-row items-center m-4 border border-[#2F2F2F] bg-gradient-to-br from-[#1f1f1f] text-gray-400 text-xs rounded-2xl px-2">
+                <h1 className="text-2xl text-gray-900 dark:text-white font-semibold tracking-tight transition-colors duration-300">Epic Management</h1>
+                    <span className="flex flex-row items-center m-4 border border-gray-300 dark:border-[#2F2F2F] bg-gradient-to-br from-gray-100 to-gray-200 dark:from-[#1f1f1f] dark:to-[#2F2F2F] text-gray-600 dark:text-gray-400 text-xs rounded-2xl px-2 transition-colors duration-300">
                         <Image
                             src="/epic.svg"
                             style={{ filter: 'invert(1)' }}

@@ -2,10 +2,10 @@ import Image from 'next/image';
 
 export default function Loading() {
   const headerColors = {
-    'Backlog': 'text-gray-200',
-    'To Do': 'text-gray-200',
-    'In Progress': 'text-gray-200',
-    'Done': 'text-gray-200'
+    'Backlog': 'text-gray-700 dark:text-gray-200',
+    'To Do': 'text-gray-700 dark:text-gray-200',
+    'In Progress': 'text-gray-700 dark:text-gray-200',
+    'Done': 'text-gray-700 dark:text-gray-200'
   };
 
   const borderColors = {
@@ -44,12 +44,12 @@ export default function Loading() {
   );
 
   return (
-    <div className="p-6 min-h-screen flex flex-col bg-black">
-      <div className="sticky top-0 z-10 -mx-6 px-6 pb-4 bg-black/80 backdrop-blur supports-[backdrop-filter]:bg-black/70">
+    <div className="p-6 min-h-screen flex flex-col bg-white dark:bg-black transition-colors duration-300">
+      <div className="sticky top-0 z-10 -mx-6 px-6 pb-4 bg-white/80 dark:bg-black/80 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-black/70 transition-colors duration-300">
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-row items-center">
-            <h1 className="text-2xl text-white font-semibold tracking-tight">Personal Kanban</h1>
-            <span className="flex flex-row items-center ml-3 border border-neutral-800 bg-neutral-900 text-gray-200 tracking-tight text-xs rounded-xl px-3 py-1 shadow-sm">
+            <h1 className="text-2xl text-gray-900 dark:text-white font-semibold tracking-tight transition-colors duration-300">Personal Kanban</h1>
+            <span className="flex flex-row items-center ml-3 border border-gray-300 dark:border-neutral-800 bg-gray-100 dark:bg-neutral-900 text-gray-700 dark:text-gray-200 tracking-tight text-xs rounded-xl px-3 py-1 shadow-sm transition-colors duration-300">
               <Image
                 src="/syncing.svg"
                 width={14}

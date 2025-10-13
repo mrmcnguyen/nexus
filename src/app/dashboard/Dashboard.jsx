@@ -222,9 +222,9 @@ export default function Dashboard() {
     }
 
     return (
-        <main className="min-h-screen bg-black text-white">
+        <main className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white transition-colors duration-300">
             {/* Header */}
-            <header className="border-b border-gray-800/50 bg-black/50 backdrop-blur-sm">
+            <header className="border-b border-gray-200/50 dark:border-gray-800/50 bg-white/50 dark:bg-black/50 backdrop-blur-sm transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
                     <Image src="/nexusNoBorder.png" width={100} height={15} alt="Nexus Logo" />
                     <div className="flex items-center space-x-3">

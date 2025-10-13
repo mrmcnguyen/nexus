@@ -2,6 +2,7 @@ import { DM_Sans } from "next/font/google";
 import { NotificationProvider } from '../../contexts/NotificationContext';
 import { NotificationContainer } from '../../components/NotificationContainer';
 import { NotificationHandler } from '../../components/NotificationHandler';
+import { ThemeProvider } from '../../components/ThemeProvider';
 import { Toaster } from 'react-hot-toast';
 import "./globals.css";
 
@@ -14,14 +15,21 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${dmSans.className} antialiased bg-white dark:bg-[#171717] transition-colors duration-300`}>
-        <NotificationProvider>
-          {children}
-          <NotificationContainer />
-          <NotificationHandler />
-          <Toaster />
-        </NotificationProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <NotificationProvider>
+            {children}
+            <NotificationContainer />
+            <NotificationHandler />
+            <Toaster />
+          </NotificationProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -120,7 +120,7 @@ export default function KanbanTaskModal({
 
   const currentStatus = statusOptions[task.status] || {
     label: 'Unknown Status',
-    color: 'bg-slate-800 text-slate-300 border border-neutral-800',
+    color: 'bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-slate-300 border border-gray-300 dark:border-neutral-800',
     icon: '❓'
   };
 
@@ -448,13 +448,13 @@ useEffect(() => {
             stiffness: 300,
             damping: 30
           }}
-          className="bg-neutral-950 border border-neutral-800 rounded-md w-full max-w-5xl max-h-[90vh] shadow-2xl flex flex-col"
+          className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-md w-full max-w-5xl max-h-[90vh] shadow-2xl flex flex-col transition-colors duration-300"
         >
           {/* Header */}
-          <div className="flex justify-between items-center p-6 border-b border-neutral-800">
+          <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-neutral-800 transition-colors duration-300">
             {!isEditingTitle ? (
               <h2
-                className="text-xl font-semibold text-white flex-grow cursor-pointer hover:text-slate-300 transition-colors"
+                className="text-xl font-semibold text-gray-900 dark:text-white flex-grow cursor-pointer hover:text-gray-700 dark:hover:text-slate-300 transition-colors"
                 onClick={() => setIsEditingTitle(true)}
               >
                 {editedTitle}
@@ -469,7 +469,7 @@ useEffect(() => {
                   setIsEditingTitle(true);
                 }}
                 onBlur={handleTitleSave}
-                className="w-full bg-transparent text-white focus:outline-none border-b border-slate-600 focus:border-blue-500 text-xl font-semibold"
+                className="w-full bg-transparent text-gray-900 dark:text-white focus:outline-none border-b border-gray-400 dark:border-slate-600 focus:border-blue-500 text-xl font-semibold transition-colors duration-300"
                 placeholder="Enter task title..."
               />
             )}
@@ -511,7 +511,7 @@ useEffect(() => {
                       {currentEpic && (
                         <button
                           onClick={handleRemoveEpic}
-                          className="w-full text-left px-2 py-1 text-red-400 hover:bg-red-900/30 rounded-md transition-colors text-sm border-b border-neutral-800"
+                          className="w-full text-left px-2 py-1 text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors text-sm border-b border-gray-200 dark:border-neutral-800"
                         >
                           Remove from Epic
                         </button>
@@ -525,7 +525,7 @@ useEffect(() => {
                           <div className="flex items-center space-x-3">
                             <div className={`w-3 h-3 rounded-full ${getEpicColor(epic.epic_id)}`}></div>
                             <div className="flex-1">
-                              <div className="text-white font-medium">{epic.name}</div>
+                              <div className="text-gray-900 dark:text-white font-medium transition-colors duration-300">{epic.name}</div>
                               {epic.description && (
                                 <div className="text-neutral-400 text-xs mt-1">{epic.description}</div>
                               )}
@@ -694,7 +694,7 @@ useEffect(() => {
               </div>
 
               {/* Metadata */}
-              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-neutral-800">
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200 dark:border-neutral-800 transition-colors duration-300">
                 <div>
                   <p className="text-xs text-slate-400 font-medium">Created</p>
                   <p className="text-sm text-slate-300">{new Date(createdAt).toLocaleDateString()}</p>
@@ -726,7 +726,7 @@ useEffect(() => {
                   stiffness: 300,
                   damping: 30
                 }}
-                className="bg-neutral-900 border border-neutral-800 rounded-lg p-6 max-w-md w-full shadow-2xl"
+                className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-lg p-6 max-w-md w-full shadow-2xl transition-colors duration-300"
               >
                 <div className="flex items-center space-x-3 mb-4">
                   <div className="flex-shrink-0">
@@ -735,19 +735,19 @@ useEffect(() => {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white">Delete Task</h3>
-                    <p className="text-sm text-slate-400">This action cannot be undone.</p>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Delete Task</h3>
+                    <p className="text-sm text-gray-500 dark:text-slate-400 transition-colors duration-300">This action cannot be undone.</p>
                   </div>
                 </div>
                 
-                <p className="text-slate-300 mb-6">
-                  Are you sure you want to delete "<span className="font-medium text-white">{editedTitle}</span>"? This will permanently remove the task and all its data.
+                <p className="text-gray-600 dark:text-slate-300 mb-6 transition-colors duration-300">
+                  Are you sure you want to delete "<span className="font-medium text-gray-900 dark:text-white transition-colors duration-300">{editedTitle}</span>"? This will permanently remove the task and all its data.
                 </p>
                 
                 <div className="flex space-x-3">
                   <button
                     onClick={handleDeleteCancel}
-                    className="flex-1 px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-white rounded-md transition-colors text-sm font-medium"
+                    className="flex-1 px-4 py-2 bg-gray-300 dark:bg-neutral-700 hover:bg-gray-400 dark:hover:bg-neutral-600 text-gray-800 dark:text-white rounded-md transition-colors text-sm font-medium"
                   >
                     Cancel
                   </button>

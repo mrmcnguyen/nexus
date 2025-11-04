@@ -185,12 +185,12 @@ const LabelPicker = ({
       {/* Dropdown Trigger */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="mt-2 flex items-center gap-2 px-3 py-2 text-sm text-gray-300 hover:text-gray-100 border border-neutral-800 rounded-lg hover:bg-neutral-900 transition-colors"
+        className="mt-2 flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:text-gray-900 border border-gray-300 dark:border-neutral-800 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-900 dark:text-slate-300 dark:hover:text-slate-100 transition-colors"
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
         </svg>
-        <span>Add labels</span>
+        <span className="text-slate-700 dark:text-slate-300">Add labels</span>
         <svg className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
@@ -204,24 +204,24 @@ const LabelPicker = ({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
-            className="absolute top-full left-0 right-0 mt-2 bg-neutral-900 border border-neutral-800 rounded-lg shadow-lg z-50 max-h-64 overflow-hidden"
+            className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-neutral-900 border border-gray-300 dark:border-neutral-800 rounded-lg shadow-lg z-50 max-h-64 overflow-hidden"
           >
             {/* Search Input */}
-            <div className="p-3 border-b border-neutral-800">
+            <div className="p-3 border-b border-gray-200 dark:border-neutral-800">
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={handleKeyPress}
                 placeholder="Search labels..."
-                className="w-full px-3 py-2 text-sm bg-black border border-neutral-800 text-gray-100 placeholder:text-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/30"
+                className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-neutral-900 border border-gray-300 dark:border-neutral-800 text-slate-700 dark:text-slate-300 placeholder:text-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/30"
                 autoFocus
               />
             </div>
 
             {/* Create New Label */}
             {isCreating ? (
-              <div className="p-3 border-b border-neutral-800 bg-neutral-800/50">
+              <div className="p-3 border-b border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-800/50">
                 <div className="space-y-3">
                   <input
                     type="text"
@@ -229,20 +229,20 @@ const LabelPicker = ({
                     onChange={(e) => setNewLabelName(e.target.value)}
                     onKeyDown={handleKeyPress}
                     placeholder="Label name..."
-                    className="w-full px-3 py-2 text-sm bg-black border border-neutral-800 text-gray-100 placeholder:text-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/30"
+                    className="w-full px-3 py-2 text-sm bg-white dark:bg-neutral-900 border border-gray-300 dark:border-neutral-800 text-gray-700 dark:text-gray-100 placeholder:text-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/30"
                     autoFocus
                   />
                   
                   {/* Color Picker */}
                   <div className="space-y-2">
-                    <label className="text-xs font-medium text-gray-300">Color</label>
+                    <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Color</label>
                     <div className="grid grid-cols-6 gap-2">
                       {predefinedColors.map((color) => (
                         <button
                         key={color}
                         onClick={() => { setNewLabelColor(color); handleCreateLabel(); }}
                         className={`w-6 h-6 rounded-full border-2 ${
-                          newLabelColor === color ? "border-gray-400" : "border-neutral-600"
+                          newLabelColor === color ? "border-gray-400 dark:border-gray-400" : "border-gray-300 dark:border-neutral-600"
                         } ${circleColors[color] || "bg-gray-500"} hover:scale-110 transition-transform`}
                       />                      
                       ))}
@@ -263,7 +263,7 @@ const LabelPicker = ({
                         setIsCreating(false);
                         setNewLabelName('');
                       }}
-                      className="px-3 py-1.5 bg-neutral-700 text-gray-200 text-sm rounded-md hover:bg-neutral-600 transition-colors"
+                      className="px-3 py-1.5 bg-gray-200 text-gray-700 text-sm rounded-md hover:bg-gray-300 dark:bg-neutral-700 dark:text-gray-200 dark:hover:bg-neutral-600 transition-colors"
                     >
                       Cancel
                     </button>
@@ -273,7 +273,7 @@ const LabelPicker = ({
             ) : (
               <button
                 onClick={() => setIsCreating(true)}
-                className="w-full px-3 py-2 text-left text-sm text-gray-300 hover:bg-neutral-800 border-b border-neutral-800 flex items-center gap-2"
+                className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-neutral-800 border-b border-gray-200 dark:border-neutral-800 flex items-center gap-2"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -290,8 +290,8 @@ const LabelPicker = ({
                   return (
                     <div
                       key={label.label_id}
-                      className={`w-full px-3 py-2 text-left text-sm hover:bg-neutral-800 flex items-center justify-between ${
-                        isSelected ? 'bg-blue-900/20' : ''
+                      className={`w-full px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-between ${
+                        isSelected ? 'bg-blue-50 dark:bg-blue-900/20' : ''
                       }`}
                     >
                       <button
@@ -299,9 +299,9 @@ const LabelPicker = ({
                         className="flex items-center gap-2 flex-1"
                       >
                         <div className={`w-3 h-3 rounded-full ${circleColors[label.color] || "bg-gray-500"}`} />
-                        <span className="truncate text-gray-100">{label.name}</span>
+                        <span className="truncate text-gray-700 dark:text-gray-100">{label.name}</span>
                         {isSelected && (
-                          <svg className="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 text-blue-600 dark:text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         )}
@@ -311,10 +311,10 @@ const LabelPicker = ({
                           e.stopPropagation();
                           handleDeleteLabel(label);
                         }}
-                        className="ml-2 p-1 hover:bg-red-900/20 rounded transition-colors"
+                        className="ml-2 p-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
                         title="Delete label"
                       >
-                        <svg className="w-4 h-4 text-red-400 hover:text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
                       </button>
@@ -322,7 +322,7 @@ const LabelPicker = ({
                   );
                 })
               ) : (
-                <div className="px-3 py-4 text-sm text-gray-400 text-center">
+                <div className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400 text-center">
                   {searchTerm ? 'No labels found' : 'No labels available'}
                 </div>
               )}

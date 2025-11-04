@@ -497,7 +497,7 @@ useEffect(() => {
                 <div className="relative" ref={epicDropdownRef}>
                   <button
                     onClick={() => setIsEpicDropdownOpen(!isEpicDropdownOpen)}
-                    className="flex items-center space-x-2 px-2.5 py-1.5 rounded-md transition-colors text-xs text-neutral-400 hover:bg-neutral-800"
+                    className="flex items-center space-x-2 px-2.5 py-1.5 rounded-md transition-colors text-xs text-slate-700 dark:text-slate-300 dark:hover:bg-neutral-800 hover:bg-neutral-300"
                   >
                     <div className={`w-3 h-3 rounded-full ${getEpicColor(currentEpic?.epic_id)}`}></div>
                     <span>{currentEpic ? currentEpic.title : 'Epic'}</span>
@@ -507,11 +507,11 @@ useEffect(() => {
                   </button>
 
                   {isEpicDropdownOpen && (
-                    <div className="absolute right-0 top-10 bg-neutral-800 border border-neutral-700 rounded-md shadow-lg z-10 min-w-56 p-1">
+                    <div className="absolute right-0 top-10 bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-800 rounded-md shadow-lg z-10 min-w-56 p-1 dark:bg-neutral-900 dark:border-neutral-800">
                       {currentEpic && (
                         <button
                           onClick={handleRemoveEpic}
-                          className="w-full text-left px-2 py-1 text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors text-sm border-b border-gray-200 dark:border-neutral-800"
+                          className="w-full text-left px-2 py-1 bg-gray-50 dark:bg-neutral-900 text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors text-sm border-b border-gray-200 dark:border-neutral-800"
                         >
                           Remove from Epic
                         </button>
@@ -520,14 +520,14 @@ useEffect(() => {
                         <button
                           key={epic.epic_id}
                           onClick={() => handleAssignEpic(epic.epic_id)}
-                          className="w-full text-left px-2 py-1 hover:bg-neutral-900 rounded-md transition-colors"
+                          className="w-full text-left px-2 py-1 bg-gray-50 dark:bg-neutral-900 dark:hover:bg-neutral-900 hover:bg-neutral-300 rounded-md transition-colors"
                         >
                           <div className="flex items-center space-x-3">
                             <div className={`w-3 h-3 rounded-full ${getEpicColor(epic.epic_id)}`}></div>
                             <div className="flex-1">
                               <div className="text-gray-900 dark:text-white font-medium transition-colors duration-300">{epic.name}</div>
                               {epic.description && (
-                                <div className="text-neutral-400 text-xs mt-1">{epic.description}</div>
+                                <div className="text-slate-700 dark:text-slate-300 text-xs mt-1">{epic.description}</div>
                               )}
                             </div>
                           </div>
@@ -546,7 +546,7 @@ useEffect(() => {
                 <div className="relative" ref={priorityDropdownRef}>
                   <button
                     onClick={() => setIsPriorityDropdownOpen(!isPriorityDropdownOpen)}
-                    className="flex items-center space-x-2 px-2.5 py-1.5 text-xs rounded-md hover:bg-neutral-800 transition-colors text-neutral-400"
+                    className="flex items-center space-x-2 px-2.5 py-1.5 text-xs rounded-md transition-colors text-slate-700 dark:text-slate-300 dark:hover:bg-neutral-800 hover:bg-neutral-300"
                   >
                     <span className="w-4 h-4">{priorityIcons[getCurrentPriorityOption().value]}</span>
                     <span>{getCurrentPriorityOption().label}</span>
@@ -556,15 +556,15 @@ useEffect(() => {
                   </button>
 
                   {isPriorityDropdownOpen && (
-                    <div className="absolute right-0 top-10 bg-neutral-800 border border-neutral-700 rounded-md shadow-lg z-10 min-w-48 p-1">
+                    <div className="absolute right-0 top-10 bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-800 rounded-md shadow-lg z-10 min-w-48 p-1">
                       {priorityOptions.map((option) => (
                         <button
                           key={option.value}
                           onClick={() => handlePriorityUpdate(option.value)}
-                          className="w-full flex items-center space-x-2 px-1 py-1 hover:bg-neutral-900 rounded-md transition-colors text-left"
+                          className="w-full flex items-center space-x-2 px-1 py-1 bg-gray-50 dark:bg-neutral-900 dark:hover:bg-neutral-800 hover:bg-gray-300 rounded-md transition-colors text-left"
                         >
-                          <span className="w-4 h-4">{priorityIcons[option.value]}</span>
-                          <span className="text-neutral-400 text-sm">{option.label}</span>
+                          <span className="w-4 h-4 text-slate-700 dark:text-slate-300">{priorityIcons[option.value]}</span>
+                          <span className="text-slate-700 dark:text-slate-300 text-sm">{option.label}</span>
                         </button>
                       ))}
                     </div>
@@ -581,17 +581,17 @@ useEffect(() => {
                         onMoveTask(key, task);
                         closeModal();
                       }}
-                      className={`flex items-center space-x-2 px-2.5 py-1.5 rounded-md text-xs text-neutral-400 transition-colors hover:bg-neutral-800`}
+                      className={`flex items-center space-x-2 px-2.5 py-1.5 rounded-md text-xs text-slate-700 dark:text-slate-300 dark:hover:bg-neutral-800 hover:bg-neutral-300 transition-colors`}
                     >
                       <span>{value.icon}</span>
-                      <span className="font-medium">{value.label}</span>
+                      <span className="font-medium text-slate-700 dark:text-slate-300">{value.label}</span>
                     </button>
                   ))}
 
                  {/* Due Date Button */}
                  <div className="relative" ref={calendarRef}>
                    <button
-                     className="flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-neutral-800 transition-colors text-sm"
+                     className="flex items-center space-x-2 px-2.5 py-1.5 rounded-md transition-colors text-slate-700 dark:text-slate-300 dark:hover:bg-neutral-800 hover:bg-neutral-300 text-sm"
                      onClick={() => setShowCalendar(!showCalendar)}
                    >
                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={`size-4 ${task.tasks?.due_date_color || 'text-neutral-400'}`}>
@@ -626,7 +626,7 @@ useEffect(() => {
 
                 {/* Start Pomodoro Button */}
                 <button
-                  className="flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-neutral-800 transition-colors text-sm"
+                  className="flex items-center space-x-2 px-2.5 py-1.5 rounded-md transition-colors text-sm text-slate-700 dark:text-slate-300 dark:hover:bg-neutral-800 hover:bg-neutral-300"
                   onClick={() => {
                     const taskId = task.task_id || task.tasks?.task_id || '';
                     const titleParam = encodeURIComponent(editedTitle || title || '');
@@ -643,7 +643,7 @@ useEffect(() => {
 
                 {/* Delete Button */}
                 <button
-                  className="flex items-center space-x-2 px-3 py-2 rounded-md hover:bg-neutral-800 transition-colors text-sm text-red-400"
+                  className="flex items-center space-x-2 px-3 py-2 rounded-md transition-colors text-sm text-slate-700 dark:text-slate-300 dark:hover:bg-neutral-800 hover:bg-neutral-300 text-red-400"
                   onClick={handleDeleteClick}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-4 text-neutral-500">
@@ -671,21 +671,21 @@ useEffect(() => {
 
               {/* Description */}
               <div className="space-y-3">
-                <h3 className="text-sm font-medium text-slate-300">Description</h3>
+                <h3 className="text-sm font-medium dark:text-slate-300 text-slate-700">Description</h3>
                 <div
                   ref={descriptionRef}
                   onClick={() => setIsEditingDescription(true)}
                   className="min-h-[200px] cursor-text"
                 >
                   {!isEditingDescription ? (
-                    <div className="text-slate-300 text-sm bg-neutral-900 rounded-md p-4 min-h-[200px]">
+                    <div className="text-slate-700 dark:text-slate-300 text-sm bg-gray-50 dark:bg-neutral-900 rounded-md p-4 min-h-[200px]">
                       {editedDescription || 'Click to add a description...'}
                     </div>
                   ) : (
                     <textarea
                       value={editedDescription}
                       onChange={(e) => setEditedDescription(e.target.value)}
-                      className="w-full bg-neutral-900 rounded-md p-4 text-slate-300 text-sm resize-none min-h-[200px] focus:outline-none"
+                      className="w-full bg-gray-50 dark:bg-neutral-900 rounded-md p-4 text-slate-700 dark:text-slate-300 text-sm resize-none min-h-[200px] focus:outline-none"
                       placeholder="Enter task description..."
                       onBlur={handleDescriptionSave}
                     />
@@ -697,11 +697,11 @@ useEffect(() => {
               <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200 dark:border-neutral-800 transition-colors duration-300">
                 <div>
                   <p className="text-xs text-slate-400 font-medium">Created</p>
-                  <p className="text-sm text-slate-300">{new Date(createdAt).toLocaleDateString()}</p>
+                  <p className="text-sm text-slate-700 dark:text-slate-300">{new Date(createdAt).toLocaleDateString()}</p>
                 </div>
                 <div>
                   <p className="text-xs text-slate-400 font-medium">Updated</p>
-                  <p className="text-sm text-slate-300">{new Date(updatedAt).toLocaleDateString()}</p>
+                  <p className="text-sm text-slate-700 dark:text-slate-300">{new Date(updatedAt).toLocaleDateString()}</p>
                 </div>
               </div>
             </div>

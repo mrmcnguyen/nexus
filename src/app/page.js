@@ -92,7 +92,7 @@ export default function Home() {
                 About
               </motion.a>
               <motion.div whileHover={{ y: -1 }}>
-                <Link href="/signIn" className="text-gray-300 hover:text-white transition-colors font-medium">
+                <Link href="/signIn" className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
                   Sign In
                 </Link>
               </motion.div>
@@ -114,7 +114,7 @@ export default function Home() {
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-gray-300 hover:text-white p-2 rounded-lg hover:bg-gray-800/50 transition-colors"
+                className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors"
               >
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -146,7 +146,7 @@ export default function Home() {
                 About
               </motion.a>
               <motion.div whileHover={{ x: 5 }}>
-                <Link href="/signIn" className="block px-3 py-2 text-gray-300 hover:text-white transition-colors font-medium">
+                <Link href="/signIn" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
                   Sign In
                 </Link>
               </motion.div>
@@ -246,7 +246,7 @@ export default function Home() {
               <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-green-400 bg-clip-text text-transparent block">
                 Productivity.
               </span>
-              <span className="text-white block">Made simple.</span>
+              <span className="text-gray-900 dark:text-white block">Made simple.</span>
             </motion.h1>
 
             {/* Subheadline */}
@@ -254,7 +254,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl sm:text-2xl text-gray-300 mb-12 leading-relaxed tracking-tight max-w-3xl mx-auto"
+              className="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 mb-12 leading-relaxed tracking-tight max-w-3xl mx-auto"
             >
               Productivity tools have been made too complex. Productivity is as simple as knowing what to do and doing it. That's it.
             </motion.p>
@@ -296,7 +296,7 @@ export default function Home() {
               >
               <Link
                 href="/signIn"
-                  className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-gray-300 border-2 border-gray-600 rounded-xl backdrop-blur-sm bg-white/5 transition-all duration-300 hover:border-blue-400 hover:text-white"
+                  className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-gray-700 dark:text-gray-300 border-2 border-gray-300 dark:border-gray-600 rounded-xl backdrop-blur-sm bg-gray-50/50 dark:bg-white/5 transition-all duration-300 hover:border-blue-400 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-white"
                 >
                   <span className="relative z-10">Sign In</span>
                   <motion.svg
@@ -319,14 +319,14 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="text-sm text-gray-400 mb-8"
+              className="text-sm text-gray-600 dark:text-gray-400 mb-8"
             >
               <p className="mb-4">Trusted by 10,000+ professionals worldwide</p>
               <div className="flex justify-center items-center gap-8 opacity-60">
-                <div className="w-20 h-8 bg-gray-700 rounded animate-pulse" />
-                <div className="w-20 h-8 bg-gray-700 rounded animate-pulse delay-100" />
-                <div className="w-20 h-8 bg-gray-700 rounded animate-pulse delay-200" />
-                <div className="w-20 h-8 bg-gray-700 rounded animate-pulse delay-300" />
+                <div className="w-20 h-8 bg-gray-300 dark:bg-gray-700 rounded animate-pulse" />
+                <div className="w-20 h-8 bg-gray-300 dark:bg-gray-700 rounded animate-pulse delay-100" />
+                <div className="w-20 h-8 bg-gray-300 dark:bg-gray-700 rounded animate-pulse delay-200" />
+                <div className="w-20 h-8 bg-gray-300 dark:bg-gray-700 rounded animate-pulse delay-300" />
             </div>
             </motion.div>
           </motion.div>
@@ -342,19 +342,19 @@ export default function Home() {
           <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center cursor-pointer hover:border-blue-400 transition-colors"
+            className="w-6 h-10 border-2 border-gray-600 dark:border-gray-400 rounded-full flex justify-center cursor-pointer hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
           >
             <motion.div
               animate={{ y: [0, 12, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
-              className="w-1 h-3 bg-gray-400 rounded-full mt-2"
+              className="w-1 h-3 bg-gray-600 dark:bg-gray-400 rounded-full mt-2"
             />
           </motion.div>
         </motion.div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-900 to-black overflow-hidden">
+      <section id="features" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-100 to-gray-50 dark:from-gray-900 dark:to-black overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMzNzQxNTEiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIxIi8+PC9nPjwvZz48L3N2Zz4=')] opacity-30" />
         
@@ -366,13 +366,13 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-white">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white">
               Everything You Need to
               <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent block">
                 Succeed
               </span>
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
               Powerful features designed to streamline your personal workflow and maximize individual productivity
             </p>
           </motion.div>
@@ -428,7 +428,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 transition-all duration-300 hover:border-gray-600/50 hover:shadow-2xl"
+                className="group relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800/50 dark:to-gray-900/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700/50 rounded-2xl p-8 transition-all duration-300 hover:border-gray-300 dark:hover:border-gray-600/50 hover:shadow-2xl"
               >
                 {/* Background Gradient */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${feature.bgGradient} rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
@@ -443,10 +443,10 @@ export default function Home() {
                 </svg>
                     )}
               </div>
-                  <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 group-hover:bg-clip-text transition-all duration-300">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-gray-900 group-hover:to-gray-700 dark:group-hover:from-white dark:group-hover:to-gray-300 group-hover:bg-clip-text transition-all duration-300">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-300 leading-relaxed group-hover:text-gray-200 transition-colors duration-300">
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed group-hover:text-gray-600 dark:group-hover:text-gray-200 transition-colors duration-300">
                     {feature.description}
               </p>
             </div>
@@ -457,9 +457,9 @@ export default function Home() {
       </section>
 
 {/* Product Showcase Section */}
-<section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-black to-gray-900 overflow-hidden">
+<section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-black dark:to-gray-900 overflow-hidden">
   {/* Background Elements */}
-  <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900" />
+  <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 dark:from-gray-900 dark:via-black dark:to-gray-900" />
   <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.1),transparent_50%)]" />
   <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_80%,rgba(168,85,247,0.1),transparent_50%)]" />
   
@@ -471,13 +471,13 @@ export default function Home() {
       viewport={{ once: true }}
       className="text-center mb-20"
     >
-      <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-white">
+      <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white">
         See Nexus in
         <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent block">
           Action
         </span>
       </h2>
-      <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+      <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
         Experience the power of intelligent personal productivity tools with real screenshots from our platform
       </p>
     </motion.div>
@@ -490,14 +490,14 @@ export default function Home() {
       viewport={{ once: true }}
       className="relative max-w-6xl mx-auto mb-20"
     >
-      <div className="relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-3xl p-8 shadow-2xl">
+      <div className="relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800/50 dark:to-gray-900/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700/50 rounded-3xl p-8 shadow-2xl">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-3xl" />
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-3xl font-bold text-white">{screenshots[currentScreenshot].title}</h3>
+            <h3 className="text-3xl font-bold text-gray-900 dark:text-white">{screenshots[currentScreenshot].title}</h3>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-400">
+                <span className="text-sm text-gray-600 dark:text-gray-400">
                   {currentScreenshot + 1} of {screenshots.length}
                 </span>
               </div>
@@ -526,7 +526,7 @@ export default function Home() {
             {/* Navigation Arrows */}
             <button
               onClick={prevScreenshot}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-black/50 hover:bg-black/70 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white/80 dark:bg-black/50 hover:bg-white dark:hover:bg-black/70 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-900 dark:text-white transition-all duration-300 hover:scale-110 shadow-lg"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -534,7 +534,7 @@ export default function Home() {
             </button>
             <button
               onClick={nextScreenshot}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-black/50 hover:bg-black/70 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white/80 dark:bg-black/50 hover:bg-white dark:hover:bg-black/70 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-900 dark:text-white transition-all duration-300 hover:scale-110 shadow-lg"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -548,7 +548,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.2 }}
-            className="text-gray-300 mt-6 text-lg leading-relaxed text-center max-w-4xl mx-auto"
+            className="text-gray-700 dark:text-gray-300 mt-6 text-lg leading-relaxed text-center max-w-4xl mx-auto"
           >
             {screenshots[currentScreenshot].description}
           </motion.p>
@@ -585,8 +585,8 @@ export default function Home() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <h3 className="text-xl font-semibold text-white mb-2">Time Blocking</h3>
-        <p className="text-gray-400 text-sm">Schedule focused work sessions with visual time blocks</p>
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Time Blocking</h3>
+        <p className="text-gray-600 dark:text-gray-400 text-sm">Schedule focused work sessions with visual time blocks</p>
       </div>
       <div className="text-center">
         <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -594,8 +594,8 @@ export default function Home() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
         </div>
-        <h3 className="text-xl font-semibold text-white mb-2">Task Management</h3>
-        <p className="text-gray-400 text-sm">Organize tasks with drag-and-drop kanban boards</p>
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Task Management</h3>
+        <p className="text-gray-600 dark:text-gray-400 text-sm">Organize tasks with drag-and-drop kanban boards</p>
       </div>
       <div className="text-center">
         <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -603,17 +603,17 @@ export default function Home() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
         </div>
-        <h3 className="text-xl font-semibold text-white mb-2">Smart Insights</h3>
-        <p className="text-gray-400 text-sm">Get analytics and recommendations for better productivity</p>
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Smart Insights</h3>
+        <p className="text-gray-600 dark:text-gray-400 text-sm">Get analytics and recommendations for better productivity</p>
       </div>
     </motion.div>
     </div>
     </section>
 
       {/* About Section */}
-      <section id="about" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-black overflow-hidden">
+      <section id="about" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-black overflow-hidden">
         {/* Background Elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900" />
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 dark:from-gray-900 dark:via-black dark:to-gray-900" />
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_50%,rgba(59,130,246,0.1),transparent_50%)]" />
         <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_50%,rgba(168,85,247,0.1),transparent_50%)]" />
         
@@ -625,13 +625,13 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-8 text-white tracking-tight">
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-8 text-gray-900 dark:text-white tracking-tight">
                 Built for the
                 <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent tracking-tight block">
                   Modern Individual
                 </span>
               </h2>
-              <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+              <p className="text-xl text-gray-700 dark:text-gray-300 mb-8 leading-relaxed">
                 Nexus was created with one goal in mind: to maximize your personal productivity and help you achieve your individual goals.
                 Built by individuals who have struggled with productivity themselves, Nexus is intentionally designed to focus on what matters most - your personal success.
               </p>
@@ -656,7 +656,7 @@ export default function Home() {
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                   </div>
-                    <span className="text-lg text-gray-300 group-hover:text-white transition-colors duration-200">
+                    <span className="text-lg text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-200">
                       {feature}
                     </span>
                   </motion.div>
@@ -671,7 +671,7 @@ export default function Home() {
               viewport={{ once: true }}
               className="relative"
             >
-              <div className="relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-3xl p-8 shadow-2xl">
+              <div className="relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800/50 dark:to-gray-900/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700/50 rounded-3xl p-8 shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-3xl" />
                 <div className="relative z-10">
                 <Image
@@ -847,8 +847,8 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="relative py-16 px-4 sm:px-6 lg:px-8 bg-black border-t border-gray-800/50">
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent" />
+      <footer className="relative py-16 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-black border-t border-gray-200 dark:border-gray-800/50">
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-100/50 dark:from-gray-900/50 to-transparent" />
         <div className="relative z-10 max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-12">
             {/* Logo and Description */}
@@ -867,7 +867,7 @@ export default function Home() {
                   height={40}
                   className="mb-4"
                 />
-                <p className="text-gray-400 leading-relaxed max-w-md">
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed max-w-md">
                   Empowering individuals worldwide with intelligent productivity tools that transform how you work, organize, and achieve your personal goals.
                 </p>
               </motion.div>
@@ -880,11 +880,11 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.1 }}
               viewport={{ once: true }}
             >
-              <h3 className="text-lg font-semibold text-white mb-4">Product</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Product</h3>
               <ul className="space-y-3">
                 {['Features', 'Pricing', 'Integrations', 'API'].map((link, index) => (
                   <li key={index}>
-                    <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+                    <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-200">
                       {link}
                     </a>
                   </li>
@@ -899,11 +899,11 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              <h3 className="text-lg font-semibold text-white mb-4">Company</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Company</h3>
               <ul className="space-y-3">
                 {['About', 'Blog', 'Careers', 'Contact'].map((link, index) => (
                   <li key={index}>
-                    <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+                    <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-200">
                       {link}
                     </a>
                   </li>
@@ -918,19 +918,19 @@ export default function Home() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
-            className="pt-8 border-t border-gray-800/50 flex flex-col md:flex-row justify-between items-center"
+            className="pt-8 border-t border-gray-200 dark:border-gray-800/50 flex flex-col md:flex-row justify-between items-center"
           >
-            <div className="text-gray-400 text-sm mb-4 md:mb-0">
+            <div className="text-gray-600 dark:text-gray-400 text-sm mb-4 md:mb-0">
               © 2025 Nexus. All rights reserved.
             </div>
             <div className="flex gap-6 text-sm">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
                 Privacy
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
                 Terms
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
                 Cookies
               </a>
           </div>
